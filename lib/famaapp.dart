@@ -33,7 +33,8 @@ class _FamaAppState extends State<FamaApp> {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: _locale,
-      theme: customLightThemeData,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       routerConfig: router(context.read()),
     );
   }

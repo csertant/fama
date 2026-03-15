@@ -6,24 +6,10 @@ var _baseTextStyle = const TextStyle(
   fontWeight: FontWeight.w400,
   fontStyle: FontStyle.normal,
   fontFamily: 'Times New Roman',
-  color: black,
 );
 
-ThemeData customLightThemeData = ThemeData(
-  brightness: Brightness.light,
-  colorScheme: const ColorScheme(
-    brightness: Brightness.light,
-    primary: black,
-    onPrimary: white,
-    secondary: darkGrey,
-    onSecondary: lightGrey,
-    surface: white,
-    onSurface: lightGrey,
-    error: red,
-    onError: white,
-    outline: black,
-  ),
-  textTheme: TextTheme(
+abstract final class AppTheme {
+  static final _textTheme = TextTheme(
     /// Currently unused.
     displayLarge: _baseTextStyle.copyWith(fontSize: 60, color: Colors.red),
 
@@ -102,5 +88,17 @@ ThemeData customLightThemeData = ThemeData(
     /// Similar styles:
     /// - bodySmall (with underline)
     labelSmall: _baseTextStyle.copyWith(decoration: TextDecoration.underline),
-  ),
-);
+  );
+
+  static ThemeData lightTheme = ThemeData(
+    brightness: Brightness.light,
+    colorScheme: AppColors.lightColorScheme,
+    textTheme: _textTheme,
+  );
+
+  static ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    colorScheme: AppColors.darkColorScheme,
+    textTheme: _textTheme,
+  );
+}

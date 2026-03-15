@@ -48,7 +48,7 @@ List<SingleChildWidget> _sharedProviders = [
   ),
 ];
 
-List<SingleChildWidget> get productionProviders {
+List<SingleChildWidget> get stagingProviders {
   return [
     ..._sharedProviders,
     ChangeNotifierProvider(

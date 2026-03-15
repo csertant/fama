@@ -11,7 +11,7 @@
             ]
         },
         {
-            "name": "fáma (prod)",
+            "name": "fáma (staging)",
             "request": "launch",
             "type": "dart",
             "args": [

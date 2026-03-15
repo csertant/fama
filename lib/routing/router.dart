@@ -15,6 +15,14 @@ GoRouter router(final ProfileRepository profileRepository) => GoRouter(
   refreshListenable: profileRepository,
   routes: [
     GoRoute(
+      path: Routes.profileSwitch,
+      builder: (final context, final state) {
+        return const Scaffold(
+          body: Center(child: Text('Profile switch screen')),
+        );
+      },
+    ),
+    GoRoute(
       path: Routes.home,
       builder: (final context, final state) {
         final viewModel = HomeViewModel(profileRepository: profileRepository);

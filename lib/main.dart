@@ -8,5 +8,5 @@ import 'famaapp.dart';
 /// Launch with `flutter run --target lib/main.dart`.
 void main() {
   usePathUrlStrategy();
-  runApp(MultiProvider(providers: productionProviders, child: const FamaApp()));
+  runApp(MultiProvider(providers: stagingProviders, child: const FamaApp()));
 }
