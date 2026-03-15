@@ -1,0 +1,23 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "fáma (dev)",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "-t",
+                "lib/main_dev.dart"
+            ]
+        },
+        {
+            "name": "fáma (prod)",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "-t",
+                "lib/main.dart"
+            ]
+        },
+    ]
+}
