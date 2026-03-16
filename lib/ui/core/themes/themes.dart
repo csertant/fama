@@ -5,7 +5,6 @@ var _baseTextStyle = const TextStyle(
   fontSize: 16,
   fontWeight: FontWeight.w400,
   fontStyle: FontStyle.normal,
-  fontFamily: 'Times New Roman',
 );
 
 abstract final class AppTheme {
@@ -94,11 +93,15 @@ abstract final class AppTheme {
     brightness: Brightness.light,
     colorScheme: AppColors.lightColorScheme,
     textTheme: _textTheme,
+    fontFamily: 'Times New Roman',
+    fontFamilyFallback: const ['Times', 'serif'],
   );
 
   static ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     colorScheme: AppColors.darkColorScheme,
     textTheme: _textTheme,
+    fontFamily: 'Times New Roman',
+    fontFamilyFallback: const ['Times', 'serif'],
   );
 }
