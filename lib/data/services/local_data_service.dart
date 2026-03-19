@@ -1,9 +1,9 @@
-import '../../models/session.dart';
 import '../../utils/result.dart';
+import '../database/database.dart';
 
 class LocalDataService {
   Future<Result<Session>> getSession() async {
-    return Result.ok(Session(profileId: 'test'));
+    return const Result.ok(Session(id: 1, profileId: 1));
   }
 
   Future<Result<void>> saveSession(final Session session) async {
