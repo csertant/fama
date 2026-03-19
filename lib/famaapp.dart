@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'l10n/generated/app_localizations.dart';
 import 'routing/router.dart';
@@ -35,7 +34,7 @@ class _FamaAppState extends State<FamaApp> {
       locale: _locale,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      routerConfig: router(context.read()),
+      routerConfig: router(),
     );
   }
 }

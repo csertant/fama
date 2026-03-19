@@ -10,12 +10,20 @@ abstract final class AppDimensions {
         _ => mobile,
       };
 
+  static const navigationBarHeight = 72.0;
+
   static const paddingLarge = 32.0;
   static const paddingMedium = 16.0;
   static const paddingSmall = 8.0;
 
+  static const iconSizeLarge = 32.0;
+  static const iconSizeMedium = 24.0;
+  static const iconSizeSmall = 16.0;
+
   double get paddingScreenHorizontal;
   double get paddingScreenVertical;
+
+  double get iconSizeDefault;
 
   EdgeInsets get edgeInsetsScreenHorizontal =>
       EdgeInsets.symmetric(horizontal: paddingScreenHorizontal);
@@ -38,6 +46,9 @@ final class _AppDimensionsMobile extends AppDimensions {
 
   @override
   double get paddingScreenVertical => AppDimensions.paddingMedium;
+
+  @override
+  double get iconSizeDefault => AppDimensions.iconSizeMedium;
 }
 
 /// Desktop/Web dimensions
@@ -49,4 +60,7 @@ final class _AppDimensionsDesktop extends AppDimensions {
 
   @override
   double get paddingScreenVertical => AppDimensions.paddingMedium * 3;
+
+  @override
+  double get iconSizeDefault => AppDimensions.iconSizeLarge;
 }

@@ -15,6 +15,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_native_splash: ^2.4.7
+  flutter_svg: ^2.2.4
   flutter_web_plugins:
     sdk: flutter
   go_router: ^17.1.0
@@ -39,6 +40,12 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
+  fonts:
+    - family: Times New Roman
+      fonts:
+        - asset: assets/fonts/TimesNewRoman.ttf
+          style: normal
+          weight: 400
 
 flutter_native_splash:
   color: "#F5F5F5"

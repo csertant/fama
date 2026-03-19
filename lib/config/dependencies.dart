@@ -20,29 +20,34 @@ List<SingleChildWidget> _sharedProviders = [
   Provider(create: (final context) => RssService()),
   Provider(create: (final context) => LocalDataService()),
   Provider(create: (final context) => SharedPreferencesService()),
-  ChangeNotifierProvider(
+  Provider(
     create: (final context) =>
-        ProfileRepositoryLocal(localDataService: context.read())
+        ProfileRepositoryLocal(
+              localDataService: context.read<LocalDataService>(),
+            )
             as ProfileRepository,
   ),
   Provider(
     create: (final context) =>
-        SettingsRepositoryLocal(sharedPreferencesService: context.read())
+        SettingsRepositoryLocal(
+              sharedPreferencesService: context
+                  .read<SharedPreferencesService>(),
+            )
             as SettingsRepository,
   ),
   Provider(
     create: (final context) =>
         ArticleRepositoryLocal(
-              rssService: context.read(),
-              localDataService: context.read(),
+              rssService: context.read<RssService>(),
+              localDataService: context.read<LocalDataService>(),
             )
             as ArticleRepository,
   ),
   Provider(
     create: (final context) =>
         SourceRepositoryLocal(
-              rssService: context.read(),
-              localDataService: context.read(),
+              rssService: context.read<RssService>(),
+              localDataService: context.read<LocalDataService>(),
             )
             as SourceRepository,
   ),
@@ -53,7 +58,7 @@ List<SingleChildWidget> get stagingProviders {
     ..._sharedProviders,
     ChangeNotifierProvider(
       create: (final context) =>
-          SessionManagerProd(localDataService: context.read())
+          SessionManagerProd(localDataService: context.read<LocalDataService>())
               as SessionManager,
     ),
   ];

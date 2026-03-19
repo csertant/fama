@@ -1,3 +1,7 @@
 {
-    "appTitle": "fáma"
+    "appTitle": "fáma",
+    "navigationLabelFeed": "Feed",
+    "navigationLabelSources": "Sources",
+    "navigationLabelSaved": "Saved",
+    "navigationLabelSettings": "Settings"
 }

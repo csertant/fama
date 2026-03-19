@@ -1,3 +1,7 @@
 {
-    "appTitle": "fáma"
+    "appTitle": "fáma",
+    "navigationLabelFeed": "Hírek",
+    "navigationLabelSources": "Források",
+    "navigationLabelSaved": "Mentve",
+    "navigationLabelSettings": "Beállítások"
 }

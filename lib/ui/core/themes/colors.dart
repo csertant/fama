@@ -10,12 +10,12 @@ abstract final class AppColors {
 
   static const lightColorScheme = ColorScheme(
     brightness: Brightness.light,
-    primary: black,
-    onPrimary: white,
-    secondary: darkGrey,
-    onSecondary: lightGrey,
+    primary: lightGrey,
+    onPrimary: darkGrey,
+    secondary: white,
+    onSecondary: black,
     surface: white,
-    onSurface: lightGrey,
+    onSurface: black,
     error: red,
     onError: white,
     outline: black,
@@ -23,14 +23,14 @@ abstract final class AppColors {
 
   static const darkColorScheme = ColorScheme(
     brightness: Brightness.dark,
-    primary: white,
-    onPrimary: black,
-    secondary: lightGrey,
-    onSecondary: darkGrey,
+    primary: darkGrey,
+    onPrimary: lightGrey,
+    secondary: black,
+    onSecondary: white,
     surface: black,
-    onSurface: darkGrey,
+    onSurface: white,
     error: red,
-    onError: white,
+    onError: black,
     outline: white,
   );
 }
