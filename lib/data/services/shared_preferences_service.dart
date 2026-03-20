@@ -25,7 +25,9 @@ class SharedPreferencesService {
     }
   }
 
-  Future<Result<void>> saveAppSettings(final AppSettings appSettings) async {
+  Future<Result<void>> saveAppSettings({
+    required final AppSettings appSettings,
+  }) async {
     try {
       final sharedPreferences = await _sharedPreferences;
       await sharedPreferences.setString(

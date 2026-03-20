@@ -16,7 +16,9 @@ class SettingsRepositoryLocal implements SettingsRepository {
   }
 
   @override
-  Future<Result<void>> updateLanguage(final String languageCode) async {
+  Future<Result<void>> updateLanguage({
+    required final String languageCode,
+  }) async {
     final currentAppSettingsResult = await _getAppSettingsOrDefault();
     switch (currentAppSettingsResult) {
       case Ok<AppSettings>():
@@ -30,7 +32,7 @@ class SettingsRepositoryLocal implements SettingsRepository {
   }
 
   @override
-  Future<Result<void>> updateTheme(final AppTheme theme) async {
+  Future<Result<void>> updateTheme({required final AppTheme theme}) async {
     final currentAppSettingsResult = await _getAppSettingsOrDefault();
     switch (currentAppSettingsResult) {
       case Ok<AppSettings>():
@@ -44,7 +46,7 @@ class SettingsRepositoryLocal implements SettingsRepository {
   }
 
   Future<Result<void>> _saveAppSettings(final AppSettings appSettings) {
-    return _sharedPreferencesService.saveAppSettings(appSettings);
+    return _sharedPreferencesService.saveAppSettings(appSettings: appSettings);
   }
 
   Future<Result<AppSettings>> _getAppSettingsOrDefault() async {

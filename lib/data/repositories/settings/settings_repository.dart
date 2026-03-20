@@ -4,7 +4,7 @@ import '../../../utils/result.dart';
 abstract class SettingsRepository {
   Future<Result<AppSettings>> getAppSettings();
 
-  Future<Result<void>> updateLanguage(final String languageCode);
+  Future<Result<void>> updateLanguage({required final String languageCode});
 
-  Future<Result<void>> updateTheme(final AppTheme theme);
+  Future<Result<void>> updateTheme({required final AppTheme theme});
 }

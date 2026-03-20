@@ -12,26 +12,23 @@ class SessionManagerProd extends ChangeNotifier implements SessionManager {
 
   final LocalDataService _localDataService;
 
-  ProfileId? _profileId;
+  Session? _session;
 
   @override
-  ProfileId get profileId => _profileId!;
+  ProfileId? get profileId => _session?.profileId;
   @override
-  bool get hasProfilePresent => _profileId != null;
+  bool get hasProfilePresent => _session != null;
 
   @override
-  Future<Result<void>> initializeSession({
-    required final Id id,
-    required final ProfileId profileId,
-  }) {
-    _profileId = profileId;
+  Future<Result<void>> initializeSession({required final ProfileId profileId}) {
+    final session = SessionsCompanion.insert(profileId: profileId);
     notifyListeners();
-    return _localDataService.saveSession(Session(id: id, profileId: profileId));
+    return _localDataService.saveSession(session: session);
   }
 
   @override
   Future<Result<void>> endSession() {
-    _profileId = null;
+    _session = null;
     notifyListeners();
     return _localDataService.removeSession();
   }
@@ -41,7 +38,7 @@ class SessionManagerProd extends ChangeNotifier implements SessionManager {
     final result = await _localDataService.getSession();
     switch (result) {
       case Ok<Session>():
-        _profileId = result.value.profileId;
+        _session = result.value;
         notifyListeners();
       case Error<Session>():
         break;

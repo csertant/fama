@@ -4,7 +4,7 @@ import '../../../utils/result.dart';
 import '../../../utils/types.dart';
 import 'session_manager.dart';
 
-/// Currently [SessionManagerDev] simulates that the test user (user_007)
+/// Currently [SessionManagerDev] simulates that the test user (7)
 /// has an active session and is always logged in.
 class SessionManagerDev extends ChangeNotifier implements SessionManager {
   SessionManagerDev();
@@ -14,11 +14,10 @@ class SessionManagerDev extends ChangeNotifier implements SessionManager {
   @override
   ProfileId get profileId => _profileId!;
   @override
-  bool get hasProfilePresent => true;
+  bool get hasProfilePresent => _profileId != null;
 
   @override
   Future<Result<void>> initializeSession({
-    required final Id id,
     required final ProfileId profileId,
   }) async {
     _profileId = profileId;

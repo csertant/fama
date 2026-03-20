@@ -1,4 +1,8 @@
 import 'package:drift/drift.dart';
+import 'package:drift_flutter/drift_flutter.dart';
+import 'package:path_provider/path_provider.dart';
+
+import '../../utils/types.dart';
 
 part 'database.g.dart';
 
@@ -68,10 +72,19 @@ class Articles extends Table {
 
 @DriftDatabase(tables: [Profiles, Sessions, Sources, Articles])
 class AppDatabase extends _$AppDatabase {
-  AppDatabase(super.e);
+  AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
   int get schemaVersion => 1;
+
+  static QueryExecutor _openConnection() {
+    return driftDatabase(
+      name: 'fama_db',
+      native: const DriftNativeOptions(
+        databaseDirectory: getApplicationSupportDirectory,
+      ),
+    );
+  }
 
   @override
   MigrationStrategy get migration {
@@ -81,7 +94,7 @@ class AppDatabase extends _$AppDatabase {
 
         await into(profiles).insert(
           ProfilesCompanion.insert(
-            name: 'Alapértelmezett',
+            name: 'Default Profile',
             isDefault: const Value(true),
           ),
         );
@@ -92,11 +105,127 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
-  Future<List<Source>> getSourcesForProfile(int profileId) {
-    return (select(sources)..where((s) => s.profileId.equals(profileId))).get();
+  // ---- Methods ----
+  // ---- Session management ----
+
+  Future<Session?> getSession() {
+    return select(sessions).getSingle();
   }
 
-  Future<void> insertOrUpdateArticle(ArticlesCompanion article) {
-    return into(articles).insert(article, mode: InsertMode.insertOrReplace);
+  Future<void> insertOrUpdateSession({required SessionsCompanion session}) {
+    return into(sessions).insertOnConflictUpdate(session);
+  }
+
+  Future<void> deleteSession() {
+    return delete(sessions).go();
+  }
+
+  // ---- Profile management ----
+
+  Future<Profile> getDefaultProfile() {
+    return (select(
+      profiles,
+    )..where((p) => p.isDefault.equals(true))).getSingle();
+  }
+
+  Future<void> insertOrUpdateProfile({required ProfilesCompanion profile}) {
+    return into(profiles).insertOnConflictUpdate(profile);
+  }
+
+  Future<void> deleteProfile({required Id profileId}) {
+    return (delete(profiles)..where((p) => p.id.equals(profileId))).go();
+  }
+
+  Stream<List<Profile>> watchProfiles() {
+    return select(profiles).watch();
+  }
+
+  // ---- Source management ----
+
+  Future<void> insertOrUpdateSource({required SourcesCompanion source}) {
+    return into(sources).insertOnConflictUpdate(source);
+  }
+
+  Future<void> deleteSource({required Id sourceId}) {
+    return (delete(sources)..where((s) => s.id.equals(sourceId))).go();
+  }
+
+  Stream<List<Source>> watchSourcesForProfile({required final Id profileId}) {
+    return (select(
+      sources,
+    )..where((s) => s.profileId.equals(profileId))).watch();
+  }
+
+  // ---- Article management ----
+
+  Future<void> insertOrUpdateArticles({
+    required List<ArticlesCompanion> articles,
+  }) {
+    return batch((final batch) {
+      batch.insertAllOnConflictUpdate(this.articles, articles);
+    });
+  }
+
+  Future<void> updateArticleStatus({
+    required Id articleId,
+    bool? isRead,
+    bool? isSaved,
+  }) {
+    return (update(articles)..where((a) => a.id.equals(articleId))).write(
+      ArticlesCompanion(
+        isRead: isRead != null ? Value(isRead) : const Value.absent(),
+        isSaved: isSaved != null ? Value(isSaved) : const Value.absent(),
+      ),
+    );
+  }
+
+  Future<void> deleteOldReadArticles(DateTime before) {
+    return (delete(articles)..where(
+          (a) =>
+              a.isRead.equals(true) &
+              a.isSaved.equals(false) &
+              a.publishedAt.isSmallerThanValue(before),
+        ))
+        .go();
+  }
+
+  Stream<List<Article>> watchUnreadArticles({required final Id profileId}) {
+    final query =
+        select(
+            articles,
+          ).join([innerJoin(sources, sources.id.equalsExp(articles.sourceId))])
+          ..where(
+            articles.isRead.equals(false) & sources.profileId.equals(profileId),
+          )
+          ..orderBy([OrderingTerm.desc(articles.publishedAt)]);
+    return query.watch().map((rows) {
+      return rows.map((row) => row.readTable(articles)).toList();
+    });
+  }
+
+  Stream<List<Article>> watchSavedArticles({required final Id profileId}) {
+    final query =
+        select(
+            articles,
+          ).join([innerJoin(sources, sources.id.equalsExp(articles.sourceId))])
+          ..where(
+            articles.isSaved.equals(true) & sources.profileId.equals(profileId),
+          )
+          ..orderBy([OrderingTerm.desc(articles.publishedAt)]);
+    return query.watch().map((rows) {
+      return rows.map((row) => row.readTable(articles)).toList();
+    });
+  }
+
+  Stream<List<Article>> watchArticles({required final Id profileId}) {
+    final query =
+        select(
+            articles,
+          ).join([innerJoin(sources, sources.id.equalsExp(articles.sourceId))])
+          ..where(sources.profileId.equals(profileId))
+          ..orderBy([OrderingTerm.desc(articles.publishedAt)]);
+    return query.watch().map((rows) {
+      return rows.map((row) => row.readTable(articles)).toList();
+    });
   }
 }

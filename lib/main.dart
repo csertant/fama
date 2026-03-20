@@ -7,6 +7,7 @@ import 'famaapp.dart';
 
 /// Launch with `flutter run --target lib/main.dart`.
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
   runApp(MultiProvider(providers: stagingProviders, child: const FamaApp()));
 }

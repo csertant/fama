@@ -1,6 +1,7 @@
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+import '../data/database/database.dart';
 import '../data/managers/session/session_manager.dart';
 import '../data/managers/session/session_manager_dev.dart';
 import '../data/managers/session/session_manager_prod.dart';
@@ -15,8 +16,15 @@ import '../data/services/rss_service.dart';
 import '../data/services/shared_preferences_service.dart';
 
 List<SingleChildWidget> _sharedProviders = [
+  Provider<AppDatabase>(
+    create: (final context) => AppDatabase(),
+    dispose: (final context, final database) => database.close(),
+  ),
+  Provider(
+    create: (final context) =>
+        LocalDataService(database: context.read<AppDatabase>()),
+  ),
   Provider(create: (final context) => RssService()),
-  Provider(create: (final context) => LocalDataService()),
   Provider(create: (final context) => SharedPreferencesService()),
   Provider(
     create: (final context) =>
