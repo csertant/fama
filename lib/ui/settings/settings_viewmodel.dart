@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../data/repositories/settings/settings_repository.dart';
-import '../../utils/command.dart';
-import '../../utils/result.dart';
+import '../../utils/utils.dart';
 
 class SettingsViewModel extends ChangeNotifier {
   SettingsViewModel({required SettingsRepository settingsRepository})

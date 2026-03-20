@@ -10,6 +10,7 @@ abstract final class AppDimensions {
         _ => mobile,
       };
 
+  static const appBarHeight = 56.0;
   static const navigationBarHeight = 72.0;
 
   static const paddingLarge = 32.0;

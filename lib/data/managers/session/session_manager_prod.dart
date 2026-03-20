@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import '../../../utils/result.dart';
-import '../../../utils/types.dart';
+import '../../../utils/utils.dart';
 import '../../database/database.dart';
 import '../../services/local_data_service.dart';
 import 'session_manager.dart';

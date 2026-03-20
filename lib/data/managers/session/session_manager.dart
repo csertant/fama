@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
-import '../../../utils/result.dart';
-import '../../../utils/types.dart';
+import '../../../utils/utils.dart';
 
 abstract class SessionManager extends ChangeNotifier {
   ProfileId? get profileId;

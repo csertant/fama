@@ -29,6 +29,7 @@ class _FamaAppState extends State<FamaApp> {
   Widget build(final BuildContext context) {
     return MaterialApp.router(
       title: 'fáma',
+      debugShowCheckedModeBanner: false,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       locale: _locale,

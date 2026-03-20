@@ -6,6 +6,8 @@ import '../themes/dimensions.dart';
 abstract class CustomIcons {
   static const String _basePath = 'assets/icons';
 
+  static const String appIcon = '$_basePath/icon.svg';
+
   static const String feed = '$_basePath/feed.svg';
   static const String sources = '$_basePath/sources.svg';
   static const String saved = '$_basePath/saved.svg';
@@ -13,6 +15,9 @@ abstract class CustomIcons {
 
   static const String read = '$_basePath/read.svg';
   static const String unread = '$_basePath/unread.svg';
+
+  static const String filter = '$_basePath/filter.svg';
+  static const String share = '$_basePath/share.svg';
 
   static const String add = '$_basePath/add.svg';
   static const String remove = '$_basePath/remove.svg';

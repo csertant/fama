@@ -6,6 +6,8 @@ var _baseTextStyle = const TextStyle(
   fontSize: 16,
   fontWeight: FontWeight.w400,
   fontStyle: FontStyle.normal,
+  fontFamily: 'Times New Roman',
+  fontFamilyFallback: ['Times', 'serif'],
 );
 
 abstract final class AppTheme {
@@ -79,11 +81,18 @@ abstract final class AppTheme {
     labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
   );
 
+  static final AppBarTheme _appBarTheme = AppBarTheme(
+    elevation: 2,
+    centerTitle: true,
+    titleTextStyle: _textTheme.titleLarge,
+  );
+
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     colorScheme: AppColors.lightColorScheme,
     textTheme: _textTheme,
     navigationBarTheme: _lightNavigationBarTheme,
+    appBarTheme: _appBarTheme,
     fontFamily: 'Times New Roman',
     fontFamilyFallback: const ['Times', 'serif'],
   );
@@ -93,6 +102,7 @@ abstract final class AppTheme {
     colorScheme: AppColors.darkColorScheme,
     textTheme: _textTheme,
     navigationBarTheme: _darkNavigationBarTheme,
+    appBarTheme: _appBarTheme,
     fontFamily: 'Times New Roman',
     fontFamilyFallback: const ['Times', 'serif'],
   );

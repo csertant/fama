@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/app_settings.dart';
-import '../../utils/result.dart';
-import '../../utils/types.dart';
+import '../../utils/utils.dart';
 
 class SharedPreferencesService {
   final _appSettingsKey = 'APP_SETTINGS';

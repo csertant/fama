@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../data/repositories/article/article_repository.dart';
-import '../../utils/command.dart';
-import '../../utils/result.dart';
+import '../../utils/utils.dart';
 
 class FeedViewModel extends ChangeNotifier {
   FeedViewModel({required ArticleRepository articleRepository})

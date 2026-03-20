@@ -3,8 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../data/repositories/source/source_repository.dart';
-import '../../utils/command.dart';
-import '../../utils/result.dart';
+import '../../utils/utils.dart';
 
 class SourcesViewModel extends ChangeNotifier {
   SourcesViewModel({required SourceRepository sourceRepository})

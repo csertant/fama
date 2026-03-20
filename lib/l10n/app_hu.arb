@@ -1,7 +1,10 @@
 {
     "appTitle": "fáma",
-    "navigationLabelFeed": "Hírek",
-    "navigationLabelSources": "Források",
-    "navigationLabelSaved": "Mentve",
-    "navigationLabelSettings": "Beállítások"
+    "navigationLabelFeed": "hírek",
+    "navigationLabelSources": "források",
+    "navigationLabelSaved": "mentve",
+    "navigationLabelSettings": "beállítások",
+    "sourcesTitle": "források",
+    "savedTitle": "mentve",
+    "settingsTitle": "beállítások"
 }

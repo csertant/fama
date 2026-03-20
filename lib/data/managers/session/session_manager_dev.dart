@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-import '../../../utils/result.dart';
-import '../../../utils/types.dart';
+import '../../../utils/utils.dart';
 import 'session_manager.dart';
 
 /// Currently [SessionManagerDev] simulates that the test user (7)

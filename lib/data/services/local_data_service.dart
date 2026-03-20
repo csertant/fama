@@ -1,5 +1,4 @@
-import '../../utils/result.dart';
-import '../../utils/types.dart';
+import '../../utils/utils.dart';
 import '../database/database.dart';
 
 class LocalDataService {
