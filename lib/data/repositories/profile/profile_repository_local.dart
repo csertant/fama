@@ -1,6 +1,6 @@
 import '../../../utils/utils.dart';
 import '../../database/database.dart';
-import '../../services/local_data_service.dart';
+import '../../services/local_data_service/local_data_service.dart';
 import 'profile_repository.dart';
 
 class ProfileRepositoryLocal implements ProfileRepository {

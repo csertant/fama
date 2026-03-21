@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../core/themes/dimensions.dart';
 import '../core/widgets/widgets.dart';
 import 'feed_viewmodel.dart';
 
@@ -12,6 +13,10 @@ class FeedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
+        leading: const CustomIcon(
+          iconPath: CustomIcons.appIcon,
+          size: AppDimensions.iconSizeMedium,
+        ),
         actions: [
           CustomIconButton.normal(icon: CustomIcons.read, onTap: () {}),
           CustomIconButton.normal(icon: CustomIcons.filter, onTap: () {}),

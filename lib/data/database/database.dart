@@ -179,7 +179,7 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
-  Future<void> deleteOldReadArticles(DateTime before) {
+  Future<void> deleteOldReadArticles({required DateTime before}) {
     return (delete(articles)..where(
           (a) =>
               a.isRead.equals(true) &

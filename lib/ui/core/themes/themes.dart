@@ -82,8 +82,7 @@ abstract final class AppTheme {
   );
 
   static final AppBarTheme _appBarTheme = AppBarTheme(
-    elevation: 2,
-    centerTitle: true,
+    elevation: 0,
     titleTextStyle: _textTheme.titleLarge,
   );
 

@@ -1,13 +1,15 @@
-import '../../utils/utils.dart';
-import '../database/database.dart';
+import '../../../utils/utils.dart';
+import '../../database/database.dart';
+import 'local_data_service.dart';
 
-class LocalDataService {
-  LocalDataService({required AppDatabase database}) : _database = database;
+class LocalDataServiceProd implements LocalDataService {
+  LocalDataServiceProd({required AppDatabase database}) : _database = database;
 
   final AppDatabase _database;
 
   // ---- Session management ----
 
+  @override
   Future<Result<Session>> getSession() async {
     try {
       final result = await _database.getSession();
@@ -20,6 +22,7 @@ class LocalDataService {
     }
   }
 
+  @override
   Future<Result<void>> saveSession({
     required final SessionsCompanion session,
   }) async {
@@ -31,6 +34,7 @@ class LocalDataService {
     }
   }
 
+  @override
   Future<Result<void>> removeSession() async {
     try {
       await _database.deleteSession();
@@ -42,6 +46,7 @@ class LocalDataService {
 
   // ---- Profile management ----
 
+  @override
   Future<Result<Profile>> getDefaultProfile() async {
     try {
       final result = await _database.getDefaultProfile();
@@ -51,6 +56,7 @@ class LocalDataService {
     }
   }
 
+  @override
   Future<Result<void>> saveProfile({
     required final ProfilesCompanion profile,
   }) async {
@@ -62,6 +68,7 @@ class LocalDataService {
     }
   }
 
+  @override
   Future<Result<void>> removeProfile({required Id profileId}) async {
     try {
       await _database.deleteProfile(profileId: profileId);
@@ -71,12 +78,14 @@ class LocalDataService {
     }
   }
 
+  @override
   Stream<List<Profile>> watchProfiles() {
     return _database.watchProfiles();
   }
 
   // ---- Source management ----
 
+  @override
   Future<Result<void>> saveSource({required SourcesCompanion source}) async {
     try {
       await _database.insertOrUpdateSource(source: source);
@@ -86,6 +95,7 @@ class LocalDataService {
     }
   }
 
+  @override
   Future<Result<void>> removeSource({required Id sourceId}) async {
     try {
       await _database.deleteSource(sourceId: sourceId);
@@ -95,12 +105,14 @@ class LocalDataService {
     }
   }
 
+  @override
   Stream<List<Source>> watchSourcesForProfile({required final Id profileId}) {
     return _database.watchSourcesForProfile(profileId: profileId);
   }
 
   // ---- Article management ----
 
+  @override
   Future<Result<void>> saveArticles({
     required List<ArticlesCompanion> articles,
   }) async {
@@ -112,6 +124,7 @@ class LocalDataService {
     }
   }
 
+  @override
   Future<Result<void>> markArticleAsRead({required Id articleId}) async {
     try {
       await _database.updateArticleStatus(articleId: articleId, isRead: true);
@@ -121,6 +134,7 @@ class LocalDataService {
     }
   }
 
+  @override
   Future<Result<void>> markArticleAsUnread({required Id articleId}) async {
     try {
       await _database.updateArticleStatus(articleId: articleId, isRead: false);
@@ -130,6 +144,7 @@ class LocalDataService {
     }
   }
 
+  @override
   Future<Result<void>> markArticleAsSaved({required Id articleId}) async {
     try {
       await _database.updateArticleStatus(articleId: articleId, isSaved: true);
@@ -139,6 +154,7 @@ class LocalDataService {
     }
   }
 
+  @override
   Future<Result<void>> markArticleAsUnsaved({required Id articleId}) async {
     try {
       await _database.updateArticleStatus(articleId: articleId, isSaved: false);
@@ -148,23 +164,27 @@ class LocalDataService {
     }
   }
 
-  Future<Result<void>> removeOldReadArticles(DateTime before) async {
+  @override
+  Future<Result<void>> removeOldReadArticles({required DateTime before}) async {
     try {
-      await _database.deleteOldReadArticles(before);
+      await _database.deleteOldReadArticles(before: before);
       return const Result.ok(null);
     } on Exception catch (e) {
       return Result.error(e);
     }
   }
 
+  @override
   Stream<List<Article>> watchUnreadArticles({required final Id profileId}) {
     return _database.watchUnreadArticles(profileId: profileId);
   }
 
+  @override
   Stream<List<Article>> watchSavedArticles({required final Id profileId}) {
     return _database.watchSavedArticles(profileId: profileId);
   }
 
+  @override
   Stream<List<Article>> watchArticles({required final Id profileId}) {
     return _database.watchArticles(profileId: profileId);
   }

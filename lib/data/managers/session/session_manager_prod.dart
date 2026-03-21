@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../utils/utils.dart';
 import '../../database/database.dart';
-import '../../services/local_data_service.dart';
+import '../../services/local_data_service/local_data_service.dart';
 import 'session_manager.dart';
 
 class SessionManagerProd extends ChangeNotifier implements SessionManager {
