@@ -1,47 +1,104 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+
 import '../../../models/app_settings.dart';
 import '../../../utils/result.dart';
 import '../../services/shared_preferences_service.dart';
 import 'settings_repository.dart';
 
-class SettingsRepositoryLocal implements SettingsRepository {
+class SettingsRepositoryLocal extends SettingsRepository {
   SettingsRepositoryLocal({
     required final SharedPreferencesService sharedPreferencesService,
-  }) : _sharedPreferencesService = sharedPreferencesService;
+  }) : _sharedPreferencesService = sharedPreferencesService {
+    unawaited(load());
+  }
+
+  static final AppSettings _defaultSettings = AppSettings(
+    languageCode: AppLanguage.hungarian,
+    theme: ThemeMode.system,
+  );
 
   final SharedPreferencesService _sharedPreferencesService;
+  AppSettings _appSettings = _defaultSettings;
+  bool _isLoading = false;
 
   @override
-  Future<Result<AppSettings>> getAppSettings() {
-    return _getAppSettingsOrDefault();
+  AppSettings get appSettings => _appSettings;
+
+  @override
+  Future<Result<void>> load() async {
+    if (_isLoading) {
+      return const Result.ok(null);
+    }
+    _isLoading = true;
+    try {
+      final appSettingsResult = await _getAppSettingsOrDefault();
+      switch (appSettingsResult) {
+        case Ok<AppSettings>():
+          _appSettings = appSettingsResult.value;
+          notifyListeners();
+          return const Result.ok(null);
+        case Error<AppSettings>():
+          return Result.error(appSettingsResult.error);
+      }
+    } finally {
+      _isLoading = false;
+    }
+  }
+
+  @override
+  Future<Result<AppSettings>> getAppSettings() async {
+    final loadResult = await load();
+    switch (loadResult) {
+      case Ok<void>():
+        return Result.ok(_appSettings);
+      case Error<void>():
+        return Result.error(loadResult.error);
+    }
   }
 
   @override
   Future<Result<void>> updateLanguage({
     required final String languageCode,
   }) async {
-    final currentAppSettingsResult = await _getAppSettingsOrDefault();
-    switch (currentAppSettingsResult) {
-      case Ok<AppSettings>():
-        final updatedAppSettings = currentAppSettingsResult.value.copyWith(
+    final loadResult = await load();
+    switch (loadResult) {
+      case Ok<void>():
+        final updatedAppSettings = _appSettings.copyWith(
           languageCode: languageCode,
         );
-        return _saveAppSettings(updatedAppSettings);
-      case Error<AppSettings>():
-        return currentAppSettingsResult;
+        final saveResult = await _saveAppSettings(updatedAppSettings);
+        switch (saveResult) {
+          case Ok<void>():
+            _appSettings = updatedAppSettings;
+            notifyListeners();
+            return saveResult;
+          case Error<void>():
+            return saveResult;
+        }
+      case Error<void>():
+        return loadResult;
     }
   }
 
   @override
-  Future<Result<void>> updateTheme({required final AppTheme theme}) async {
-    final currentAppSettingsResult = await _getAppSettingsOrDefault();
-    switch (currentAppSettingsResult) {
-      case Ok<AppSettings>():
-        final updatedAppSettings = currentAppSettingsResult.value.copyWith(
-          theme: theme,
-        );
-        return _saveAppSettings(updatedAppSettings);
-      case Error<AppSettings>():
-        return currentAppSettingsResult;
+  Future<Result<void>> updateTheme({required final ThemeMode theme}) async {
+    final loadResult = await load();
+    switch (loadResult) {
+      case Ok<void>():
+        final updatedAppSettings = _appSettings.copyWith(theme: theme);
+        final saveResult = await _saveAppSettings(updatedAppSettings);
+        switch (saveResult) {
+          case Ok<void>():
+            _appSettings = updatedAppSettings;
+            notifyListeners();
+            return saveResult;
+          case Error<void>():
+            return saveResult;
+        }
+      case Error<void>():
+        return loadResult;
     }
   }
 
@@ -55,12 +112,7 @@ class SettingsRepositoryLocal implements SettingsRepository {
       case Ok<AppSettings>():
         return appSettingsResult;
       case Error<AppSettings>():
-        return Result.ok(
-          AppSettings(
-            languageCode: AppLanguage.hungarian,
-            theme: AppTheme.light,
-          ),
-        );
+        return Result.ok(_defaultSettings);
     }
   }
 }

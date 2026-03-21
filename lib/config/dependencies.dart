@@ -20,7 +20,7 @@ import '../data/services/shared_preferences_service.dart';
 List<SingleChildWidget> _sharedProviders = [
   Provider(create: (final context) => RssService()),
   Provider(create: (final context) => SharedPreferencesService()),
-  Provider(
+  ChangeNotifierProvider(
     create: (final context) =>
         SettingsRepositoryLocal(
               sharedPreferencesService: context

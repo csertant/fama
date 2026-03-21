@@ -81,10 +81,7 @@ abstract final class AppTheme {
     labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
   );
 
-  static final AppBarTheme _appBarTheme = AppBarTheme(
-    elevation: 0,
-    titleTextStyle: _textTheme.titleLarge,
-  );
+  static const AppBarTheme _appBarTheme = AppBarTheme(elevation: 0);
 
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,

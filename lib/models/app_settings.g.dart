@@ -9,17 +9,18 @@ part of 'app_settings.dart';
 AppSettings _$AppSettingsFromJson(Map<String, dynamic> json) => AppSettings(
   languageCode: json['languageCode'] as String? ?? 'hu',
   theme:
-      $enumDecodeNullable(_$AppThemeEnumMap, json['theme']) ?? AppTheme.system,
+      $enumDecodeNullable(_$ThemeModeEnumMap, json['theme']) ??
+      ThemeMode.system,
 );
 
 Map<String, dynamic> _$AppSettingsToJson(AppSettings instance) =>
     <String, dynamic>{
       'languageCode': instance.languageCode,
-      'theme': _$AppThemeEnumMap[instance.theme]!,
+      'theme': _$ThemeModeEnumMap[instance.theme]!,
     };
 
-const _$AppThemeEnumMap = {
-  AppTheme.light: 'light',
-  AppTheme.dark: 'dark',
-  AppTheme.system: 'system',
+const _$ThemeModeEnumMap = {
+  ThemeMode.system: 'system',
+  ThemeMode.light: 'light',
+  ThemeMode.dark: 'dark',
 };

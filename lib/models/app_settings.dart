@@ -1,8 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'app_settings.g.dart';
-
-enum AppTheme { light, dark, system }
 
 class AppLanguage {
   static const String hungarian = 'hu';
@@ -19,10 +18,10 @@ class AppSettings {
   @JsonKey(defaultValue: AppLanguage.hungarian)
   final String languageCode;
 
-  @JsonKey(defaultValue: AppTheme.system)
-  final AppTheme theme;
+  @JsonKey(defaultValue: ThemeMode.system)
+  final ThemeMode theme;
 
-  AppSettings copyWith({final String? languageCode, final AppTheme? theme}) {
+  AppSettings copyWith({final String? languageCode, final ThemeMode? theme}) {
     return AppSettings(
       languageCode: languageCode ?? this.languageCode,
       theme: theme ?? this.theme,

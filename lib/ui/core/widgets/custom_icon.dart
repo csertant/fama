@@ -22,6 +22,8 @@ abstract class CustomIcons {
   static const String add = '$_basePath/add.svg';
   static const String remove = '$_basePath/remove.svg';
   static const String modify = '$_basePath/modify.svg';
+
+  static const String error = '$_basePath/error.svg';
 }
 
 class CustomIcon extends StatelessWidget {

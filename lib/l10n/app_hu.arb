@@ -6,5 +6,17 @@
     "navigationLabelSettings": "beállítások",
     "sourcesTitle": "források",
     "savedTitle": "mentve",
-    "settingsTitle": "beállítások"
+    "settingsTitle": "beállítások",
+    "settingsLoadErrorTitle": "nem sikerült betölteni a beállításokat",
+    "settingsLoadErrorLabel": "újratöltés",
+    "settingsThemeTitle": "téma",
+    "settingsThemeSubtitle": "válaszd ki a kívánt témát",
+    "settingsThemeOptionSystem": "rendszer",
+    "settingsThemeOptionLight": "világos",
+    "settingsThemeOptionDark": "sötét",
+    "settingsLanguageTitle": "nyelv",
+    "settingsLanguageSubtitle": "válaszd ki a kívánt nyelvet",
+    "settingsLanguageOptionHungarian": "magyar",
+    "settingsLanguageOptionEnglish": "angol",
+    "settingsLanguageOptionUnknown": "ismeretlen"
 }

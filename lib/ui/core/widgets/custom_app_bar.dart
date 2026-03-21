@@ -33,6 +33,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leadingWidth:
           AppDimensions.iconSizeMedium + AppDimensions.paddingMedium * 2,
       title: title != null ? Text(title!) : null,
+      titleTextStyle: Theme.of(context).textTheme.titleLarge,
       actions: actions,
       actionsPadding: const EdgeInsets.symmetric(
         horizontal: AppDimensions.paddingMedium,
