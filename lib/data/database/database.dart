@@ -122,6 +122,10 @@ class AppDatabase extends _$AppDatabase {
 
   // ---- Profile management ----
 
+  Future<List<Profile>> getProfiles() {
+    return select(profiles).get();
+  }
+
   Future<Profile> getDefaultProfile() {
     return (select(
       profiles,
@@ -142,6 +146,10 @@ class AppDatabase extends _$AppDatabase {
 
   // ---- Source management ----
 
+  Future<List<Source>> getSourcesForProfile({required final Id profileId}) {
+    return (select(sources)..where((s) => s.profileId.equals(profileId))).get();
+  }
+
   Future<void> insertOrUpdateSource({required SourcesCompanion source}) {
     return into(sources).insertOnConflictUpdate(source);
   }
@@ -157,6 +165,46 @@ class AppDatabase extends _$AppDatabase {
   }
 
   // ---- Article management ----
+
+  Future<List<Article>> getUnreadArticles({required final Id profileId}) {
+    final query =
+        select(
+            articles,
+          ).join([innerJoin(sources, sources.id.equalsExp(articles.sourceId))])
+          ..where(
+            articles.isRead.equals(false) & sources.profileId.equals(profileId),
+          )
+          ..orderBy([OrderingTerm.desc(articles.publishedAt)]);
+    return query.get().then((rows) {
+      return rows.map((row) => row.readTable(articles)).toList();
+    });
+  }
+
+  Future<List<Article>> getSavedArticles({required final Id profileId}) {
+    final query =
+        select(
+            articles,
+          ).join([innerJoin(sources, sources.id.equalsExp(articles.sourceId))])
+          ..where(
+            articles.isSaved.equals(true) & sources.profileId.equals(profileId),
+          )
+          ..orderBy([OrderingTerm.desc(articles.publishedAt)]);
+    return query.get().then((rows) {
+      return rows.map((row) => row.readTable(articles)).toList();
+    });
+  }
+
+  Future<List<Article>> getArticles({required final Id profileId}) {
+    final query =
+        select(
+            articles,
+          ).join([innerJoin(sources, sources.id.equalsExp(articles.sourceId))])
+          ..where(sources.profileId.equals(profileId))
+          ..orderBy([OrderingTerm.desc(articles.publishedAt)]);
+    return query.get().then((rows) {
+      return rows.map((row) => row.readTable(articles)).toList();
+    });
+  }
 
   Future<void> insertOrUpdateArticles({
     required List<ArticlesCompanion> articles,

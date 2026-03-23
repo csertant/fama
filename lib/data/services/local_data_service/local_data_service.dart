@@ -10,17 +10,31 @@ abstract class LocalDataService {
 
   Future<Result<Profile>> getDefaultProfile();
 
+  Future<Result<List<Profile>>> getProfiles();
+
   Future<Result<void>> saveProfile({required final ProfilesCompanion profile});
 
   Future<Result<void>> removeProfile({required Id profileId});
 
   Stream<List<Profile>> watchProfiles();
 
+  Future<Result<List<Source>>> getSourcesForProfile({
+    required final Id profileId,
+  });
+
   Future<Result<void>> saveSource({required SourcesCompanion source});
 
   Future<Result<void>> removeSource({required Id sourceId});
 
   Stream<List<Source>> watchSourcesForProfile({required final Id profileId});
+
+  Future<Result<List<Article>>> getUnreadArticles({
+    required final Id profileId,
+  });
+
+  Future<Result<List<Article>>> getSavedArticles({required final Id profileId});
+
+  Future<Result<List<Article>>> getArticles({required final Id profileId});
 
   Future<Result<void>> saveArticles({
     required List<ArticlesCompanion> articles,

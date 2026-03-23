@@ -10,72 +10,43 @@ class LocalDataServiceProd implements LocalDataService {
   // ---- Session management ----
 
   @override
-  Future<Result<Session>> getSession() async {
-    try {
-      final result = await _database.getSession();
-      if (result == null) {
-        return Result.error(Exception('No session found'));
-      }
-      return Result.ok(result);
-    } on Exception catch (e) {
-      return Result.error(e);
-    }
+  Future<Result<Session>> getSession() {
+    return guardNotNull(
+      _database.getSession,
+      notFoundException: LocalDataNotFoundException('No session found'),
+    );
   }
 
   @override
-  Future<Result<void>> saveSession({
-    required final SessionsCompanion session,
-  }) async {
-    try {
-      await _database.insertOrUpdateSession(session: session);
-      return const Result.ok(null);
-    } on Exception catch (e) {
-      return Result.error(e);
-    }
+  Future<Result<void>> saveSession({required final SessionsCompanion session}) {
+    return guardVoid(() => _database.insertOrUpdateSession(session: session));
   }
 
   @override
-  Future<Result<void>> removeSession() async {
-    try {
-      await _database.deleteSession();
-      return const Result.ok(null);
-    } on Exception catch (e) {
-      return Result.error(e);
-    }
+  Future<Result<void>> removeSession() {
+    return guardVoid(_database.deleteSession);
   }
 
   // ---- Profile management ----
 
   @override
-  Future<Result<Profile>> getDefaultProfile() async {
-    try {
-      final result = await _database.getDefaultProfile();
-      return Result.ok(result);
-    } on Exception catch (e) {
-      return Result.error(e);
-    }
+  Future<Result<List<Profile>>> getProfiles() {
+    return guard(_database.getProfiles);
   }
 
   @override
-  Future<Result<void>> saveProfile({
-    required final ProfilesCompanion profile,
-  }) async {
-    try {
-      await _database.insertOrUpdateProfile(profile: profile);
-      return const Result.ok(null);
-    } on Exception catch (e) {
-      return Result.error(e);
-    }
+  Future<Result<Profile>> getDefaultProfile() {
+    return guard(_database.getDefaultProfile);
   }
 
   @override
-  Future<Result<void>> removeProfile({required Id profileId}) async {
-    try {
-      await _database.deleteProfile(profileId: profileId);
-      return const Result.ok(null);
-    } on Exception catch (e) {
-      return Result.error(e);
-    }
+  Future<Result<void>> saveProfile({required final ProfilesCompanion profile}) {
+    return guardVoid(() => _database.insertOrUpdateProfile(profile: profile));
+  }
+
+  @override
+  Future<Result<void>> removeProfile({required Id profileId}) {
+    return guardVoid(() => _database.deleteProfile(profileId: profileId));
   }
 
   @override
@@ -86,23 +57,20 @@ class LocalDataServiceProd implements LocalDataService {
   // ---- Source management ----
 
   @override
-  Future<Result<void>> saveSource({required SourcesCompanion source}) async {
-    try {
-      await _database.insertOrUpdateSource(source: source);
-      return const Result.ok(null);
-    } on Exception catch (e) {
-      return Result.error(e);
-    }
+  Future<Result<List<Source>>> getSourcesForProfile({
+    required final Id profileId,
+  }) {
+    return guard(() => _database.getSourcesForProfile(profileId: profileId));
   }
 
   @override
-  Future<Result<void>> removeSource({required Id sourceId}) async {
-    try {
-      await _database.deleteSource(sourceId: sourceId);
-      return const Result.ok(null);
-    } on Exception catch (e) {
-      return Result.error(e);
-    }
+  Future<Result<void>> saveSource({required SourcesCompanion source}) {
+    return guardVoid(() => _database.insertOrUpdateSource(source: source));
+  }
+
+  @override
+  Future<Result<void>> removeSource({required Id sourceId}) {
+    return guardVoid(() => _database.deleteSource(sourceId: sourceId));
   }
 
   @override
@@ -113,65 +81,64 @@ class LocalDataServiceProd implements LocalDataService {
   // ---- Article management ----
 
   @override
+  Future<Result<List<Article>>> getUnreadArticles({
+    required final Id profileId,
+  }) {
+    return guard(() => _database.getUnreadArticles(profileId: profileId));
+  }
+
+  @override
+  Future<Result<List<Article>>> getSavedArticles({
+    required final Id profileId,
+  }) {
+    return guard(() => _database.getSavedArticles(profileId: profileId));
+  }
+
+  @override
+  Future<Result<List<Article>>> getArticles({required final Id profileId}) {
+    return guard(() => _database.getArticles(profileId: profileId));
+  }
+
+  @override
   Future<Result<void>> saveArticles({
     required List<ArticlesCompanion> articles,
-  }) async {
-    try {
-      await _database.insertOrUpdateArticles(articles: articles);
-      return const Result.ok(null);
-    } on Exception catch (e) {
-      return Result.error(e);
-    }
+  }) {
+    return guardVoid(
+      () => _database.insertOrUpdateArticles(articles: articles),
+    );
   }
 
   @override
-  Future<Result<void>> markArticleAsRead({required Id articleId}) async {
-    try {
-      await _database.updateArticleStatus(articleId: articleId, isRead: true);
-      return const Result.ok(null);
-    } on Exception catch (e) {
-      return Result.error(e);
-    }
+  Future<Result<void>> markArticleAsRead({required Id articleId}) {
+    return guardVoid(
+      () => _database.updateArticleStatus(articleId: articleId, isRead: true),
+    );
   }
 
   @override
-  Future<Result<void>> markArticleAsUnread({required Id articleId}) async {
-    try {
-      await _database.updateArticleStatus(articleId: articleId, isRead: false);
-      return const Result.ok(null);
-    } on Exception catch (e) {
-      return Result.error(e);
-    }
+  Future<Result<void>> markArticleAsUnread({required Id articleId}) {
+    return guardVoid(
+      () => _database.updateArticleStatus(articleId: articleId, isRead: false),
+    );
   }
 
   @override
-  Future<Result<void>> markArticleAsSaved({required Id articleId}) async {
-    try {
-      await _database.updateArticleStatus(articleId: articleId, isSaved: true);
-      return const Result.ok(null);
-    } on Exception catch (e) {
-      return Result.error(e);
-    }
+  Future<Result<void>> markArticleAsSaved({required Id articleId}) {
+    return guardVoid(
+      () => _database.updateArticleStatus(articleId: articleId, isSaved: true),
+    );
   }
 
   @override
-  Future<Result<void>> markArticleAsUnsaved({required Id articleId}) async {
-    try {
-      await _database.updateArticleStatus(articleId: articleId, isSaved: false);
-      return const Result.ok(null);
-    } on Exception catch (e) {
-      return Result.error(e);
-    }
+  Future<Result<void>> markArticleAsUnsaved({required Id articleId}) {
+    return guardVoid(
+      () => _database.updateArticleStatus(articleId: articleId, isSaved: false),
+    );
   }
 
   @override
-  Future<Result<void>> removeOldReadArticles({required DateTime before}) async {
-    try {
-      await _database.deleteOldReadArticles(before: before);
-      return const Result.ok(null);
-    } on Exception catch (e) {
-      return Result.error(e);
-    }
+  Future<Result<void>> removeOldReadArticles({required DateTime before}) {
+    return guardVoid(() => _database.deleteOldReadArticles(before: before));
   }
 
   @override
