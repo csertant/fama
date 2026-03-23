@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../l10n/generated/app_localizations.dart';
@@ -60,11 +62,11 @@ class SourcesScreen extends StatelessWidget {
     final source = viewModel.sources[index];
     return SourceCard(
       source: source,
-      onModifySource: () async {
-        await viewModel.modifySource(source);
+      onModifySource: () {
+        unawaited(viewModel.modifySource.execute(source));
       },
-      onRemoveSource: () async {
-        await viewModel.removeSource(source);
+      onRemoveSource: () {
+        unawaited(viewModel.removeSource.execute(source));
       },
     );
   }

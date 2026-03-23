@@ -8,9 +8,9 @@ abstract class LocalDataService {
 
   Future<Result<void>> removeSession();
 
-  Future<Result<Profile>> getDefaultProfile();
-
   Future<Result<List<Profile>>> getProfiles();
+
+  Future<Result<Profile>> getDefaultProfile();
 
   Future<Result<void>> saveProfile({required final ProfilesCompanion profile});
 
@@ -24,7 +24,10 @@ abstract class LocalDataService {
 
   Future<Result<void>> saveSource({required SourcesCompanion source});
 
-  Future<Result<void>> removeSource({required Id sourceId});
+  Future<Result<void>> removeSource({
+    required ProfileId profileId,
+    required Id sourceId,
+  });
 
   Stream<List<Source>> watchSourcesForProfile({required final Id profileId});
 

@@ -2,14 +2,18 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../data/repositories/profile/profile_repository.dart';
 import '../../data/repositories/settings/settings_repository.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../models/app_settings.dart';
 import '../../utils/utils.dart';
 
 class SettingsViewModel extends ChangeNotifier {
-  SettingsViewModel({required SettingsRepository settingsRepository})
-    : _settingsRepository = settingsRepository {
+  SettingsViewModel({
+    required SettingsRepository settingsRepository,
+    required ProfileRepository profileRepository,
+  }) : _settingsRepository = settingsRepository,
+       _profileRepository = profileRepository {
     load = Command0(_load);
     updateTheme = Command1(_updateTheme);
     updateLanguage = Command1(_updateLanguage);
@@ -17,6 +21,7 @@ class SettingsViewModel extends ChangeNotifier {
     unawaited(load.execute());
   }
 
+  final ProfileRepository _profileRepository;
   final SettingsRepository _settingsRepository;
 
   late Command0<void> load;

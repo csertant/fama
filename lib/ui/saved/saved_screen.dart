@@ -62,7 +62,30 @@ class SavedScreen extends StatelessWidget {
     final article = viewModel.savedArticles[index];
     return ArticleCard.leadingImage(
       article: article,
-      onConfirmDismissArticle: (direction) => Future.value(true),
+      onConfirmDismissArticle: (direction) async {
+        switch (direction) {
+          case DismissDirection.startToEnd:
+            await viewModel.markAsUnsaved.execute(article);
+            if (viewModel.markAsUnsaved.completed) {
+              return true;
+            } else {
+              return false;
+            }
+          case DismissDirection.endToStart:
+            await viewModel.markAsRead.execute(article);
+            if (viewModel.markAsRead.completed) {
+              return true;
+            } else {
+              return false;
+            }
+          case DismissDirection.up:
+          case DismissDirection.down:
+          case DismissDirection.horizontal:
+          case DismissDirection.vertical:
+          case DismissDirection.none:
+            return false;
+        }
+      },
       dismissibleActionLeft: CustomDismissibleAction.left(
         icon: CustomIcons.remove,
         backgroundColor: Theme.of(context).colorScheme.error,

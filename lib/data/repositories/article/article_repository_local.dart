@@ -1,3 +1,5 @@
+import 'package:drift/drift.dart';
+
 import '../../../utils/utils.dart';
 import '../../database/database.dart';
 import '../../services/local_data_service/local_data_service.dart';
@@ -15,45 +17,28 @@ class ArticleRepositoryLocal implements ArticleRepository {
   final RssService _rssService;
 
   @override
-  Future<Result<void>> syncArticlesForProfile({required Id profileId}) async {
-    // TODO: Implement
-    throw UnimplementedError();
+  Future<Result<List<Article>>> getUnreadArticles({required Id profileId}) {
+    return _localDataService.getUnreadArticles(profileId: profileId);
   }
 
   @override
-  Future<Result<void>> markAsRead({
-    required final Id profileId,
-    required final Id articleId,
-  }) async {
-    // TODO: Implement
-    throw UnimplementedError();
+  Future<Result<List<Article>>> getSavedArticles({required Id profileId}) {
+    return _localDataService.getSavedArticles(profileId: profileId);
   }
 
   @override
-  Future<Result<void>> markAsUnread({
-    required final Id profileId,
-    required final Id articleId,
-  }) async {
-    // TODO: Implement
-    throw UnimplementedError();
+  Future<Result<List<Article>>> getArticles({required Id profileId}) {
+    return _localDataService.getArticles(profileId: profileId);
   }
 
   @override
-  Future<Result<void>> markAsSaved({
-    required final Id profileId,
-    required final Id articleId,
-  }) async {
-    // TODO: Implement
-    throw UnimplementedError();
+  Stream<List<Article>> watchUnreadArticles({required Id profileId}) {
+    return _localDataService.watchUnreadArticles(profileId: profileId);
   }
 
   @override
-  Future<Result<void>> markAsUnsaved({
-    required final Id profileId,
-    required final Id articleId,
-  }) async {
-    // TODO: Implement
-    throw UnimplementedError();
+  Stream<List<Article>> watchSavedArticles({required Id profileId}) {
+    return _localDataService.watchSavedArticles(profileId: profileId);
   }
 
   @override
@@ -62,7 +47,89 @@ class ArticleRepositoryLocal implements ArticleRepository {
   }
 
   @override
-  Stream<List<Article>> watchUnreadArticles({required Id profileId}) {
-    return _localDataService.watchUnreadArticles(profileId: profileId);
+  Future<Result<void>> markAsRead({
+    required final Id profileId,
+    required final Id articleId,
+  }) {
+    return _localDataService.markArticleAsRead(articleId: articleId);
+  }
+
+  @override
+  Future<Result<void>> markAsUnread({
+    required final Id profileId,
+    required final Id articleId,
+  }) {
+    return _localDataService.markArticleAsUnread(articleId: articleId);
+  }
+
+  @override
+  Future<Result<void>> markAsSaved({
+    required final Id profileId,
+    required final Id articleId,
+  }) {
+    return _localDataService.markArticleAsSaved(articleId: articleId);
+  }
+
+  @override
+  Future<Result<void>> markAsUnsaved({
+    required final Id profileId,
+    required final Id articleId,
+  }) {
+    return _localDataService.markArticleAsUnsaved(articleId: articleId);
+  }
+
+  @override
+  Future<Result<void>> syncArticlesForProfile({required Id profileId}) async {
+    try {
+      final sourcesResult = await _localDataService.getSourcesForProfile(
+        profileId: profileId,
+      );
+      switch (sourcesResult) {
+        case Ok<List<Source>>():
+          final sources = sourcesResult.value;
+          final syncTasks = sources.map(
+            (source) => _syncSingleSource(profileId: profileId, source: source),
+          );
+          await Future.wait(syncTasks);
+          return const Result.ok(null);
+        case Error<List<Source>>():
+          return sourcesResult;
+      }
+    } on Exception catch (e) {
+      return Result.error(e);
+    }
+  }
+
+  Future<Result<void>> _syncSingleSource({
+    required ProfileId profileId,
+    required Source source,
+  }) async {
+    try {
+      final parsedFeedResult = await _rssService.fetchFeed(url: source.url);
+      switch (parsedFeedResult) {
+        case Ok<ParsedFeed>():
+          final parsedFeed = parsedFeedResult.value;
+          final newArticles = parsedFeed.articles.map((parsedArticle) {
+            return ArticlesCompanion.insert(
+              profileId: profileId,
+              sourceId: source.id,
+              guid: parsedArticle.guid,
+              url: parsedArticle.url,
+              title: parsedArticle.title,
+              content: Value(parsedArticle.content),
+              summary: Value(parsedArticle.summary),
+              author: Value(parsedArticle.author),
+              imageUrl: Value(parsedArticle.imageUrl),
+              publishedAt: parsedArticle.publishedAt,
+              updatedAt: Value(DateTime.now()),
+            );
+          }).toList();
+          return _localDataService.saveArticles(articles: newArticles);
+        case Error<ParsedFeed>():
+          return Result.error(parsedFeedResult.error);
+      }
+    } on Exception catch (e) {
+      return Result.error(e);
+    }
   }
 }

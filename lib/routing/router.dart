@@ -1,7 +1,9 @@
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
+import '../data/managers/session/session_manager.dart';
 import '../data/repositories/article/article_repository.dart';
+import '../data/repositories/profile/profile_repository.dart';
 import '../data/repositories/settings/settings_repository.dart';
 import '../data/repositories/source/source_repository.dart';
 import '../ui/core/widgets/custom_screen.dart';
@@ -30,6 +32,7 @@ GoRouter router() => GoRouter(
               path: Routes.feed,
               builder: (context, state) {
                 final viewModel = FeedViewModel(
+                  sessionManager: context.read<SessionManager>(),
                   articleRepository: context.read<ArticleRepository>(),
                 );
                 return FeedScreen(viewModel: viewModel);
@@ -43,6 +46,7 @@ GoRouter router() => GoRouter(
               path: Routes.sources,
               builder: (context, state) {
                 final viewModel = SourcesViewModel(
+                  sessionManager: context.read<SessionManager>(),
                   sourceRepository: context.read<SourceRepository>(),
                 );
                 return SourcesScreen(viewModel: viewModel);
@@ -56,6 +60,7 @@ GoRouter router() => GoRouter(
               path: Routes.saved,
               builder: (context, state) {
                 final viewModel = SavedViewModel(
+                  sessionManager: context.read<SessionManager>(),
                   articleRepository: context.read<ArticleRepository>(),
                 );
                 return SavedScreen(viewModel: viewModel);
@@ -70,6 +75,7 @@ GoRouter router() => GoRouter(
               path: Routes.settings,
               builder: (context, state) {
                 final viewModel = SettingsViewModel(
+                  profileRepository: context.read<ProfileRepository>(),
                   settingsRepository: context.read<SettingsRepository>(),
                 );
                 return SettingsScreen(viewModel: viewModel);

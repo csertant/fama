@@ -7,6 +7,8 @@ import '../data/managers/session/session_manager_dev.dart';
 import '../data/managers/session/session_manager_prod.dart';
 import '../data/repositories/article/article_repository.dart';
 import '../data/repositories/article/article_repository_local.dart';
+import '../data/repositories/profile/profile_repository.dart';
+import '../data/repositories/profile/profile_repository_local.dart';
 import '../data/repositories/settings/settings_repository.dart';
 import '../data/repositories/settings/settings_repository_local.dart';
 import '../data/repositories/source/source_repository.dart';
@@ -43,6 +45,13 @@ List<SingleChildWidget> _sharedProviders = [
               localDataService: context.read<LocalDataService>(),
             )
             as SourceRepository,
+  ),
+  Provider(
+    create: (final context) =>
+        ProfileRepositoryLocal(
+              localDataService: context.read<LocalDataService>(),
+            )
+            as ProfileRepository,
   ),
 ];
 

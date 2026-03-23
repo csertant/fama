@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../l10n/generated/app_localizations.dart';
@@ -45,9 +47,9 @@ class SettingsScreen extends StatelessWidget {
                         .map((e) => mapThemeModeToString(context, e))
                         .toList(),
                     selectedOption: viewModel.theme,
-                    onChanged: (theme) async {
+                    onChanged: (theme) {
                       if (theme != null) {
-                        await viewModel.updateTheme.execute(theme);
+                        unawaited(viewModel.updateTheme.execute(theme));
                       }
                     },
                   ),
@@ -64,9 +66,11 @@ class SettingsScreen extends StatelessWidget {
                         )
                         .toList(),
                     selectedOption: viewModel.language,
-                    onChanged: (languageCode) async {
+                    onChanged: (languageCode) {
                       if (languageCode != null) {
-                        await viewModel.updateLanguage.execute(languageCode);
+                        unawaited(
+                          viewModel.updateLanguage.execute(languageCode),
+                        );
                       }
                     },
                   ),

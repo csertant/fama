@@ -154,8 +154,13 @@ class AppDatabase extends _$AppDatabase {
     return into(sources).insertOnConflictUpdate(source);
   }
 
-  Future<void> deleteSource({required Id sourceId}) {
-    return (delete(sources)..where((s) => s.id.equals(sourceId))).go();
+  Future<void> deleteSource({
+    required ProfileId profileId,
+    required Id sourceId,
+  }) {
+    return (delete(sources)
+          ..where((s) => s.id.equals(sourceId) & s.profileId.equals(profileId)))
+        .go();
   }
 
   Stream<List<Source>> watchSourcesForProfile({required final Id profileId}) {

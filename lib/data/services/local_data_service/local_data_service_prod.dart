@@ -69,8 +69,13 @@ class LocalDataServiceProd implements LocalDataService {
   }
 
   @override
-  Future<Result<void>> removeSource({required Id sourceId}) {
-    return guardVoid(() => _database.deleteSource(sourceId: sourceId));
+  Future<Result<void>> removeSource({
+    required ProfileId profileId,
+    required Id sourceId,
+  }) {
+    return guardVoid(
+      () => _database.deleteSource(profileId: profileId, sourceId: sourceId),
+    );
   }
 
   @override

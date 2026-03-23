@@ -17,7 +17,7 @@ class CustomTextWithActions extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-          child: Text(text, style: Theme.of(context).textTheme.titleSmall),
+          child: Text(text, style: Theme.of(context).textTheme.bodyMedium),
         ),
         ...actions,
       ],

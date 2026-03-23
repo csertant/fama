@@ -13,7 +13,6 @@ class ArticleCard extends StatelessWidget {
     super.key,
     required this.article,
     this.sourceTitle,
-    this.onDismissArticle,
     required this.onConfirmDismissArticle,
     required this.dismissibleActionLeft,
     required this.dismissibleActionRight,
@@ -23,7 +22,6 @@ class ArticleCard extends StatelessWidget {
     super.key,
     required this.article,
     this.sourceTitle,
-    this.onDismissArticle,
     required this.onConfirmDismissArticle,
     required this.dismissibleActionLeft,
     required this.dismissibleActionRight,
@@ -33,7 +31,6 @@ class ArticleCard extends StatelessWidget {
     super.key,
     required this.article,
     this.sourceTitle,
-    this.onDismissArticle,
     required this.onConfirmDismissArticle,
     required this.dismissibleActionLeft,
     required this.dismissibleActionRight,
@@ -43,7 +40,6 @@ class ArticleCard extends StatelessWidget {
   final ArticleCardLayout layout;
   final String? sourceTitle;
 
-  final void Function(DismissDirection)? onDismissArticle;
   final ConfirmDismissCallback onConfirmDismissArticle;
 
   final CustomDismissibleAction dismissibleActionLeft;
@@ -54,7 +50,6 @@ class ArticleCard extends StatelessWidget {
     return Dismissible(
       key: ValueKey(article.id),
       confirmDismiss: onConfirmDismissArticle,
-      onDismissed: onDismissArticle,
       background: dismissibleActionLeft,
       secondaryBackground: dismissibleActionRight,
       child: Card(
@@ -115,9 +110,8 @@ class ArticleCard extends StatelessWidget {
     final summaryOrPlaceholder = article.summary != null
         ? article.summary!
         : localizations.articleCardNoSummaryLabel;
-    //TODO
-    final sourceOrPlaceholder =
-        sourceTitle ?? article.author ?? 'Source #${article.sourceId}';
+    //TODO: real source name
+    final sourceOrPlaceholder = sourceTitle ?? 'Source #${article.sourceId}';
     final authorOrPlaceholder = article.author != null
         ? article.author!
         : localizations.articleCardNoAuthorLabel;

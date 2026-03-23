@@ -40,7 +40,7 @@ class SettingsRepositoryLocal extends SettingsRepository {
           notifyListeners();
           return const Result.ok(null);
         case Error<AppSettings>():
-          return Result.error(appSettingsResult.error);
+          return appSettingsResult;
       }
     } finally {
       _isLoading = false;

@@ -11,12 +11,16 @@ class ParsedFeed {
     required this.title,
     this.siteUrl,
     this.imageUrl,
+    this.description,
+    this.copyright,
     required this.articles,
   });
 
   final String title;
   final String? siteUrl;
   final String? imageUrl;
+  final String? description;
+  final String? copyright;
   final List<ParsedArticle> articles;
 }
 
@@ -25,7 +29,9 @@ class ParsedArticle {
     required this.guid,
     required this.url,
     required this.title,
+    this.summary,
     this.content,
+    this.author,
     this.imageUrl,
     required this.publishedAt,
   });
@@ -33,7 +39,9 @@ class ParsedArticle {
   final String guid;
   final String url;
   final String title;
+  final String? summary;
   final String? content;
+  final String? author;
   final String? imageUrl;
   final DateTime publishedAt;
 }
@@ -43,10 +51,10 @@ class RssService {
 
   final http.Client _client;
 
-  Future<Result<ParsedFeed>> fetchFeed(String feedUrl) async {
+  Future<Result<ParsedFeed>> fetchFeed({required String url}) async {
     try {
       final response = await _client
-          .get(Uri.parse(feedUrl))
+          .get(Uri.parse(url))
           .timeout(const Duration(seconds: 15));
 
       if (response.statusCode != 200) {
@@ -74,12 +82,16 @@ class RssService {
       title: feed.title ?? 'Unknown Source',
       siteUrl: feed.link,
       imageUrl: feed.image?.url,
+      description: feed.description,
+      copyright: feed.copyright,
       articles: feed.items.map((item) {
         return ParsedArticle(
           guid: item.guid ?? item.link ?? const Uuid().v1(),
           url: item.link ?? '',
           title: item.title ?? 'Unknown Article',
+          summary: item.description,
           content: item.content?.value ?? item.description,
+          author: item.author,
           imageUrl: _extractImageUrlFromRssItem(item),
           publishedAt: DateTime.tryParse(item.pubDate ?? '') ?? DateTime.now(),
         );
@@ -92,12 +104,18 @@ class RssService {
       title: feed.title ?? 'Unknown Source',
       siteUrl: feed.links.isNotEmpty == true ? feed.links.first.href : null,
       imageUrl: feed.logo,
+      description: feed.subtitle,
+      copyright: feed.rights,
       articles: feed.items.map((item) {
         return ParsedArticle(
           guid: item.id ?? item.links.first.href ?? const Uuid().v1(),
           url: item.links.isNotEmpty == true ? item.links.first.href ?? '' : '',
           title: item.title ?? 'Unknown Article',
+          summary: item.summary,
           content: item.content ?? item.summary,
+          author: item.authors.isNotEmpty == true
+              ? item.authors.first.name
+              : null,
           imageUrl: _extractMediaUrl(item.media?.thumbnails),
           publishedAt:
               DateTime.tryParse(item.updated ?? item.published ?? '') ??

@@ -19,10 +19,10 @@ final Profile otherProfile = Profile(
 final Source exampleSource = Source(
   id: 1,
   profileId: defaultProfile.id,
-  title: 'Example Source',
-  url: 'https://example.com/rss',
-  description: 'An example RSS feed',
-  siteUrl: 'https://example.com',
+  title: 'Telex',
+  url: 'https://telex.hu/rss',
+  description: 'Telex Legfrissebb hírek',
+  siteUrl: 'https://telex.hu',
   createdAt: DateTime.now().subtract(const Duration(days: 1)),
   updatedAt: DateTime.now(),
 );
@@ -34,7 +34,8 @@ final List<Article> exampleArticles = List.generate(
     sourceId: exampleSource.id,
     profileId: defaultProfile.id,
     title: 'Example Article ${index + 1}',
-    url: 'https://example.com/article${index + 1}',
+    author: 'Author ${index + 1}',
+    url: 'https://telex.hu/article${index + 1}',
     summary: 'Description for article ${index + 1}',
     publishedAt: DateTime.now().subtract(Duration(days: index)),
     isRead: index.isEven,
@@ -102,7 +103,10 @@ class LocalDataServiceDev implements LocalDataService {
   }
 
   @override
-  Future<Result<void>> removeSource({required Id sourceId}) async {
+  Future<Result<void>> removeSource({
+    required ProfileId profileId,
+    required Id sourceId,
+  }) async {
     return const Result.ok(null);
   }
 

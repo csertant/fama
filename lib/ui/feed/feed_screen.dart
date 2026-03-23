@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/generated/app_localizations.dart';
+import '../core/themes/colors.dart';
 import '../core/themes/dimensions.dart';
 import '../core/widgets/widgets.dart';
 import 'feed_viewmodel.dart';
@@ -66,10 +67,33 @@ class FeedScreen extends StatelessWidget {
     final article = viewModel.articles[index];
     return ArticleCard.headingImage(
       article: article,
-      onConfirmDismissArticle: (direction) => Future.value(true),
-      dismissibleActionLeft: CustomDismissibleAction.left(
+      onConfirmDismissArticle: (direction) async {
+        switch (direction) {
+          case DismissDirection.startToEnd:
+            await viewModel.markAsSaved.execute(article);
+            if (viewModel.markAsSaved.completed) {
+              return true;
+            } else {
+              return false;
+            }
+          case DismissDirection.endToStart:
+            await viewModel.markAsRead.execute(article);
+            if (viewModel.markAsRead.completed) {
+              return true;
+            } else {
+              return false;
+            }
+          case DismissDirection.up:
+          case DismissDirection.down:
+          case DismissDirection.horizontal:
+          case DismissDirection.vertical:
+          case DismissDirection.none:
+            return false;
+        }
+      },
+      dismissibleActionLeft: const CustomDismissibleAction.left(
         icon: CustomIcons.saved,
-        backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
+        backgroundColor: AppColors.green,
       ),
       dismissibleActionRight: const CustomDismissibleAction.right(
         icon: CustomIcons.read,

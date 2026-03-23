@@ -16,6 +16,11 @@ class ProfileRepositoryLocal implements ProfileRepository {
   }
 
   @override
+  Stream<List<Profile>> watchProfiles() {
+    return _localDataService.watchProfiles();
+  }
+
+  @override
   Future<Result<void>> saveProfile({
     required String name,
     String? description,
@@ -28,10 +33,5 @@ class ProfileRepositoryLocal implements ProfileRepository {
   Future<Result<void>> removeProfile({required Id profileId}) {
     // TODO: Implement
     throw UnimplementedError();
-  }
-
-  @override
-  Stream<List<Profile>> watchProfiles() {
-    return _localDataService.watchProfiles();
   }
 }
