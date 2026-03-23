@@ -39,5 +39,6 @@
     "settingsLanguageOptionEnglish": "angol",
     "settingsLanguageOptionUnknown": "ismeretlen",
     "articleCardNoSummaryLabel": "nincs összefoglaló ehhez a cikkhez",
+    "articleCardNoAuthorLabel": "ismeretlen szerző",
     "sourceCardNoDescriptionLabel": "nincs leírás ehhez a forráshoz"
 }

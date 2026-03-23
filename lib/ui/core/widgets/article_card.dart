@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../data/database/database.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../utils/utils.dart';
 import '../themes/dimensions.dart';
 import 'widgets.dart';
 
@@ -112,42 +112,33 @@ class ArticleCard extends StatelessWidget {
 
   Widget _buildTextContent(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     final summaryOrPlaceholder = article.summary != null
         ? article.summary!
         : localizations.articleCardNoSummaryLabel;
     //TODO
     final sourceOrPlaceholder =
         sourceTitle ?? article.author ?? 'Source #${article.sourceId}';
-    final publishedAtLabel = DateFormat(
-      'y. MM. dd. HH:mm',
-    ).format(article.publishedAt);
+    final authorOrPlaceholder = article.author != null
+        ? article.author!
+        : localizations.articleCardNoAuthorLabel;
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: AppDimensions.paddingSmall,
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: Text(
-                sourceOrPlaceholder,
-                style: theme.textTheme.labelMedium,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            const SizedBox(width: AppDimensions.paddingSmall),
-            Text(publishedAtLabel, style: theme.textTheme.labelMedium),
+        CustomTextWithActions(
+          text: sourceOrPlaceholder,
+          actions: [
+            CustomIconButton.normal(onTap: () {}, icon: CustomIcons.share),
           ],
         ),
-        const SizedBox(height: AppDimensions.paddingSmall),
-        Text(article.title, style: theme.textTheme.titleMedium),
-        const SizedBox(height: AppDimensions.paddingSmall),
-        Text(
-          summaryOrPlaceholder,
-          style: theme.textTheme.bodyMedium,
-          maxLines: 3,
-          overflow: TextOverflow.ellipsis,
+        CustomTextTitleWithSummary(
+          title: article.title,
+          summary: summaryOrPlaceholder,
+        ),
+        CustomTextMetadata(
+          leftText: authorOrPlaceholder,
+          rightText: AppDateFormat.dateTime.format(article.publishedAt),
         ),
       ],
     );

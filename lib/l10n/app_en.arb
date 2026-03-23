@@ -39,5 +39,6 @@
     "settingsLanguageOptionEnglish": "english",
     "settingsLanguageOptionUnknown": "unknown",
     "articleCardNoSummaryLabel": "no summary available for this article",
+    "articleCardNoAuthorLabel": "unknown author",
     "sourceCardNoDescriptionLabel": "no description available for this source"
 }
