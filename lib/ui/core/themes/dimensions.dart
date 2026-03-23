@@ -21,6 +21,9 @@ abstract final class AppDimensions {
   static const iconSizeMedium = 24.0;
   static const iconSizeSmall = 16.0;
 
+  static const headingImageHeight = 172.0;
+  static const leadingImageWidth = 88.0;
+
   double get paddingScreenHorizontal;
   double get paddingScreenVertical;
 

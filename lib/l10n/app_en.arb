@@ -1,11 +1,30 @@
 {
+    "@@locale": "en",
     "appTitle": "fáma",
     "navigationLabelFeed": "feed",
     "navigationLabelSources": "sources",
     "navigationLabelSaved": "saved",
     "navigationLabelSettings": "settings",
+    "feedLoadErrorTitle": "failed to load feed",
+    "feedLoadErrorLabel": "reload",
+    "feedEmptyLabel": "nothing here yet",
     "sourcesTitle": "sources",
+    "sourcesLoadErrorTitle": "failed to load sources",
+    "sourcesLoadErrorLabel": "reload",
+    "sourcesEmptyLabel": "no sources yet",
+    "sourceCardNotSyncedYetLabel": "not synced yet",
+    "sourceCardLastSyncLabel": "last synced at: {date}",
+    "@sourceCardLastSyncLabel": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
     "savedTitle": "saved",
+    "savedLoadErrorTitle": "failed to load saved articles",
+    "savedLoadErrorLabel": "reload",
+    "savedEmptyLabel": "no saved articles yet",
     "settingsTitle": "settings",
     "settingsLoadErrorTitle": "failed to load settings",
     "settingsLoadErrorLabel": "reload",
@@ -18,5 +37,7 @@
     "settingsLanguageSubtitle": "select your preferred language",
     "settingsLanguageOptionHungarian": "hungarian",
     "settingsLanguageOptionEnglish": "english",
-    "settingsLanguageOptionUnknown": "unknown"
+    "settingsLanguageOptionUnknown": "unknown",
+    "articleCardNoSummaryLabel": "no summary available for this article",
+    "sourceCardNoDescriptionLabel": "no description available for this source"
 }

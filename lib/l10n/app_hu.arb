@@ -1,11 +1,30 @@
 {
+    "@@locale": "hu",
     "appTitle": "fáma",
     "navigationLabelFeed": "hírek",
     "navigationLabelSources": "források",
     "navigationLabelSaved": "mentve",
     "navigationLabelSettings": "beállítások",
+    "feedLoadErrorTitle": "nem sikerült betölteni a híreket",
+    "feedLoadErrorLabel": "újratöltés",
+    "feedEmptyLabel": "egyelőre nincs itt semmi",
     "sourcesTitle": "források",
+    "sourcesLoadErrorTitle": "nem sikerült betölteni a forrásokat",
+    "sourcesLoadErrorLabel": "újratöltés",
+    "sourcesEmptyLabel": "még nincs forrás hozzáadva",
+    "sourceCardNotSyncedYetLabel": "még nincs szinkronizálva",
+    "sourceCardLastSyncLabel": "utolsó szinkronizálás: {date}",
+    "@sourceCardLastSyncLabel": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
     "savedTitle": "mentve",
+    "savedLoadErrorTitle": "nem sikerült betölteni az elmentett híreket",
+    "savedLoadErrorLabel": "újratöltés",
+    "savedEmptyLabel": "még nincs elmentett hír",
     "settingsTitle": "beállítások",
     "settingsLoadErrorTitle": "nem sikerült betölteni a beállításokat",
     "settingsLoadErrorLabel": "újratöltés",
@@ -18,5 +37,7 @@
     "settingsLanguageSubtitle": "válaszd ki a kívánt nyelvet",
     "settingsLanguageOptionHungarian": "magyar",
     "settingsLanguageOptionEnglish": "angol",
-    "settingsLanguageOptionUnknown": "ismeretlen"
+    "settingsLanguageOptionUnknown": "ismeretlen",
+    "articleCardNoSummaryLabel": "nincs összefoglaló ehhez a cikkhez",
+    "sourceCardNoDescriptionLabel": "nincs leírás ehhez a forráshoz"
 }

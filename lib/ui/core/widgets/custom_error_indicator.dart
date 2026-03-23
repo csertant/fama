@@ -28,7 +28,7 @@ class ErrorIndicator extends StatelessWidget {
               iconPath: CustomIcons.error,
               color: theme.colorScheme.error,
             ),
-            const SizedBox(width: AppDimensions.paddingLarge),
+            const SizedBox(height: AppDimensions.paddingSmall),
             Text(
               title,
               style: theme.textTheme.titleMedium?.copyWith(
@@ -43,7 +43,7 @@ class ErrorIndicator extends StatelessWidget {
                   theme.colorScheme.error,
                 ),
               ),
-              child: Text(label),
+              child: Text(label, style: theme.textTheme.labelMedium),
             ),
           ],
         ),

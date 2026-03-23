@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
+import '../../data/database/database.dart';
 import '../../data/repositories/article/article_repository.dart';
 import '../../utils/utils.dart';
 
@@ -13,8 +15,11 @@ class FeedViewModel extends ChangeNotifier {
   }
 
   final ArticleRepository _articleRepository;
+  List<Article> _articles = [];
 
   late Command0<void> load;
+
+  List<Article> get articles => UnmodifiableListView(_articles);
 
   Future<Result<void>> _load() async {
     try {

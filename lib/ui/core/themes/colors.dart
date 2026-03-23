@@ -7,6 +7,7 @@ abstract final class AppColors {
   static const Color white = Color(0xFFF5F5F5);
 
   static const Color red = Color(0xFFFF0000);
+  static const Color green = Color(0xFF4CAF50);
 
   static const lightColorScheme = ColorScheme(
     brightness: Brightness.light,
@@ -16,6 +17,7 @@ abstract final class AppColors {
     onSecondary: black,
     surface: white,
     onSurface: black,
+    surfaceContainer: green,
     error: red,
     onError: white,
     outline: black,
@@ -29,6 +31,7 @@ abstract final class AppColors {
     onSecondary: white,
     surface: black,
     onSurface: white,
+    surfaceContainer: green,
     error: red,
     onError: black,
     outline: white,
