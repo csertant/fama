@@ -357,6 +357,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.15.6"
+  html_unescape:
+    dependency: transitive
+    description:
+      name: html_unescape
+      sha256: "15362d7a18f19d7b742ef8dcb811f5fd2a2df98db9f80ea393c075189e0b61e3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   http:
     dependency: "direct main"
     description:
@@ -661,14 +669,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.0"
-  rss_dart:
-    dependency: "direct main"
-    description:
-      name: rss_dart
-      sha256: "09c0123427e9557d74562e07f9d22effe3fd493893602e8a8d24b961490f2c30"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.14"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -858,6 +858,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.0"
+  universal_feed:
+    dependency: "direct main"
+    description:
+      name: universal_feed
+      sha256: "5c5f4470ffd05a0601ffc11b071943ec8dd74360670b3207886d51c800f18e0e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.0"
   universal_io:
     dependency: transitive
     description:

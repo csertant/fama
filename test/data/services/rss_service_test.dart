@@ -1,11 +1,10 @@
 import 'dart:convert';
 
+import 'package:fama/data/services/rss_service.dart';
+import 'package:fama/utils/result.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-
-import 'package:fama/data/services/rss_service.dart';
-import 'package:fama/utils/result.dart';
 
 void main() {
   group('RssService.fetchFeed', () {

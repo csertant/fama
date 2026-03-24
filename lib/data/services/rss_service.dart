@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:rss_dart/dart_rss.dart';
-import 'package:rss_dart/domain/media/thumbnail.dart';
+import 'package:universal_feed/universal_feed.dart';
 import 'package:uuid/uuid.dart';
 import '../../utils/result.dart';
 
@@ -71,22 +70,18 @@ class RssService {
   }
 
   ParsedFeed _parseFeedWithFallback(String xmlString) {
-    try {
-      return _parseFeed(xmlString);
-    } on Exception {
-      final sanitizedXml = _sanitizeXml(xmlString);
-      return _parseFeed(sanitizedXml);
-    }
-  }
-
-  ParsedFeed _parseFeed(String xmlString) {
-    if (xmlString.contains('<feed') && !xmlString.contains('<rss')) {
-      final atomFeed = AtomFeed.parse(xmlString);
-      return _mapAtomToParsedFeed(atomFeed);
+    final parsed = UniversalFeed.tryParse(xmlString);
+    if (parsed != null) {
+      return _mapToParsedFeed(parsed);
     }
 
-    final rssFeed = RssFeed.parse(xmlString);
-    return _mapRssToParsedFeed(rssFeed);
+    final sanitizedXml = _sanitizeXml(xmlString);
+    final sanitizedParsed = UniversalFeed.tryParse(sanitizedXml);
+    if (sanitizedParsed != null) {
+      return _mapToParsedFeed(sanitizedParsed);
+    }
+
+    throw const FormatException('Failed to parse feed content');
   }
 
   String _sanitizeXml(String xmlString) {
@@ -100,120 +95,102 @@ class RssService {
     );
   }
 
-  ParsedFeed _mapRssToParsedFeed(RssFeed feed) {
+  ParsedFeed _mapToParsedFeed(UniversalFeed feed) {
     return ParsedFeed(
       title: feed.title ?? 'Unknown Source',
-      siteUrl: feed.link,
-      imageUrl: feed.image?.url,
+      siteUrl: _pickFeedSiteUrl(feed),
+      imageUrl: feed.image?.url ?? feed.icon?.url,
       description: feed.description,
       copyright: feed.copyright,
       articles: feed.items.map((item) {
         return ParsedArticle(
-          guid: item.guid ?? item.link ?? const Uuid().v1(),
-          url: item.link ?? '',
+          guid: item.guid ?? item.link?.href ?? const Uuid().v1(),
+          url: _pickItemUrl(item),
           title: item.title ?? 'Unknown Article',
           summary: item.description,
-          content: item.content?.value ?? item.description,
-          author: item.author,
-          imageUrl: _extractImageUrlFromRssItem(item),
-          publishedAt: _parsePublishedAt(item.pubDate),
+          content: _pickItemContent(item),
+          author: item.authors.isNotEmpty ? item.authors.first.value : null,
+          imageUrl: _extractImageUrlFromItem(item),
+          publishedAt: _parsePublishedAt(item.published ?? item.updated),
         );
       }).toList(),
     );
   }
 
-  ParsedFeed _mapAtomToParsedFeed(AtomFeed feed) {
-    return ParsedFeed(
-      title: feed.title ?? 'Unknown Source',
-      siteUrl: feed.links.isNotEmpty == true ? feed.links.first.href : null,
-      imageUrl: feed.logo,
-      description: feed.subtitle,
-      copyright: feed.rights,
-      articles: feed.items.map((item) {
-        return ParsedArticle(
-          guid: item.id ?? item.links.first.href ?? const Uuid().v1(),
-          url: item.links.isNotEmpty == true ? item.links.first.href ?? '' : '',
-          title: item.title ?? 'Unknown Article',
-          summary: item.summary,
-          content: item.content ?? item.summary,
-          author: item.authors.isNotEmpty == true
-              ? item.authors.first.name
-              : null,
-          imageUrl: _extractMediaUrl(item.media?.thumbnails),
-          publishedAt: _parsePublishedAt(item.updated ?? item.published),
-        );
-      }).toList(),
-    );
+  String? _pickFeedSiteUrl(UniversalFeed feed) {
+    final htmlLink = feed.htmlLink?.href;
+    if (htmlLink != null && htmlLink.isNotEmpty) {
+      return htmlLink;
+    }
+
+    final firstNonSelf = feed.links
+        .where(
+          (link) => link.href.isNotEmpty && link.rel != LinkRelationType.self,
+        )
+        .map((link) => link.href)
+        .firstOrNull;
+    if (firstNonSelf != null) {
+      return firstNonSelf;
+    }
+
+    return feed.xmlLink?.href;
   }
 
-  DateTime _parsePublishedAt(String? rawDate) {
-    if (rawDate == null || rawDate.trim().isEmpty) {
+  String _pickItemUrl(Item item) {
+    final direct = item.link?.href;
+    if (direct != null && direct.isNotEmpty) {
+      return direct;
+    }
+
+    return item.links
+            .where((link) => link.href.isNotEmpty)
+            .map((link) => link.href)
+            .firstOrNull ??
+        '';
+  }
+
+  String? _pickItemContent(Item item) {
+    final contentValue = item.content
+        .map((content) => content.value.trim())
+        .firstWhere((value) => value.isNotEmpty, orElse: () => '');
+
+    if (contentValue.isNotEmpty) {
+      return contentValue;
+    }
+
+    return item.description;
+  }
+
+  DateTime _parsePublishedAt(Timestamp? timestamp) {
+    final parsed = timestamp?.parseValue();
+    if (parsed != null) {
+      return parsed;
+    }
+
+    if (timestamp == null || timestamp.value.trim().isEmpty) {
       return DateTime.now();
     }
-    final dateValue = rawDate.trim();
-    final isoDate = DateTime.tryParse(dateValue);
-    if (isoDate != null) {
-      return isoDate;
-    }
-    final rfcDate = _tryParseRfc822Date(dateValue);
-    if (rfcDate != null) {
-      return rfcDate;
-    }
+
     return DateTime.now();
   }
 
-  DateTime? _tryParseRfc822Date(String value) {
-    final match = RegExp(
-      r'^(?:[A-Za-z]{3},\s*)?(\d{1,2})\s([A-Za-z]{3})\s(\d{4})\s(\d{2}):(\d{2})(?::(\d{2}))?\s([+-]\d{4}|GMT|UTC|UT)$',
-    ).firstMatch(value);
-    if (match == null) {
-      return null;
+  String? _extractImageUrlFromItem(Item item) {
+    final itemImage = item.image?.url;
+    if (itemImage != null && itemImage.isNotEmpty) {
+      return itemImage;
     }
-    final monthByName = <String, String>{
-      'Jan': '01',
-      'Feb': '02',
-      'Mar': '03',
-      'Apr': '04',
-      'May': '05',
-      'Jun': '06',
-      'Jul': '07',
-      'Aug': '08',
-      'Sep': '09',
-      'Oct': '10',
-      'Nov': '11',
-      'Dec': '12',
-    };
-    final day = match.group(1)!.padLeft(2, '0');
-    final month = monthByName[match.group(2)!];
-    if (month == null) {
-      return null;
-    }
-    final year = match.group(3)!;
-    final hour = match.group(4)!;
-    final minute = match.group(5)!;
-    final second = (match.group(6) ?? '00').padLeft(2, '0');
-    final zone = match.group(7)!;
-    final isoZone = switch (zone) {
-      'GMT' || 'UTC' || 'UT' => 'Z',
-      _ => '${zone.substring(0, 3)}:${zone.substring(3, 5)}',
-    };
-    final isoDateString = '$year-$month-${day}T$hour:$minute:$second$isoZone';
-    return DateTime.tryParse(isoDateString);
-  }
 
-  String? _extractImageUrlFromRssItem(RssItem item) {
-    if (item.enclosure != null &&
-        item.enclosure!.url != null &&
-        item.enclosure!.url!.contains('image')) {
-      return item.enclosure!.url;
-    }
-    return null;
-  }
+    for (final enclosure in item.enclosures) {
+      if (enclosure.url.isEmpty) {
+        continue;
+      }
 
-  String? _extractMediaUrl(List<Thumbnail>? thumbnails) {
-    if (thumbnails != null && thumbnails.isNotEmpty) {
-      return thumbnails.first.url;
+      final mimeType = enclosure.type.toLowerCase();
+      if (mimeType.startsWith('image/')) {
+        return enclosure.url;
+      }
     }
+
     return null;
   }
 }
