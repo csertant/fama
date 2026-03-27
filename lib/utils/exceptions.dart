@@ -9,9 +9,6 @@ class AppException implements Exception {
 
   //TODO: map native exceptions to app exceptions
   static AppException mapError(Object error) {
-    if (error is LocalDataException) {
-      return error;
-    }
     return LocalDataStorageException(
       'Failed to perform local data operation',
       cause: error,
@@ -32,4 +29,22 @@ class LocalDataNotFoundException extends LocalDataException {
 
 class LocalDataStorageException extends LocalDataException {
   LocalDataStorageException(super.message, {super.cause});
+}
+
+class RemoteDataException extends AppException {
+  RemoteDataException(super.message, {super.cause});
+
+  @override
+  String toString() => 'RemoteDataException: $message';
+}
+
+class RemoteDataNotFoundException extends RemoteDataException {
+  RemoteDataNotFoundException(super.message);
+}
+
+class ValidationException extends AppException {
+  ValidationException(super.message, {super.cause});
+
+  @override
+  String toString() => 'ValidationException: $message';
 }

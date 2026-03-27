@@ -89,18 +89,38 @@ class AppDatabase extends _$AppDatabase {
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
-      onCreate: (Migrator m) async {
-        await m.createAll();
-
-        await into(profiles).insert(
-          ProfilesCompanion.insert(
-            name: 'Default Profile',
-            isDefault: const Value(true),
-          ),
-        );
-      },
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
+
+        // Ensure at least one profile exists.
+        await customStatement(
+          'INSERT INTO profiles (name, is_default, created_at, updated_at) '
+          "SELECT 'Default Profile', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP "
+          'WHERE NOT EXISTS (SELECT 1 FROM profiles)',
+        );
+
+        // Keep a single default profile (lowest id wins).
+        await customStatement(
+          'UPDATE profiles SET is_default = 0 '
+          'WHERE id NOT IN '
+          '(SELECT id FROM profiles WHERE is_default = 1 ORDER BY id LIMIT 1)',
+        );
+        await customStatement(
+          'UPDATE profiles SET is_default = 1 '
+          'WHERE id = (SELECT id FROM profiles ORDER BY id LIMIT 1) '
+          'AND NOT EXISTS (SELECT 1 FROM profiles WHERE is_default = 1)',
+        );
+
+        // Keep session table singleton-safe.
+        await customStatement(
+          'DELETE FROM sessions '
+          'WHERE id NOT IN (SELECT id FROM sessions ORDER BY id DESC LIMIT 1)',
+        );
+        await customStatement(
+          'UPDATE sessions SET id = 1 '
+          'WHERE id = (SELECT id FROM sessions ORDER BY id DESC LIMIT 1) '
+          'AND id != 1',
+        );
       },
     );
   }
@@ -109,7 +129,7 @@ class AppDatabase extends _$AppDatabase {
   // ---- Session management ----
 
   Future<Session?> getSession() {
-    return select(sessions).getSingle();
+    return select(sessions).getSingleOrNull();
   }
 
   Future<void> insertOrUpdateSession({required SessionsCompanion session}) {

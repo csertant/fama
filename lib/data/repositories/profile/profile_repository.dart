@@ -7,6 +7,7 @@ abstract class ProfileRepository {
   Stream<List<Profile>> watchProfiles();
 
   Future<Result<void>> saveProfile({
+    Id? profileId,
     required final String name,
     final String? description,
   });

@@ -8,7 +8,7 @@ import 'session_manager.dart';
 class SessionManagerDev extends ChangeNotifier implements SessionManager {
   SessionManagerDev();
 
-  ProfileId? _profileId = 7;
+  ProfileId? _profileId = 1;
 
   @override
   ProfileId get profileId => _profileId!;
@@ -33,7 +33,7 @@ class SessionManagerDev extends ChangeNotifier implements SessionManager {
 
   @override
   Future<Result<void>> loadSavedSession() async {
-    _profileId = 7;
+    _profileId = 1;
     notifyListeners();
     return const Result.ok(null);
   }

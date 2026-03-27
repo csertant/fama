@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../utils/utils.dart';
@@ -19,10 +20,22 @@ class SessionManagerProd extends ChangeNotifier implements SessionManager {
   bool get hasProfilePresent => _session != null;
 
   @override
-  Future<Result<void>> initializeSession({required final ProfileId profileId}) {
-    final session = SessionsCompanion.insert(profileId: profileId);
-    notifyListeners();
-    return _localDataService.saveSession(session: session);
+  Future<Result<void>> initializeSession({
+    required final ProfileId profileId,
+  }) async {
+    final session = SessionsCompanion.insert(
+      id: const Value(1),
+      profileId: profileId,
+    );
+    final result = await _localDataService.saveSession(session: session);
+    switch (result) {
+      case Ok<void>():
+        _session = Session(id: 1, profileId: profileId);
+        notifyListeners();
+      case Error<void>():
+        break;
+    }
+    return result;
   }
 
   @override
@@ -38,10 +51,13 @@ class SessionManagerProd extends ChangeNotifier implements SessionManager {
     switch (result) {
       case Ok<Session>():
         _session = result.value;
-        notifyListeners();
       case Error<Session>():
-        break;
+        _session = null;
     }
-    return result;
+    notifyListeners();
+    return switch (result) {
+      Ok<Session>() => const Result.ok(null),
+      Error<Session>() => Result.error(result.error),
+    };
   }
 }

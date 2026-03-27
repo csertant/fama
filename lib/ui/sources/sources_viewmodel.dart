@@ -17,11 +17,22 @@ class SourcesViewModel extends ChangeNotifier {
     load = Command0(_load);
     modifySource = Command1(_modifySource);
     removeSource = Command1(_removeSource);
+
+    _sessionManager.addListener(_onSessionChanged);
+    _sourcesSubscription = _sourceRepository
+        .watchSourcesForProfile(profileId: _sessionManager.profileId!)
+        .listen((sources) {
+          _sources = sources;
+          notifyListeners();
+        });
+
     unawaited(load.execute());
   }
 
   final SessionManager _sessionManager;
   final SourceRepository _sourceRepository;
+  late final StreamSubscription<List<Source>> _sourcesSubscription;
+
   List<Source> _sources = [];
 
   late Command0<void> load;
@@ -32,9 +43,14 @@ class SourcesViewModel extends ChangeNotifier {
 
   Future<Result<void>> _load() async {
     try {
-      //TODO: sessionManager!
+      final profileId = _sessionManager.profileId;
+      if (profileId == null) {
+        return Result.error(
+          LocalDataNotFoundException('No active profile session found'),
+        );
+      }
       final sourcesResult = await _sourceRepository.getSourcesForProfile(
-        profileId: 1,
+        profileId: profileId,
       );
       switch (sourcesResult) {
         case Ok<List<Source>>():
@@ -48,6 +64,10 @@ class SourcesViewModel extends ChangeNotifier {
     } finally {
       notifyListeners();
     }
+  }
+
+  void _onSessionChanged() {
+    unawaited(load.execute());
   }
 
   Future<Result<void>> _modifySource(Source source) async {
@@ -74,5 +94,12 @@ class SourcesViewModel extends ChangeNotifier {
       case Error<void>():
         return removeResult;
     }
+  }
+
+  @override
+  Future<void> dispose() async {
+    _sessionManager.removeListener(_onSessionChanged);
+    await _sourcesSubscription.cancel();
+    super.dispose();
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../themes/dimensions.dart';
+import 'widgets.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
@@ -13,7 +14,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   final Widget? leading;
   final String? title;
-  final List<Widget>? actions;
+  final List<CustomIconButton>? actions;
   final bool centerTitle;
 
   @override

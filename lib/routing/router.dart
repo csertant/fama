@@ -75,6 +75,7 @@ GoRouter router() => GoRouter(
               path: Routes.settings,
               builder: (context, state) {
                 final viewModel = SettingsViewModel(
+                  sessionManager: context.read<SessionManager>(),
                   profileRepository: context.read<ProfileRepository>(),
                   settingsRepository: context.read<SettingsRepository>(),
                 );

@@ -17,11 +17,22 @@ class FeedViewModel extends ChangeNotifier {
     load = Command0(_load);
     markAsSaved = Command1(_markAsSaved);
     markAsRead = Command1(_markAsRead);
+
+    _sessionManager.addListener(_onSessionChanged);
+    _articlesSubscription = _articleRepository
+        .watchArticles(profileId: _sessionManager.profileId!)
+        .listen((articles) {
+          _articles = articles;
+          notifyListeners();
+        });
+
     unawaited(load.execute());
   }
 
   final SessionManager _sessionManager;
   final ArticleRepository _articleRepository;
+  late final StreamSubscription<List<Article>> _articlesSubscription;
+
   List<Article> _articles = [];
 
   late Command0<void> load;
@@ -32,14 +43,19 @@ class FeedViewModel extends ChangeNotifier {
 
   Future<Result<void>> _load() async {
     try {
-      //TODO: sessionManager!
+      final profileId = _sessionManager.profileId;
+      if (profileId == null) {
+        return Result.error(
+          LocalDataNotFoundException('No active session found'),
+        );
+      }
       final syncResult = await _articleRepository.syncArticlesForProfile(
-        profileId: 1,
+        profileId: profileId,
       );
       switch (syncResult) {
         case Ok<void>():
           final articlesResult = await _articleRepository.getArticles(
-            profileId: 1,
+            profileId: profileId,
           );
           switch (articlesResult) {
             case Ok<List<Article>>():
@@ -56,6 +72,10 @@ class FeedViewModel extends ChangeNotifier {
     } finally {
       notifyListeners();
     }
+  }
+
+  void _onSessionChanged() {
+    unawaited(load.execute());
   }
 
   Future<Result<void>> _markAsSaved(Article article) async {
@@ -82,5 +102,12 @@ class FeedViewModel extends ChangeNotifier {
       case Error<void>():
         return markAsReadResult;
     }
+  }
+
+  @override
+  Future<void> dispose() async {
+    _sessionManager.removeListener(_onSessionChanged);
+    await _articlesSubscription.cancel();
+    super.dispose();
   }
 }

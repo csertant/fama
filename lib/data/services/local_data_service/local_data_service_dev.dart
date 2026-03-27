@@ -5,6 +5,7 @@ import 'local_data_service.dart';
 final Profile defaultProfile = Profile(
   id: 1,
   name: 'Default Profile',
+  description: 'This is the default profile.',
   isDefault: true,
   createdAt: DateTime.now().subtract(const Duration(days: 1)),
   updatedAt: DateTime.now(),

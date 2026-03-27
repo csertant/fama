@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
+import '../../data/database/database.dart';
+import '../../data/managers/session/session_manager.dart';
 import '../../data/repositories/profile/profile_repository.dart';
 import '../../data/repositories/settings/settings_repository.dart';
 import '../../l10n/generated/app_localizations.dart';
@@ -12,26 +15,52 @@ class SettingsViewModel extends ChangeNotifier {
   SettingsViewModel({
     required SettingsRepository settingsRepository,
     required ProfileRepository profileRepository,
+    required SessionManager sessionManager,
   }) : _settingsRepository = settingsRepository,
-       _profileRepository = profileRepository {
+       _profileRepository = profileRepository,
+       _sessionManager = sessionManager {
     load = Command0(_load);
     updateTheme = Command1(_updateTheme);
     updateLanguage = Command1(_updateLanguage);
+    createProfile = Command1(_createProfile);
+    modifyProfile = Command1(_modifyProfile);
+    removeProfile = Command1(_removeProfile);
+    switchProfile = Command1(_switchProfile);
+
     _settingsRepository.addListener(notifyListeners);
+    _sessionManager.addListener(notifyListeners);
+    _profilesSubscription = _profileRepository.watchProfiles().listen((
+      profiles,
+    ) {
+      _profiles = profiles;
+      notifyListeners();
+    });
+
     unawaited(load.execute());
   }
 
   final ProfileRepository _profileRepository;
   final SettingsRepository _settingsRepository;
+  final SessionManager _sessionManager;
+  late final StreamSubscription<List<Profile>> _profilesSubscription;
+
+  List<Profile> _profiles = [];
 
   late Command0<void> load;
   late Command1<void, ThemeMode> updateTheme;
   late Command1<void, String> updateLanguage;
+  late Command1<void, String> createProfile;
+  late Command1<void, Profile> modifyProfile;
+  late Command1<void, Profile> removeProfile;
+  late Command1<void, Profile> switchProfile;
 
   AppSettings get appSettings => _settingsRepository.appSettings;
   ThemeMode get theme => appSettings.theme;
   String get language => appSettings.languageCode;
-
+  Profile get activeProfile => _profiles.firstWhere(
+    (profile) => profile.id == _sessionManager.profileId,
+  );
+  List<Profile> get profiles => UnmodifiableListView(_profiles);
   List<Locale> get availableLocales => AppLocalizations.supportedLocales;
   List<ThemeMode> get availableThemes => ThemeMode.values;
 
@@ -51,9 +80,60 @@ class SettingsViewModel extends ChangeNotifier {
     return _settingsRepository.updateLanguage(languageCode: languageCode);
   }
 
+  Future<Result<void>> _createProfile(final String name) async {
+    if (name.trim().isEmpty) {
+      return Result.error(
+        ValidationException('Profile name must not be empty'),
+      );
+    }
+    return _profileRepository.saveProfile(name: name.trim());
+  }
+
+  Future<Result<void>> _switchProfile(final Profile profile) {
+    return _sessionManager.initializeSession(profileId: profile.id);
+  }
+
+  Future<Result<void>> _modifyProfile(final Profile profile) async {
+    if (profile.name.trim().isEmpty) {
+      return Result.error(
+        ValidationException('Profile name must not be empty'),
+      );
+    }
+    return _profileRepository.saveProfile(
+      profileId: profile.id,
+      name: profile.name.trim(),
+      description: profile.description,
+    );
+  }
+
+  Future<Result<void>> _removeProfile(final Profile profile) async {
+    final isActiveProfile = activeProfile.id == profile.id;
+    final remainingProfiles = _profiles
+        .where((existingProfile) => existingProfile.id != profile.id)
+        .toList();
+
+    final removeResult = await _profileRepository.removeProfile(
+      profileId: profile.id,
+    );
+
+    switch (removeResult) {
+      case Ok<void>():
+        if (isActiveProfile && remainingProfiles.isNotEmpty) {
+          return _sessionManager.initializeSession(
+            profileId: remainingProfiles.first.id,
+          );
+        }
+        return const Result.ok(null);
+      case Error<void>():
+        return removeResult;
+    }
+  }
+
   @override
-  void dispose() {
+  Future<void> dispose() async {
     _settingsRepository.removeListener(notifyListeners);
+    _sessionManager.removeListener(notifyListeners);
+    await _profilesSubscription.cancel();
     super.dispose();
   }
 }

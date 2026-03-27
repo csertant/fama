@@ -12,6 +12,7 @@ class CustomIconButton extends StatelessWidget {
     super.key,
     required this.icon,
     required this.onTap,
+    this.tooltip,
     this.size = AppDimensions.iconSizeMedium,
   }) : type = CustomIconButtonType.normal;
 
@@ -20,6 +21,7 @@ class CustomIconButton extends StatelessWidget {
     required this.icon,
     required final String route,
     required BuildContext context,
+    this.tooltip,
     this.size = AppDimensions.iconSizeMedium,
   }) : type = CustomIconButtonType.redirectInApp,
        onTap = (() => context.go(route));
@@ -28,6 +30,7 @@ class CustomIconButton extends StatelessWidget {
     super.key,
     required this.icon,
     required final String url,
+    this.tooltip,
     this.size = AppDimensions.iconSizeMedium,
   }) : type = CustomIconButtonType.redirectExternal,
        onTap = (() => safeLaunchUrl(Uri.parse(url)));
@@ -35,6 +38,7 @@ class CustomIconButton extends StatelessWidget {
   final String icon;
   final VoidCallback onTap;
   final double size;
+  final String? tooltip;
   final CustomIconButtonType type;
 
   @override
@@ -42,6 +46,7 @@ class CustomIconButton extends StatelessWidget {
     return IconButton(
       onPressed: onTap,
       icon: CustomIcon(iconPath: icon, size: size),
+      tooltip: tooltip,
     );
   }
 }

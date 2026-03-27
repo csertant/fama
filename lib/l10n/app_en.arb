@@ -1,6 +1,8 @@
 {
     "@@locale": "en",
     "appTitle": "fáma",
+    "bootstrapLoadErrorTitle": "failed to initialize app",
+    "bootstrapLoadErrorLabel": "retry",
     "navigationLabelFeed": "feed",
     "navigationLabelSources": "sources",
     "navigationLabelSaved": "saved",
@@ -28,6 +30,8 @@
     "settingsTitle": "settings",
     "settingsLoadErrorTitle": "failed to load settings",
     "settingsLoadErrorLabel": "reload",
+    "settingsProfilesTitle": "profiles",
+    "settingsProfilesSubtitle": "select your preferred profile",
     "settingsThemeTitle": "app theme",
     "settingsThemeSubtitle": "choose your preferred app theme",
     "settingsThemeOptionSystem": "system",

@@ -3,13 +3,13 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:provider/provider.dart';
 
 import 'config/dependencies.dart';
-import 'famaapp.dart';
+import 'ui/bootstrap/bootstrap.dart';
 
 /// Launch with `flutter run --target lib/main_dev.dart`.
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
   runApp(
-    MultiProvider(providers: developmentProviders, child: const FamaApp()),
+    MultiProvider(providers: developmentProviders, child: const Bootstrap()),
   );
 }

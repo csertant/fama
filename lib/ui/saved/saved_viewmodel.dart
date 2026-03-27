@@ -17,11 +17,22 @@ class SavedViewModel extends ChangeNotifier {
     load = Command0(_load);
     markAsUnsaved = Command1(_markAsUnsaved);
     markAsRead = Command1(_markAsRead);
+
+    _sessionManager.addListener(_onSessionChanged);
+    _savedArticlesSubscription = _articleRepository
+        .watchSavedArticles(profileId: _sessionManager.profileId!)
+        .listen((articles) {
+          _savedArticles = articles;
+          notifyListeners();
+        });
+
     unawaited(load.execute());
   }
 
   final SessionManager _sessionManager;
   final ArticleRepository _articleRepository;
+  late final StreamSubscription<List<Article>> _savedArticlesSubscription;
+
   List<Article> _savedArticles = [];
 
   late Command0<void> load;
@@ -32,9 +43,14 @@ class SavedViewModel extends ChangeNotifier {
 
   Future<Result<void>> _load() async {
     try {
-      //TODO: sessionManager!
+      final profileId = _sessionManager.profileId;
+      if (profileId == null) {
+        return Result.error(
+          LocalDataNotFoundException('No active session found'),
+        );
+      }
       final savedArticlesResult = await _articleRepository.getSavedArticles(
-        profileId: 1,
+        profileId: profileId,
       );
       switch (savedArticlesResult) {
         case Ok<List<Article>>():
@@ -48,6 +64,10 @@ class SavedViewModel extends ChangeNotifier {
     } finally {
       notifyListeners();
     }
+  }
+
+  void _onSessionChanged() {
+    unawaited(load.execute());
   }
 
   Future<Result<void>> _markAsUnsaved(Article article) async {
@@ -74,5 +94,12 @@ class SavedViewModel extends ChangeNotifier {
       case Error<void>():
         return markAsReadResult;
     }
+  }
+
+  @override
+  Future<void> dispose() async {
+    _sessionManager.removeListener(_onSessionChanged);
+    await _savedArticlesSubscription.cancel();
+    super.dispose();
   }
 }

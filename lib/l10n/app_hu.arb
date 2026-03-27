@@ -1,6 +1,8 @@
 {
     "@@locale": "hu",
     "appTitle": "fáma",
+    "bootstrapLoadErrorTitle": "nem sikerült inicializálni az alkalmazást",
+    "bootstrapLoadErrorLabel": "újrapróbálás",
     "navigationLabelFeed": "hírek",
     "navigationLabelSources": "források",
     "navigationLabelSaved": "mentve",
@@ -28,6 +30,8 @@
     "settingsTitle": "beállítások",
     "settingsLoadErrorTitle": "nem sikerült betölteni a beállításokat",
     "settingsLoadErrorLabel": "újratöltés",
+    "settingsProfilesTitle": "profilok",
+    "settingsProfilesSubtitle": "válaszd ki a kívánt profilt",
     "settingsThemeTitle": "téma",
     "settingsThemeSubtitle": "válaszd ki a kívánt témát",
     "settingsThemeOptionSystem": "rendszer",
