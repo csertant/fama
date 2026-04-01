@@ -14,15 +14,10 @@
     "sourcesLoadErrorTitle": "nem sikerült betölteni a forrásokat",
     "sourcesLoadErrorLabel": "újratöltés",
     "sourcesEmptyLabel": "még nincs forrás hozzáadva",
-    "sourceCardNotSyncedYetLabel": "még nincs szinkronizálva",
-    "sourceCardLastSyncLabel": "utolsó szinkronizálás: {date}",
-    "@sourceCardLastSyncLabel": {
-        "placeholders": {
-            "date": {
-                "type": "String"
-            }
-        }
-    },
+    "exploreTitle": "felfedezés",
+    "exploreLoadErrorTitle": "nem sikerült betölteni az ajánlásokat",
+    "exploreLoadErrorLabel": "újratöltés",
+    "exploreEmptyLabel": "nem találhatóak ajánlások",
     "savedTitle": "mentve",
     "savedLoadErrorTitle": "nem sikerült betölteni az elmentett híreket",
     "savedLoadErrorLabel": "újratöltés",
@@ -44,5 +39,16 @@
     "settingsLanguageOptionUnknown": "ismeretlen",
     "articleCardNoSummaryLabel": "nincs összefoglaló ehhez a cikkhez",
     "articleCardNoAuthorLabel": "ismeretlen szerző",
-    "sourceCardNoDescriptionLabel": "nincs leírás ehhez a forráshoz"
+    "sourceCardNoDescriptionLabel": "nincs leírás ehhez a forráshoz",
+    "sourceCardNotSyncedYetLabel": "még nincs szinkronizálva",
+    "sourceCardLastSyncLabel": "utolsó szinkronizálás: {date}",
+    "@sourceCardLastSyncLabel": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "sourceRecommendationCardNoDescriptionLabel": "nincs leírás ehhez az ajánláshoz",
+    "sourceRecommendationCardSubscribedLabel": "feliratkozva"
 }

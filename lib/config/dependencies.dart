@@ -16,20 +16,14 @@ import '../data/repositories/source/source_repository_local.dart';
 import '../data/services/local_data_service/local_data_service.dart';
 import '../data/services/local_data_service/local_data_service_dev.dart';
 import '../data/services/local_data_service/local_data_service_prod.dart';
-import '../data/services/rss_service.dart';
-import '../data/services/shared_preferences_service.dart';
+import '../data/services/remote_data_service/remote_data_service.dart';
+import '../data/services/rss_service/rss_service.dart';
+import '../data/services/shared_preferences_service/shared_preferences_service.dart';
 
 List<SingleChildWidget> _sharedProviders = [
+  Provider(create: (final context) => RemoteDataService()),
   Provider(create: (final context) => RssService()),
   Provider(create: (final context) => SharedPreferencesService()),
-  ChangeNotifierProvider(
-    create: (final context) =>
-        SettingsRepositoryLocal(
-              sharedPreferencesService: context
-                  .read<SharedPreferencesService>(),
-            )
-            as SettingsRepository,
-  ),
   Provider(
     create: (final context) =>
         ArticleRepositoryLocal(
@@ -40,18 +34,27 @@ List<SingleChildWidget> _sharedProviders = [
   ),
   Provider(
     create: (final context) =>
-        SourceRepositoryLocal(
-              rssService: context.read<RssService>(),
-              localDataService: context.read<LocalDataService>(),
-            )
-            as SourceRepository,
-  ),
-  Provider(
-    create: (final context) =>
         ProfileRepositoryLocal(
               localDataService: context.read<LocalDataService>(),
             )
             as ProfileRepository,
+  ),
+  Provider(
+    create: (final context) =>
+        SourceRepositoryLocal(
+              localDataService: context.read<LocalDataService>(),
+              remoteDataService: context.read<RemoteDataService>(),
+              rssService: context.read<RssService>(),
+            )
+            as SourceRepository,
+  ),
+  ChangeNotifierProvider(
+    create: (final context) =>
+        SettingsRepositoryLocal(
+              sharedPreferencesService: context
+                  .read<SharedPreferencesService>(),
+            )
+            as SettingsRepository,
   ),
 ];
 

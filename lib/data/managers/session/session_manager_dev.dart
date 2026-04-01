@@ -13,7 +13,14 @@ class SessionManagerDev extends ChangeNotifier implements SessionManager {
   @override
   ProfileId get profileId => _profileId!;
   @override
-  bool get hasProfilePresent => _profileId != null;
+  bool get hasSessionPresent => _profileId != null;
+
+  @override
+  Future<Result<void>> loadSavedSession() async {
+    _profileId = 1;
+    notifyListeners();
+    return const Result.ok(null);
+  }
 
   @override
   Future<Result<void>> initializeSession({
@@ -27,13 +34,6 @@ class SessionManagerDev extends ChangeNotifier implements SessionManager {
   @override
   Future<Result<void>> endSession() async {
     _profileId = null;
-    notifyListeners();
-    return const Result.ok(null);
-  }
-
-  @override
-  Future<Result<void>> loadSavedSession() async {
-    _profileId = 1;
     notifyListeners();
     return const Result.ok(null);
   }

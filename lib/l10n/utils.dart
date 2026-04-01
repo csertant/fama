@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/app_settings.dart';
+import '../data/services/shared_preferences_service/app_settings.dart';
 import 'generated/app_localizations.dart';
 
 String mapThemeModeToString(final BuildContext context, final ThemeMode theme) {

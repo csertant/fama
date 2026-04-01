@@ -3,18 +3,44 @@ import 'package:drift/drift.dart';
 import '../../../utils/utils.dart';
 import '../../database/database.dart';
 import '../../services/local_data_service/local_data_service.dart';
-import '../../services/rss_service.dart';
+import '../../services/remote_data_service/models.dart';
+import '../../services/remote_data_service/remote_data_service.dart';
+import '../../services/rss_service/models.dart';
+import '../../services/rss_service/rss_service.dart';
 import 'source_repository.dart';
 
 class SourceRepositoryLocal implements SourceRepository {
   SourceRepositoryLocal({
-    required final RssService rssService,
     required final LocalDataService localDataService,
-  }) : _rssService = rssService,
-       _localDataService = localDataService;
+    required final RemoteDataService remoteDataService,
+    required final RssService rssService,
+  }) : _localDataService = localDataService,
+       _remoteDataService = remoteDataService,
+       _rssService = rssService;
 
   final LocalDataService _localDataService;
+  final RemoteDataService _remoteDataService;
   final RssService _rssService;
+
+  static const String recommendationsCacheKey = 'source_recommendations';
+  final Map<String, List<SourceRecommendation>> _recommendationsCache = {};
+
+  @override
+  Future<Result<List<SourceRecommendation>>> getSourceRecommendations() async {
+    if (_recommendationsCache.containsKey(recommendationsCacheKey)) {
+      return Result.ok(_recommendationsCache[recommendationsCacheKey]!);
+    }
+    final parsedRecommendationsResult = await _remoteDataService
+        .fetchSourceRecommendations();
+    switch (parsedRecommendationsResult) {
+      case Ok<List<SourceRecommendation>>():
+        final recommendations = parsedRecommendationsResult.value;
+        _recommendationsCache[recommendationsCacheKey] = recommendations;
+        return Result.ok(recommendations);
+      case Error<List<SourceRecommendation>>():
+        return parsedRecommendationsResult;
+    }
+  }
 
   @override
   Future<Result<List<Source>>> getSourcesForProfile({
@@ -33,13 +59,14 @@ class SourceRepositoryLocal implements SourceRepository {
     required final Id profileId,
     required final String url,
   }) async {
-    final parsedFeedResult = await _rssService.fetchFeed(url: url);
+    final normalizedUrl = normalizeUrl(url);
+    final parsedFeedResult = await _rssService.fetchFeed(url: normalizedUrl);
     switch (parsedFeedResult) {
       case Ok<ParsedFeed>():
         final parsedFeed = parsedFeedResult.value;
         final newSource = SourcesCompanion.insert(
           profileId: profileId,
-          url: url,
+          url: normalizedUrl,
           title: parsedFeed.title,
           description: Value(parsedFeed.description),
           siteUrl: Value(parsedFeed.siteUrl),

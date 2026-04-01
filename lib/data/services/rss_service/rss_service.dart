@@ -3,58 +3,23 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:universal_feed/universal_feed.dart';
 import 'package:uuid/uuid.dart';
-import '../../utils/result.dart';
-
-class ParsedFeed {
-  ParsedFeed({
-    required this.title,
-    this.siteUrl,
-    this.imageUrl,
-    this.description,
-    this.copyright,
-    required this.articles,
-  });
-
-  final String title;
-  final String? siteUrl;
-  final String? imageUrl;
-  final String? description;
-  final String? copyright;
-  final List<ParsedArticle> articles;
-}
-
-class ParsedArticle {
-  ParsedArticle({
-    required this.guid,
-    required this.url,
-    required this.title,
-    this.summary,
-    this.content,
-    this.author,
-    this.imageUrl,
-    required this.publishedAt,
-  });
-
-  final String guid;
-  final String url;
-  final String title;
-  final String? summary;
-  final String? content;
-  final String? author;
-  final String? imageUrl;
-  final DateTime publishedAt;
-}
+import '../../../config/rss_service_config.dart';
+import '../../../utils/result.dart';
+import 'models.dart';
 
 class RssService {
-  RssService({http.Client? client}) : _client = client ?? http.Client();
+  RssService({http.Client? client, RssServiceConfig? config})
+    : _client = client ?? http.Client(),
+      _config = config ?? RssServiceConfig.defaults;
 
   final http.Client _client;
+  final RssServiceConfig _config;
 
   Future<Result<ParsedFeed>> fetchFeed({required String url}) async {
     try {
       final response = await _client
           .get(Uri.parse(url))
-          .timeout(const Duration(seconds: 15));
+          .timeout(_config.requestTimeout);
 
       if (response.statusCode != 200) {
         return Result.error(

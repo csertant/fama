@@ -115,25 +115,20 @@ class ArticleCard extends StatelessWidget {
     final authorOrPlaceholder = article.author != null
         ? article.author!
         : localizations.articleCardNoAuthorLabel;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: AppDimensions.paddingSmall,
-      children: [
-        CustomTextWithActions(
-          text: sourceOrPlaceholder,
-          actions: [
-            CustomIconButton.normal(onTap: () {}, icon: CustomIcons.share),
-          ],
+    return CustomCard(
+      padding: EdgeInsets.zero,
+      headline: sourceOrPlaceholder,
+      actions: [
+        CustomIconButton.normal(
+          onTap: () => safeShareUrl(url: Uri.parse(article.url)),
+          icon: CustomIcons.share,
         ),
-        CustomTextTitleWithSummary(
-          title: article.title,
-          summary: summaryOrPlaceholder,
-        ),
-        CustomTextMetadata(
-          leftText: authorOrPlaceholder,
-          rightText: AppDateFormat.dateTime.format(article.publishedAt),
-        ),
+      ],
+      title: article.title,
+      description: summaryOrPlaceholder,
+      metadata: [
+        authorOrPlaceholder,
+        AppDateFormat.dateTime.format(article.publishedAt),
       ],
     );
   }

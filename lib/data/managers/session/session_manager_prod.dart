@@ -17,7 +17,23 @@ class SessionManagerProd extends ChangeNotifier implements SessionManager {
   @override
   ProfileId? get profileId => _session?.profileId;
   @override
-  bool get hasProfilePresent => _session != null;
+  bool get hasSessionPresent => _session != null;
+
+  @override
+  Future<Result<void>> loadSavedSession() async {
+    final result = await _localDataService.getSession();
+    switch (result) {
+      case Ok<Session>():
+        _session = result.value;
+      case Error<Session>():
+        _session = null;
+    }
+    notifyListeners();
+    return switch (result) {
+      Ok<Session>() => const Result.ok(null),
+      Error<Session>() => Result.error(result.error),
+    };
+  }
 
   @override
   Future<Result<void>> initializeSession({
@@ -43,21 +59,5 @@ class SessionManagerProd extends ChangeNotifier implements SessionManager {
     _session = null;
     notifyListeners();
     return _localDataService.removeSession();
-  }
-
-  @override
-  Future<Result<void>> loadSavedSession() async {
-    final result = await _localDataService.getSession();
-    switch (result) {
-      case Ok<Session>():
-        _session = result.value;
-      case Error<Session>():
-        _session = null;
-    }
-    notifyListeners();
-    return switch (result) {
-      Ok<Session>() => const Result.ok(null),
-      Error<Session>() => Result.error(result.error),
-    };
   }
 }

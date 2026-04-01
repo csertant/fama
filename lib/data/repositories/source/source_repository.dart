@@ -1,7 +1,10 @@
 import '../../../utils/utils.dart';
 import '../../database/database.dart';
+import '../../services/remote_data_service/models.dart';
 
 abstract class SourceRepository {
+  Future<Result<List<SourceRecommendation>>> getSourceRecommendations();
+
   Future<Result<List<Source>>> getSourcesForProfile({
     required final Id profileId,
   });

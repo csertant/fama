@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../../models/app_settings.dart';
 import '../../../utils/result.dart';
-import '../../services/shared_preferences_service.dart';
+import '../../services/shared_preferences_service/app_settings.dart';
+import '../../services/shared_preferences_service/shared_preferences_service.dart';
 import 'settings_repository.dart';
 
 class SettingsRepositoryLocal extends SettingsRepository {

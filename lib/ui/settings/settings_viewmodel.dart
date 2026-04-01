@@ -7,8 +7,9 @@ import '../../data/database/database.dart';
 import '../../data/managers/session/session_manager.dart';
 import '../../data/repositories/profile/profile_repository.dart';
 import '../../data/repositories/settings/settings_repository.dart';
+import '../../data/services/shared_preferences_service/app_settings.dart';
 import '../../l10n/generated/app_localizations.dart';
-import '../../models/app_settings.dart';
+
 import '../../utils/utils.dart';
 
 class SettingsViewModel extends ChangeNotifier {

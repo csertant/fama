@@ -3,7 +3,8 @@ import 'package:drift/drift.dart';
 import '../../../utils/utils.dart';
 import '../../database/database.dart';
 import '../../services/local_data_service/local_data_service.dart';
-import '../../services/rss_service.dart';
+import '../../services/rss_service/models.dart';
+import '../../services/rss_service/rss_service.dart';
 import 'article_repository.dart';
 
 class ArticleRepositoryLocal implements ArticleRepository {

@@ -33,7 +33,7 @@ class CustomIconButton extends StatelessWidget {
     this.tooltip,
     this.size = AppDimensions.iconSizeMedium,
   }) : type = CustomIconButtonType.redirectExternal,
-       onTap = (() => safeLaunchUrl(Uri.parse(url)));
+       onTap = (() => safeLaunchUrl(url: Uri.parse(url)));
 
   final String icon;
   final VoidCallback onTap;

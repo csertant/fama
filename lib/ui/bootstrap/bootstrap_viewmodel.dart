@@ -35,22 +35,19 @@ class BootstrapViewModel extends ChangeNotifier {
         case Error<void>():
           return settingsResult;
       }
-
       final defaultProfileResult = await _profileRepository.getDefaultProfile();
       switch (defaultProfileResult) {
         case Ok<Profile>():
           final defaultProfile = defaultProfileResult.value;
-
           final savedSessionResult = await _sessionManager.loadSavedSession();
           switch (savedSessionResult) {
             case Ok<void>():
-              if (_sessionManager.hasProfilePresent) {
+              if (_sessionManager.hasSessionPresent) {
                 return const Result.ok(null);
               }
             case Error<void>():
               break;
           }
-
           return _sessionManager.initializeSession(
             profileId: defaultProfile.id,
           );

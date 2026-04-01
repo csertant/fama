@@ -14,15 +14,10 @@
     "sourcesLoadErrorTitle": "failed to load sources",
     "sourcesLoadErrorLabel": "reload",
     "sourcesEmptyLabel": "no sources yet",
-    "sourceCardNotSyncedYetLabel": "not synced yet",
-    "sourceCardLastSyncLabel": "last synced at: {date}",
-    "@sourceCardLastSyncLabel": {
-        "placeholders": {
-            "date": {
-                "type": "String"
-            }
-        }
-    },
+    "exploreTitle": "explore",
+    "exploreLoadErrorTitle": "failed to load recommendations",
+    "exploreLoadErrorLabel": "reload",
+    "exploreEmptyLabel": "no recommendations found",
     "savedTitle": "saved",
     "savedLoadErrorTitle": "failed to load saved articles",
     "savedLoadErrorLabel": "reload",
@@ -44,5 +39,16 @@
     "settingsLanguageOptionUnknown": "unknown",
     "articleCardNoSummaryLabel": "no summary available for this article",
     "articleCardNoAuthorLabel": "unknown author",
-    "sourceCardNoDescriptionLabel": "no description available for this source"
+    "sourceCardNoDescriptionLabel": "no description available for this source",
+    "sourceCardNotSyncedYetLabel": "not synced yet",
+    "sourceCardLastSyncLabel": "last synced at: {date}",
+    "@sourceCardLastSyncLabel": {
+        "placeholders": {
+            "date": {
+                "type": "String"
+            }
+        }
+    },
+    "sourceRecommendationCardNoDescriptionLabel": "no description available for this recommendation",
+    "sourceRecommendationCardSubscribedLabel": "subscribed"
 }

@@ -7,6 +7,8 @@ import '../data/repositories/profile/profile_repository.dart';
 import '../data/repositories/settings/settings_repository.dart';
 import '../data/repositories/source/source_repository.dart';
 import '../ui/core/widgets/custom_screen.dart';
+import '../ui/explore/explore_screen.dart';
+import '../ui/explore/explore_viewmodel.dart';
 import '../ui/feed/feed_screen.dart';
 import '../ui/feed/feed_viewmodel.dart';
 import '../ui/saved/saved_screen.dart';
@@ -51,6 +53,18 @@ GoRouter router() => GoRouter(
                 );
                 return SourcesScreen(viewModel: viewModel);
               },
+              routes: [
+                GoRoute(
+                  path: Routes.explore,
+                  builder: (context, state) {
+                    final viewModel = ExploreViewModel(
+                      sessionManager: context.read<SessionManager>(),
+                      sourceRepository: context.read<SourceRepository>(),
+                    );
+                    return ExploreScreen(viewModel: viewModel);
+                  },
+                ),
+              ],
             ),
           ],
         ),
@@ -68,7 +82,6 @@ GoRouter router() => GoRouter(
             ),
           ],
         ),
-
         StatefulShellBranch(
           routes: [
             GoRoute(
