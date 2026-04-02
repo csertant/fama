@@ -28,6 +28,7 @@ class SourceRecommendation {
     required this.name,
     this.description,
     required this.url,
+    required this.siteUrl,
     required this.language,
     required this.country,
     required this.category,
@@ -40,6 +41,8 @@ class SourceRecommendation {
   final String? description;
   @JsonKey(fromJson: normalizeUrl)
   final String url;
+  @JsonKey(fromJson: normalizeUrl)
+  final String siteUrl;
   final String language;
   final String country;
   final String category;

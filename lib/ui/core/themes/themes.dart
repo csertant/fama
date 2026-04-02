@@ -100,6 +100,26 @@ abstract final class AppTheme {
     surfaceTintColor: WidgetStatePropertyAll<Color>(Colors.transparent),
   );
 
+  static final _lightProgressIndicatorTheme = ProgressIndicatorThemeData(
+    color: AppColors.lightColorScheme.outline,
+    //There is likely a bug in Flutter where though this param is deprecated
+    //it still evaluates to true and causes the widget to use the old style
+    //We need to revisit this once material3 designs are fixed
+    // Tracked issue: https://github.com/flutter/flutter/issues/168813
+    // ignore: deprecated_member_use
+    year2023: false,
+  );
+
+  static final _darkProgressIndicatorTheme = ProgressIndicatorThemeData(
+    color: AppColors.darkColorScheme.outline,
+    //There is likely a bug in Flutter where though this param is deprecated
+    //it still evaluates to true and causes the widget to use the old style
+    //We need to revisit this once material3 designs are fixed
+    // Tracked issue: https://github.com/flutter/flutter/issues/168813
+    // ignore: deprecated_member_use
+    year2023: false,
+  );
+
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     colorScheme: AppColors.lightColorScheme,
@@ -107,6 +127,7 @@ abstract final class AppTheme {
     navigationBarTheme: _lightNavigationBarTheme,
     appBarTheme: _appBarTheme,
     cardTheme: const CardThemeData(elevation: 0),
+    progressIndicatorTheme: _lightProgressIndicatorTheme,
     elevatedButtonTheme: const ElevatedButtonThemeData(
       style: _noElevationButtonStyle,
     ),
@@ -135,6 +156,7 @@ abstract final class AppTheme {
     navigationBarTheme: _darkNavigationBarTheme,
     appBarTheme: _appBarTheme,
     cardTheme: const CardThemeData(elevation: 0),
+    progressIndicatorTheme: _darkProgressIndicatorTheme,
     elevatedButtonTheme: const ElevatedButtonThemeData(
       style: _noElevationButtonStyle,
     ),

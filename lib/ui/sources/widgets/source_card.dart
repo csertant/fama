@@ -41,6 +41,7 @@ class SourceCard extends StatelessWidget {
         ),
       ],
       title: source.title,
+      titleUrl: source.siteUrl,
       description: descriptionOrPlaceholder,
       metadata: [
         source.url,

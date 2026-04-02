@@ -126,6 +126,7 @@ class ArticleCard extends StatelessWidget {
         ),
       ],
       title: article.title,
+      titleUrl: article.url,
       description: summaryOrPlaceholder,
       metadata: [
         authorOrPlaceholder,

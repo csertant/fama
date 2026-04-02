@@ -37,6 +37,7 @@ class SourceRecommendationCard extends StatelessWidget {
         ),
       ],
       title: recommendation.name,
+      titleUrl: recommendation.siteUrl,
       description: descriptionOrPlaceholder,
       metadata: [
         if (subscribed) localizations.sourceRecommendationCardLabelSubscribed,

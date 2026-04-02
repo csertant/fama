@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/link.dart';
 
 import '../themes/dimensions.dart';
 import 'custom_icon_button.dart';
@@ -9,6 +10,7 @@ class CustomCard extends StatelessWidget {
     required this.headline,
     required this.actions,
     required this.title,
+    this.titleUrl,
     required this.description,
     this.metadata = const [],
     this.padding = const EdgeInsets.all(AppDimensions.paddingMedium),
@@ -17,6 +19,7 @@ class CustomCard extends StatelessWidget {
   final String headline;
   final List<CustomIconButton> actions;
   final String title;
+  final String? titleUrl;
   final String description;
   final List<String> metadata;
   final EdgeInsetsGeometry padding;
@@ -24,6 +27,9 @@ class CustomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final parsedTitleUrl = titleUrl == null || titleUrl!.isEmpty
+        ? null
+        : Uri.tryParse(titleUrl!);
     return Padding(
       padding: padding,
       child: Column(
@@ -40,7 +46,27 @@ class CustomCard extends StatelessWidget {
               ...actions,
             ],
           ),
-          Text(title, style: theme.textTheme.titleMedium),
+          if (parsedTitleUrl == null)
+            Text(title, style: theme.textTheme.titleMedium)
+          else
+            Link(
+              uri: parsedTitleUrl,
+              target: LinkTarget.blank,
+              builder: (context, followLink) {
+                return MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    onTap: followLink,
+                    child: Text(
+                      title,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
           Text(
             description,
             style: theme.textTheme.bodyMedium,

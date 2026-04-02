@@ -91,7 +91,7 @@ class ExploreViewModel extends ChangeNotifier {
       }
       final subscribeResult = await _sourceRepository.saveSource(
         profileId: profileId,
-        url: url.trim(),
+        url: url,
       );
       switch (subscribeResult) {
         case Ok<void>():
