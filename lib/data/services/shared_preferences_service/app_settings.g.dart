@@ -16,7 +16,7 @@ AppSettings _$AppSettingsFromJson(Map<String, dynamic> json) => AppSettings(
 Map<String, dynamic> _$AppSettingsToJson(AppSettings instance) =>
     <String, dynamic>{
       'languageCode': instance.languageCode,
-      'theme': _$ThemeModeEnumMap[instance.theme]!,
+      'theme': _$ThemeModeEnumMap[instance.theme],
     };
 
 const _$ThemeModeEnumMap = {

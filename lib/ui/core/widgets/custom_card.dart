@@ -32,10 +32,11 @@ class CustomCard extends StatelessWidget {
         spacing: AppDimensions.paddingSmall,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             spacing: AppDimensions.paddingSmall,
             children: [
-              Text(headline, style: theme.textTheme.bodyMedium),
+              Expanded(
+                child: Text(headline, style: theme.textTheme.bodyMedium),
+              ),
               ...actions,
             ],
           ),

@@ -27,7 +27,11 @@ class SourceRecommendationCard extends StatelessWidget {
     return CustomCard(
       headline: recommendation.url,
       actions: [
-        CustomIconButton.normal(onTap: onSubscribe, icon: CustomIcons.add),
+        CustomIconButton.normal(
+          onTap: onSubscribe,
+          icon: CustomIcons.add,
+          enabled: !subscribed,
+        ),
       ],
       title: recommendation.name,
       description: descriptionOrPlaceholder,

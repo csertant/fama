@@ -55,7 +55,7 @@ GoRouter router() => GoRouter(
               },
               routes: [
                 GoRoute(
-                  path: Routes.explore,
+                  path: Routes.exploreSegment,
                   builder: (context, state) {
                     final viewModel = ExploreViewModel(
                       sessionManager: context.read<SessionManager>(),
