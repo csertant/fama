@@ -7,6 +7,9 @@
     "navigationLabelSources": "források",
     "navigationLabelSaved": "mentve",
     "navigationLabelSettings": "beállítások",
+    "navigationLabelFilter": "szűrés",
+    "navigationLabelExplore": "felfedezés",
+    "buttonLabelMarkAllAsRead": "összes megjelölése olvasottként",
     "feedLoadErrorTitle": "nem sikerült betölteni a híreket",
     "feedLoadErrorLabel": "újratöltés",
     "feedEmptyLabel": "egyelőre nincs itt semmi",
@@ -39,8 +42,11 @@
     "settingsLanguageOptionUnknown": "ismeretlen",
     "articleCardNoSummaryLabel": "nincs összefoglaló ehhez a cikkhez",
     "articleCardNoAuthorLabel": "ismeretlen szerző",
+    "articleCardLabelShare": "megosztás",
     "sourceCardNoDescriptionLabel": "nincs leírás ehhez a forráshoz",
     "sourceCardNotSyncedYetLabel": "még nincs szinkronizálva",
+    "sourceCardLabelModify": "módosítás",
+    "sourceCardLabelRemove": "eltávolítás",
     "sourceCardLastSyncLabel": "utolsó szinkronizálás: {date}",
     "@sourceCardLastSyncLabel": {
         "placeholders": {
@@ -50,5 +56,9 @@
         }
     },
     "sourceRecommendationCardNoDescriptionLabel": "nincs leírás ehhez az ajánláshoz",
-    "sourceRecommendationCardSubscribedLabel": "feliratkozva"
+    "sourceRecommendationCardLabelSubscribed": "feliratkozva",
+    "sourceRecommendationCardLabelSubscribe": "feliratkozás",
+    "settingsProfilesCardLabelAdd": "profil hozzáadása",
+    "settingsProfilesCardLabelModify": "profil módosítása",
+    "settingsProfilesCardLabelRemove": "profil eltávolítása"
 }

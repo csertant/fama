@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../data/database/database.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../core/themes/dimensions.dart';
 import '../../core/widgets/widgets.dart';
 
@@ -29,6 +30,7 @@ class SettingsProfilesGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final localizations = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(AppDimensions.paddingMedium),
       child: RadioGroup<Profile>(
@@ -45,6 +47,7 @@ class SettingsProfilesGroup extends StatelessWidget {
                 CustomIconButton.normal(
                   icon: CustomIcons.add,
                   onTap: onNewProfile,
+                  tooltip: localizations.settingsProfilesCardLabelAdd,
                 ),
               ],
             ),
@@ -63,10 +66,12 @@ class SettingsProfilesGroup extends StatelessWidget {
                     CustomIconButton.normal(
                       icon: CustomIcons.modify,
                       onTap: () => onModifyProfile(profile),
+                      tooltip: localizations.settingsProfilesCardLabelModify,
                     ),
                     CustomIconButton.normal(
                       icon: CustomIcons.remove,
                       onTap: () => onRemoveProfile(profile),
+                      tooltip: localizations.settingsProfilesCardLabelRemove,
                     ),
                   ],
                 ),

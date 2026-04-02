@@ -25,6 +25,7 @@ class SourcesScreen extends StatelessWidget {
             context: context,
             icon: CustomIcons.add,
             route: Routes.explore,
+            tooltip: localizations.navigationLabelExplore,
           ),
         ],
       ),

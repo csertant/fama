@@ -17,7 +17,11 @@ class SavedScreen extends StatelessWidget {
       appBar: CustomAppBar(
         title: localizations.savedTitle,
         actions: [
-          CustomIconButton.normal(icon: CustomIcons.filter, onTap: () {}),
+          CustomIconButton.normal(
+            icon: CustomIcons.filter,
+            onTap: () {},
+            tooltip: localizations.navigationLabelFilter,
+          ),
         ],
       ),
       body: ListenableBuilder(

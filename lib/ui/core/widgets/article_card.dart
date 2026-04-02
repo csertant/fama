@@ -122,6 +122,7 @@ class ArticleCard extends StatelessWidget {
         CustomIconButton.normal(
           onTap: () => safeShareUrl(url: Uri.parse(article.url)),
           icon: CustomIcons.share,
+          tooltip: localizations.articleCardLabelShare,
         ),
       ],
       title: article.title,

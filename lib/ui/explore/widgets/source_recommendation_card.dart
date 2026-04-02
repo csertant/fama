@@ -31,12 +31,15 @@ class SourceRecommendationCard extends StatelessWidget {
           onTap: onSubscribe,
           icon: CustomIcons.add,
           enabled: !subscribed,
+          tooltip: subscribed
+              ? localizations.sourceRecommendationCardLabelSubscribed
+              : localizations.sourceRecommendationCardLabelSubscribe,
         ),
       ],
       title: recommendation.name,
       description: descriptionOrPlaceholder,
       metadata: [
-        if (subscribed) localizations.sourceRecommendationCardSubscribedLabel,
+        if (subscribed) localizations.sourceRecommendationCardLabelSubscribed,
       ],
     );
   }

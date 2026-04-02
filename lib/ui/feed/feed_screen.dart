@@ -21,8 +21,16 @@ class FeedScreen extends StatelessWidget {
           size: AppDimensions.iconSizeMedium,
         ),
         actions: [
-          CustomIconButton.normal(icon: CustomIcons.read, onTap: () {}),
-          CustomIconButton.normal(icon: CustomIcons.filter, onTap: () {}),
+          CustomIconButton.normal(
+            icon: CustomIcons.read,
+            onTap: () {},
+            tooltip: localizations.buttonLabelMarkAllAsRead,
+          ),
+          CustomIconButton.normal(
+            icon: CustomIcons.filter,
+            onTap: () {},
+            tooltip: localizations.navigationLabelFilter,
+          ),
         ],
       ),
       body: ListenableBuilder(

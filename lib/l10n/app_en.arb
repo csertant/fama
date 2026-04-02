@@ -7,6 +7,9 @@
     "navigationLabelSources": "sources",
     "navigationLabelSaved": "saved",
     "navigationLabelSettings": "settings",
+    "navigationLabelFilter": "filter",
+    "navigationLabelExplore": "explore",
+    "buttonLabelMarkAllAsRead": "mark all as read",
     "feedLoadErrorTitle": "failed to load feed",
     "feedLoadErrorLabel": "reload",
     "feedEmptyLabel": "nothing here yet",
@@ -39,8 +42,11 @@
     "settingsLanguageOptionUnknown": "unknown",
     "articleCardNoSummaryLabel": "no summary available for this article",
     "articleCardNoAuthorLabel": "unknown author",
+    "articleCardLabelShare": "share",
     "sourceCardNoDescriptionLabel": "no description available for this source",
     "sourceCardNotSyncedYetLabel": "not synced yet",
+    "sourceCardLabelModify": "modify",
+    "sourceCardLabelRemove": "remove",
     "sourceCardLastSyncLabel": "last synced at: {date}",
     "@sourceCardLastSyncLabel": {
         "placeholders": {
@@ -50,5 +56,9 @@
         }
     },
     "sourceRecommendationCardNoDescriptionLabel": "no description available for this recommendation",
-    "sourceRecommendationCardSubscribedLabel": "subscribed"
+    "sourceRecommendationCardLabelSubscribed": "subscribed",
+    "sourceRecommendationCardLabelSubscribe": "subscribe",
+    "settingsProfilesCardLabelAdd": "add profile",
+    "settingsProfilesCardLabelModify": "modify profile",
+    "settingsProfilesCardLabelRemove": "remove profile"
 }

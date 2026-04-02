@@ -32,10 +32,12 @@ class SourceCard extends StatelessWidget {
         CustomIconButton.normal(
           onTap: onModifySource,
           icon: CustomIcons.modify,
+          tooltip: localizations.sourceCardLabelModify,
         ),
         CustomIconButton.normal(
           onTap: onRemoveSource,
           icon: CustomIcons.remove,
+          tooltip: localizations.sourceCardLabelRemove,
         ),
       ],
       title: source.title,
