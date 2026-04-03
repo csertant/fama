@@ -1,15 +1,14 @@
 name: fama
 description: "fáma for all platforms in flutter"
 
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+publish_to: "none"
 
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.11.1
+  sdk: ^3.10.0
 
 dependencies:
-  cupertino_icons: ^1.0.8
   drift: ^2.32.0
   drift_flutter: ^0.3.0
   flutter:

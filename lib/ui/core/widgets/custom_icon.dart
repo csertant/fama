@@ -16,6 +16,9 @@ abstract class CustomIcons {
   static const String read = '$_basePath/read.svg';
   static const String unread = '$_basePath/unread.svg';
 
+  static const String check = '$_basePath/check.svg';
+  static const String checked = '$_basePath/checked.svg';
+
   static const String search = '$_basePath/search.svg';
   static const String filter = '$_basePath/filter.svg';
   static const String share = '$_basePath/share.svg';

@@ -101,6 +101,8 @@ class ExploreViewModel extends ChangeNotifier {
       }
     } on Exception catch (e) {
       return Result.error(e);
+    } finally {
+      notifyListeners();
     }
   }
 

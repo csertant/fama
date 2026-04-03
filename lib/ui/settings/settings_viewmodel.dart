@@ -82,12 +82,16 @@ class SettingsViewModel extends ChangeNotifier {
   }
 
   Future<Result<void>> _createProfile(final String name) async {
-    if (name.trim().isEmpty) {
-      return Result.error(
-        ValidationException('Profile name must not be empty'),
-      );
+    try {
+      if (name.trim().isEmpty) {
+        return Result.error(
+          ValidationException('Profile name must not be empty'),
+        );
+      }
+      return _profileRepository.saveProfile(name: name.trim());
+    } finally {
+      notifyListeners();
     }
-    return _profileRepository.saveProfile(name: name.trim());
   }
 
   Future<Result<void>> _switchProfile(final Profile profile) {
@@ -95,38 +99,44 @@ class SettingsViewModel extends ChangeNotifier {
   }
 
   Future<Result<void>> _modifyProfile(final Profile profile) async {
-    if (profile.name.trim().isEmpty) {
-      return Result.error(
-        ValidationException('Profile name must not be empty'),
+    try {
+      if (profile.name.trim().isEmpty) {
+        return Result.error(
+          ValidationException('Profile name must not be empty'),
+        );
+      }
+      return _profileRepository.saveProfile(
+        profileId: profile.id,
+        name: profile.name.trim(),
+        description: profile.description,
       );
+    } finally {
+      notifyListeners();
     }
-    return _profileRepository.saveProfile(
-      profileId: profile.id,
-      name: profile.name.trim(),
-      description: profile.description,
-    );
   }
 
   Future<Result<void>> _removeProfile(final Profile profile) async {
-    final isActiveProfile = activeProfile.id == profile.id;
-    final remainingProfiles = _profiles
-        .where((existingProfile) => existingProfile.id != profile.id)
-        .toList();
-
-    final removeResult = await _profileRepository.removeProfile(
-      profileId: profile.id,
-    );
-
-    switch (removeResult) {
-      case Ok<void>():
-        if (isActiveProfile && remainingProfiles.isNotEmpty) {
-          return _sessionManager.initializeSession(
-            profileId: remainingProfiles.first.id,
-          );
-        }
-        return const Result.ok(null);
-      case Error<void>():
-        return removeResult;
+    try {
+      final isActiveProfile = activeProfile.id == profile.id;
+      final remainingProfiles = _profiles
+          .where((existingProfile) => existingProfile.id != profile.id)
+          .toList();
+      final removeResult = await _profileRepository.removeProfile(
+        profileId: profile.id,
+      );
+      switch (removeResult) {
+        case Ok<void>():
+          if (isActiveProfile && remainingProfiles.isNotEmpty) {
+            return _sessionManager.initializeSession(
+              profileId: remainingProfiles.first.id,
+            );
+          }
+          return const Result.ok(null);
+        case Error<void>():
+          return removeResult;
+      }
+    } finally {
+      notifyListeners();
     }
   }
 

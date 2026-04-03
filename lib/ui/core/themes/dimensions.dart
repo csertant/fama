@@ -17,6 +17,8 @@ abstract final class AppDimensions {
   static const paddingMedium = 16.0;
   static const paddingSmall = 8.0;
 
+  static const borderRadiusMedium = 18.0;
+
   static const iconSizeLarge = 32.0;
   static const iconSizeMedium = 24.0;
   static const iconSizeSmall = 16.0;

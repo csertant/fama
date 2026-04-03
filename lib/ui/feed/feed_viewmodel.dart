@@ -79,28 +79,36 @@ class FeedViewModel extends ChangeNotifier {
   }
 
   Future<Result<void>> _markAsSaved(Article article) async {
-    final saveResult = await _articleRepository.markAsSaved(
-      profileId: article.profileId,
-      articleId: article.id,
-    );
-    switch (saveResult) {
-      case Ok<void>():
-        return const Result.ok(null);
-      case Error<void>():
-        return saveResult;
+    try {
+      final saveResult = await _articleRepository.markAsSaved(
+        profileId: article.profileId,
+        articleId: article.id,
+      );
+      switch (saveResult) {
+        case Ok<void>():
+          return const Result.ok(null);
+        case Error<void>():
+          return saveResult;
+      }
+    } finally {
+      notifyListeners();
     }
   }
 
   Future<Result<void>> _markAsRead(Article article) async {
-    final markAsReadResult = await _articleRepository.markAsRead(
-      profileId: article.profileId,
-      articleId: article.id,
-    );
-    switch (markAsReadResult) {
-      case Ok<void>():
-        return const Result.ok(null);
-      case Error<void>():
-        return markAsReadResult;
+    try {
+      final markAsReadResult = await _articleRepository.markAsRead(
+        profileId: article.profileId,
+        articleId: article.id,
+      );
+      switch (markAsReadResult) {
+        case Ok<void>():
+          return const Result.ok(null);
+        case Error<void>():
+          return markAsReadResult;
+      }
+    } finally {
+      notifyListeners();
     }
   }
 

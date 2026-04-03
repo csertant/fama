@@ -71,28 +71,36 @@ class SourcesViewModel extends ChangeNotifier {
   }
 
   Future<Result<void>> _modifySource(Source source) async {
-    final saveResult = await _sourceRepository.modifySource(
-      profileId: source.profileId,
-      source: source,
-    );
-    switch (saveResult) {
-      case Ok<void>():
-        return const Result.ok(null);
-      case Error<void>():
-        return saveResult;
+    try {
+      final saveResult = await _sourceRepository.modifySource(
+        profileId: source.profileId,
+        source: source,
+      );
+      switch (saveResult) {
+        case Ok<void>():
+          return const Result.ok(null);
+        case Error<void>():
+          return saveResult;
+      }
+    } finally {
+      notifyListeners();
     }
   }
 
   Future<Result<void>> _removeSource(Source source) async {
-    final removeResult = await _sourceRepository.removeSource(
-      profileId: source.profileId,
-      sourceId: source.id,
-    );
-    switch (removeResult) {
-      case Ok<void>():
-        return const Result.ok(null);
-      case Error<void>():
-        return removeResult;
+    try {
+      final removeResult = await _sourceRepository.removeSource(
+        profileId: source.profileId,
+        sourceId: source.id,
+      );
+      switch (removeResult) {
+        case Ok<void>():
+          return const Result.ok(null);
+        case Error<void>():
+          return removeResult;
+      }
+    } finally {
+      notifyListeners();
     }
   }
 

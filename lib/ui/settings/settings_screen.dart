@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/generated/app_localizations.dart';
 import '../../l10n/utils.dart';
+import '../core/themes/dimensions.dart';
+import '../core/widgets/custom_modal_sheet.dart';
 import '../core/widgets/widgets.dart';
 import 'settings_viewmodel.dart';
 import 'widgets/settings_profiles_group.dart';
@@ -45,7 +47,7 @@ class SettingsScreen extends StatelessWidget {
                     subtitle: localizations.settingsProfilesSubtitle,
                     profiles: viewModel.profiles,
                     selectedProfile: viewModel.activeProfile,
-                    onNewProfile: () => _showCreateCollectionDialog(context),
+                    onNewProfile: () => _showCreateProfileModal(context),
                     onModifyProfile: (profile) =>
                         unawaited(viewModel.modifyProfile.execute(profile)),
                     onRemoveProfile: (profile) =>
@@ -99,37 +101,50 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
-  //TODO: move to modalsheet
-  Future<void> _showCreateCollectionDialog(BuildContext context) async {
-    final textController = TextEditingController();
-    final name = await showDialog<String>(
+  Future<void> _showCreateProfileModal(BuildContext context) async {
+    final nameController = TextEditingController();
+    final localizations = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    await showModalBottomSheet<void>(
       context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
-          title: const Text('Create collection'),
-          content: TextField(
-            controller: textController,
-            autofocus: true,
-            decoration: const InputDecoration(hintText: 'Collection name'),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: const Text('Cancel'),
-            ),
-            FilledButton(
-              onPressed: () {
-                Navigator.of(dialogContext).pop(textController.text.trim());
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppDimensions.borderRadiusMedium),
+        ),
+      ),
+      builder: (context) {
+        return AnimatedBuilder(
+          animation: viewModel.createProfile,
+          builder: (context, _) {
+            return CustomModalSheet(
+              title: localizations.settingsCreateProfileTitle,
+              actionLabel: localizations.settingsCreateProfileLabel,
+              onAction: () async {
+                if (nameController.text.isNotEmpty) {
+                  await viewModel.createProfile.execute(nameController.text);
+                  if (viewModel.createProfile.completed && context.mounted) {
+                    viewModel.createProfile.clearResult();
+                    Navigator.of(context).pop();
+                  }
+                }
               },
-              child: const Text('Create'),
-            ),
-          ],
+              isLoading: viewModel.createProfile.running,
+              children: [
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    hintText: localizations.settingsCreateProfileSubtitle,
+                    hintStyle: theme.textTheme.bodyMedium!.copyWith(
+                      color: theme.colorScheme.onPrimary,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         );
       },
     );
-
-    if (name != null && name.trim().isNotEmpty) {
-      unawaited(viewModel.createProfile.execute(name));
-    }
   }
 }

@@ -71,28 +71,36 @@ class SavedViewModel extends ChangeNotifier {
   }
 
   Future<Result<void>> _markAsUnsaved(Article article) async {
-    final unsaveResult = await _articleRepository.markAsUnsaved(
-      profileId: article.profileId,
-      articleId: article.id,
-    );
-    switch (unsaveResult) {
-      case Ok<void>():
-        return const Result.ok(null);
-      case Error<void>():
-        return unsaveResult;
+    try {
+      final unsaveResult = await _articleRepository.markAsUnsaved(
+        profileId: article.profileId,
+        articleId: article.id,
+      );
+      switch (unsaveResult) {
+        case Ok<void>():
+          return const Result.ok(null);
+        case Error<void>():
+          return unsaveResult;
+      }
+    } finally {
+      notifyListeners();
     }
   }
 
   Future<Result<void>> _markAsRead(Article article) async {
-    final markAsReadResult = await _articleRepository.markAsRead(
-      profileId: article.profileId,
-      articleId: article.id,
-    );
-    switch (markAsReadResult) {
-      case Ok<void>():
-        return const Result.ok(null);
-      case Error<void>():
-        return markAsReadResult;
+    try {
+      final markAsReadResult = await _articleRepository.markAsRead(
+        profileId: article.profileId,
+        articleId: article.id,
+      );
+      switch (markAsReadResult) {
+        case Ok<void>():
+          return const Result.ok(null);
+        case Error<void>():
+          return markAsReadResult;
+      }
+    } finally {
+      notifyListeners();
     }
   }
 
