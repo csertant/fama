@@ -71,9 +71,6 @@ class SourcesScreen extends StatelessWidget {
     final source = viewModel.sources[index];
     return SourceCard(
       source: source,
-      onModifySource: () {
-        unawaited(viewModel.modifySource.execute(source));
-      },
       onRemoveSource: () {
         unawaited(viewModel.removeSource.execute(source));
       },

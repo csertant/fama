@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/database/database.dart';
@@ -23,7 +24,7 @@ class SettingsViewModel extends ChangeNotifier {
     load = Command0(_load);
     updateTheme = Command1(_updateTheme);
     updateLanguage = Command1(_updateLanguage);
-    createProfile = Command1(_createProfile);
+    createProfile = Command2(_createProfile);
     modifyProfile = Command1(_modifyProfile);
     removeProfile = Command1(_removeProfile);
     switchProfile = Command1(_switchProfile);
@@ -50,7 +51,7 @@ class SettingsViewModel extends ChangeNotifier {
   late Command0<void> load;
   late Command1<void, ThemeMode> updateTheme;
   late Command1<void, String> updateLanguage;
-  late Command1<void, String> createProfile;
+  late Command2<void, String, String?> createProfile;
   late Command1<void, Profile> modifyProfile;
   late Command1<void, Profile> removeProfile;
   late Command1<void, Profile> switchProfile;
@@ -81,14 +82,20 @@ class SettingsViewModel extends ChangeNotifier {
     return _settingsRepository.updateLanguage(languageCode: languageCode);
   }
 
-  Future<Result<void>> _createProfile(final String name) async {
+  Future<Result<void>> _createProfile(
+    final String name,
+    final String? description,
+  ) async {
     try {
       if (name.trim().isEmpty) {
         return Result.error(
           ValidationException('Profile name must not be empty'),
         );
       }
-      return _profileRepository.saveProfile(name: name.trim());
+      return _profileRepository.saveProfile(
+        name: name.trim(),
+        description: description?.trim(),
+      );
     } finally {
       notifyListeners();
     }
@@ -105,10 +112,11 @@ class SettingsViewModel extends ChangeNotifier {
           ValidationException('Profile name must not be empty'),
         );
       }
-      return _profileRepository.saveProfile(
-        profileId: profile.id,
-        name: profile.name.trim(),
-        description: profile.description,
+      return _profileRepository.modifyProfile(
+        profile: profile.copyWith(
+          name: profile.name.trim(),
+          description: Value(profile.description?.trim()),
+        ),
       );
     } finally {
       notifyListeners();

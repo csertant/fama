@@ -52,18 +52,60 @@ class ProfileRepositoryLocal implements ProfileRepository {
 
   @override
   Future<Result<void>> saveProfile({
-    Id? profileId,
     required String name,
     String? description,
-    bool isDefault = false,
   }) {
     final profile = ProfilesCompanion.insert(
-      id: profileId != null ? Value(profileId) : const Value.absent(),
-      name: name,
-      description: Value(description),
-      isDefault: Value(isDefault),
+      name: name.trim(),
+      description: description != null && description.trim().isNotEmpty
+          ? Value(description.trim())
+          : const Value.absent(),
     );
     return _localDataService.saveProfile(profile: profile);
+  }
+
+  @override
+  Future<Result<void>> modifyProfile({required Profile profile}) async {
+    final defaultProfileResult = await _localDataService.getDefaultProfile();
+    switch (defaultProfileResult) {
+      case Ok<Profile>(value: final defaultProfile):
+        if (defaultProfile.id != profile.id && profile.isDefault) {
+          final demoteResult = await _localDataService.saveProfile(
+            profile: defaultProfile
+                .toCompanion(true)
+                .copyWith(isDefault: const Value(false)),
+          );
+          switch (demoteResult) {
+            case Ok<void>():
+              break;
+            case Error<void>(error: final demoteError):
+              return Result.error(
+                LocalDataStorageException(
+                  'Failed to demote existing default profile',
+                  cause: demoteError,
+                ),
+              );
+          }
+        }
+        final promoteResult = await _localDataService.saveProfile(
+          profile: profile.toCompanion(true),
+        );
+        switch (promoteResult) {
+          case Ok<void>():
+            return const Result.ok(null);
+          case Error<void>(error: final promoteError):
+            return Result.error(
+              LocalDataStorageException(
+                'Failed to save modified profile',
+                cause: promoteError,
+              ),
+            );
+        }
+      case Error<Profile>():
+        return Result.error(
+          LocalDataNotFoundException('Failed to retrieve default profile'),
+        );
+    }
   }
 
   @override

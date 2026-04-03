@@ -9,3 +9,4 @@ export 'custom_icon.dart';
 export 'custom_icon_button.dart';
 export 'custom_modal_sheet.dart';
 export 'custom_screen.dart';
+export 'custom_switch.dart';

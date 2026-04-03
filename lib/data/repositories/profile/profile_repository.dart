@@ -7,10 +7,11 @@ abstract class ProfileRepository {
   Stream<List<Profile>> watchProfiles();
 
   Future<Result<void>> saveProfile({
-    Id? profileId,
     required final String name,
     final String? description,
   });
+
+  Future<Result<void>> modifyProfile({required final Profile profile});
 
   Future<Result<void>> removeProfile({required final Id profileId});
 }

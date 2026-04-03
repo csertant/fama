@@ -9,13 +9,11 @@ class SourceCard extends StatelessWidget {
   const SourceCard({
     super.key,
     required this.source,
-    required this.onModifySource,
     required this.onRemoveSource,
   });
 
   final Source source;
 
-  final VoidCallback onModifySource;
   final VoidCallback onRemoveSource;
 
   @override
@@ -29,11 +27,6 @@ class SourceCard extends StatelessWidget {
     return CustomCard(
       headline: source.profileId.toString(),
       actions: [
-        CustomIconButton.normal(
-          onTap: onModifySource,
-          icon: CustomIcons.modify,
-          tooltip: localizations.sourceCardLabelModify,
-        ),
         CustomIconButton.normal(
           onTap: onRemoveSource,
           icon: CustomIcons.remove,
