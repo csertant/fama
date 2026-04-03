@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../l10n/generated/app_localizations.dart';
 import '../core/themes/dimensions.dart';
-import '../core/widgets/custom_modal_sheet.dart';
 import '../core/widgets/widgets.dart';
 import 'explore_viewmodel.dart';
 import 'widgets/source_by_custom_url_card.dart';
@@ -22,7 +21,7 @@ class ExploreScreen extends StatelessWidget {
         actions: [
           CustomIconButton.normal(
             icon: CustomIcons.filter,
-            onTap: () {},
+            onTap: () => _showFiltersModal(context),
             tooltip: localizations.navigationLabelFilter,
           ),
         ],
@@ -45,12 +44,12 @@ class ExploreScreen extends StatelessWidget {
         child: ListenableBuilder(
           listenable: viewModel,
           builder: (context, child) {
-            return viewModel.sourceRecommendations.isNotEmpty
+            return viewModel.filteredRecommendations.isNotEmpty
                 ? ListView.builder(
                     padding: const EdgeInsets.symmetric(
                       vertical: AppDimensions.paddingMedium,
                     ),
-                    itemCount: viewModel.sourceRecommendations.length + 1,
+                    itemCount: viewModel.filteredRecommendations.length + 1,
                     itemBuilder: (context, index) {
                       if (index == 0) {
                         return Padding(
@@ -69,7 +68,9 @@ class ExploreScreen extends StatelessWidget {
                   )
                 : Center(
                     child: Text(
-                      localizations.exploreEmptyLabel,
+                      viewModel.sourceRecommendations.isEmpty
+                          ? localizations.exploreEmptyLabel
+                          : localizations.exploreFiltersNoMatchesLabel,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   );
@@ -80,7 +81,7 @@ class ExploreScreen extends StatelessWidget {
   }
 
   Widget _buildRecommendationCard(BuildContext context, int index) {
-    final recommendation = viewModel.sourceRecommendations[index];
+    final recommendation = viewModel.filteredRecommendations[index];
     return SourceRecommendationCard(
       recommendation: recommendation,
       subscribed: viewModel.subscribedSources.any(
@@ -88,6 +89,51 @@ class ExploreScreen extends StatelessWidget {
       ),
       onSubscribe: () =>
           viewModel.subscribeToSource.execute(recommendation.url),
+    );
+  }
+
+  Future<void> _showFiltersModal(BuildContext context) async {
+    final localizations = AppLocalizations.of(context)!;
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppDimensions.borderRadiusMedium),
+        ),
+      ),
+      builder: (context) {
+        return AnimatedBuilder(
+          animation: viewModel,
+          builder: (context, _) {
+            return CustomModalSheet(
+              title: localizations.exploreFiltersTitle,
+              actionLabel: localizations.exploreFiltersActionLabel,
+              onAction: viewModel.clearFilters,
+              children: [
+                CustomFilter(
+                  label: localizations.exploreFiltersLanguageLabel,
+                  selected: viewModel.selectedLanguages,
+                  options: viewModel.availableLanguages,
+                  onOptionSelected: viewModel.toggleLanguageFilter,
+                ),
+                CustomFilter(
+                  label: localizations.exploreFiltersCountryLabel,
+                  selected: viewModel.selectedCountries,
+                  options: viewModel.availableCountries,
+                  onOptionSelected: viewModel.toggleCountryFilter,
+                ),
+                CustomFilter(
+                  label: localizations.exploreFiltersCategoryLabel,
+                  selected: viewModel.selectedCategories,
+                  options: viewModel.availableCategories,
+                  onOptionSelected: viewModel.toggleCategoryFilter,
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 

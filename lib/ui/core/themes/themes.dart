@@ -120,6 +120,14 @@ abstract final class AppTheme {
     year2023: false,
   );
 
+  static final _chipTheme = ChipThemeData(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
+    padding: const EdgeInsets.symmetric(
+      horizontal: AppDimensions.paddingExtraSmall,
+      vertical: AppDimensions.paddingSmall,
+    ),
+  );
+
   static ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
     colorScheme: AppColors.lightColorScheme,
@@ -128,6 +136,7 @@ abstract final class AppTheme {
     appBarTheme: _appBarTheme,
     cardTheme: const CardThemeData(elevation: 0),
     progressIndicatorTheme: _lightProgressIndicatorTheme,
+    chipTheme: _chipTheme,
     elevatedButtonTheme: const ElevatedButtonThemeData(
       style: _noElevationButtonStyle,
     ),
@@ -157,6 +166,7 @@ abstract final class AppTheme {
     appBarTheme: _appBarTheme,
     cardTheme: const CardThemeData(elevation: 0),
     progressIndicatorTheme: _darkProgressIndicatorTheme,
+    chipTheme: _chipTheme,
     elevatedButtonTheme: const ElevatedButtonThemeData(
       style: _noElevationButtonStyle,
     ),

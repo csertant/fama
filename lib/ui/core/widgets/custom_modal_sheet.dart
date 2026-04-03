@@ -30,22 +30,26 @@ class CustomModalSheet extends StatelessWidget {
         right: AppDimensions.paddingMedium,
         top: AppDimensions.paddingMedium,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        spacing: AppDimensions.paddingSmall,
-        children: [
-          Text(title, style: theme.textTheme.titleMedium),
-          if (description != null) ...[
-            Text(description!, style: theme.textTheme.bodyMedium),
+      child: SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          spacing: AppDimensions.paddingSmall,
+          children: [
+            Text(title, style: theme.textTheme.titleMedium),
+            if (description != null) ...[
+              Text(description!, style: theme.textTheme.bodyMedium),
+            ],
+            ...children,
+            FilledButton.tonal(
+              onPressed: isLoading ? null : onAction,
+              child: isLoading
+                  ? const CircularProgressIndicator()
+                  : Text(actionLabel, style: theme.textTheme.labelMedium),
+            ),
           ],
-          ...children,
-          FilledButton.tonal(
-            onPressed: isLoading ? null : onAction,
-            child: isLoading
-                ? const CircularProgressIndicator()
-                : Text(actionLabel, style: theme.textTheme.labelMedium),
-          ),
-        ],
+        ),
       ),
     );
   }

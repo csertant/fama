@@ -16,12 +16,17 @@ abstract final class AppDimensions {
   static const paddingLarge = 32.0;
   static const paddingMedium = 16.0;
   static const paddingSmall = 8.0;
+  static const paddingExtraSmall = 4.0;
 
   static const borderRadiusMedium = 18.0;
 
   static const iconSizeLarge = 32.0;
   static const iconSizeMedium = 24.0;
   static const iconSizeSmall = 16.0;
+
+  static const badgeSizeLarge = 4.0;
+  static const badgeSizeSmall = 2.0;
+  static const badgeOffset = Offset(8, -8);
 
   static const headingImageHeight = 172.0;
   static const leadingImageWidth = 88.0;

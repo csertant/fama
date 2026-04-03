@@ -36,6 +36,10 @@ class ExploreViewModel extends ChangeNotifier {
   List<Source> _subscribedSources = [];
   List<SourceRecommendation> _sourceRecommendations = [];
 
+  final Set<String> _selectedLanguages = {};
+  final Set<String> _selectedCountries = {};
+  final Set<String> _selectedCategories = {};
+
   late Command0<void> load;
   late Command1<void, String> subscribeToSource;
 
@@ -43,6 +47,59 @@ class ExploreViewModel extends ChangeNotifier {
       UnmodifiableListView(_subscribedSources);
   List<SourceRecommendation> get sourceRecommendations =>
       UnmodifiableListView(_sourceRecommendations);
+  List<SourceRecommendation> get filteredRecommendations {
+    return _sourceRecommendations.where((rec) {
+      final matchesLanguage =
+          _selectedLanguages.isEmpty ||
+          _selectedLanguages.contains(rec.language);
+      final matchesCountry =
+          _selectedCountries.isEmpty ||
+          _selectedCountries.contains(rec.country);
+      final matchesCategory =
+          _selectedCategories.isEmpty ||
+          _selectedCategories.contains(rec.category);
+      return matchesLanguage && matchesCountry && matchesCategory;
+    }).toList();
+  }
+
+  List<String> get selectedLanguages =>
+      UnmodifiableListView(_selectedLanguages);
+  List<String> get availableLanguages {
+    final values =
+        _sourceRecommendations.map((rec) => rec.language).toSet().toList()
+          ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+    return values;
+  }
+
+  List<String> get selectedCountries =>
+      UnmodifiableListView(_selectedCountries);
+  List<String> get availableCountries {
+    final values =
+        _sourceRecommendations
+            .map((rec) => rec.country.toUpperCase())
+            .toSet()
+            .toList()
+          ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+    return values;
+  }
+
+  List<String> get selectedCategories =>
+      UnmodifiableListView(_selectedCategories);
+  List<String> get availableCategories {
+    final values =
+        _sourceRecommendations.map((rec) => rec.category).toSet().toList()
+          ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+    return values;
+  }
+
+  bool get hasActiveFilters =>
+      _selectedLanguages.isNotEmpty ||
+      _selectedCountries.isNotEmpty ||
+      _selectedCategories.isNotEmpty;
+  int get activeFiltersCount =>
+      _selectedLanguages.length +
+      _selectedCountries.length +
+      _selectedCategories.length;
 
   Future<Result<void>> _load() async {
     try {
@@ -104,6 +161,40 @@ class ExploreViewModel extends ChangeNotifier {
     } finally {
       notifyListeners();
     }
+  }
+
+  void toggleLanguageFilter(String language) {
+    if (_selectedLanguages.contains(language)) {
+      _selectedLanguages.remove(language);
+    } else {
+      _selectedLanguages.add(language);
+    }
+    notifyListeners();
+  }
+
+  void toggleCountryFilter(String country) {
+    if (_selectedCountries.contains(country)) {
+      _selectedCountries.remove(country);
+    } else {
+      _selectedCountries.add(country);
+    }
+    notifyListeners();
+  }
+
+  void toggleCategoryFilter(String category) {
+    if (_selectedCategories.contains(category)) {
+      _selectedCategories.remove(category);
+    } else {
+      _selectedCategories.add(category);
+    }
+    notifyListeners();
+  }
+
+  void clearFilters() {
+    _selectedLanguages.clear();
+    _selectedCountries.clear();
+    _selectedCategories.clear();
+    notifyListeners();
   }
 
   @override

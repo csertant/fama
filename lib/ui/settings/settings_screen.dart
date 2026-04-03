@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../l10n/utils.dart';
 import '../core/themes/dimensions.dart';
-import '../core/widgets/custom_modal_sheet.dart';
 import '../core/widgets/widgets.dart';
 import 'settings_viewmodel.dart';
 import 'widgets/settings_profiles_group.dart';

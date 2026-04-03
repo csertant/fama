@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../themes/dimensions.dart';
+import 'custom_badge.dart';
 
 abstract class CustomIcons {
   static const String _basePath = 'assets/icons';
@@ -32,17 +33,26 @@ abstract class CustomIcons {
 }
 
 class CustomIcon extends StatelessWidget {
-  const CustomIcon({super.key, required this.iconPath, this.size, this.color});
+  const CustomIcon({
+    super.key,
+    required this.iconPath,
+    this.size,
+    this.color,
+    this.showBadge = false,
+    this.badgeLabel,
+  });
 
   final String iconPath;
   final double? size;
   final Color? color;
+  final bool showBadge;
+  final String? badgeLabel;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final size = this.size ?? AppDimensions.of(context).iconSizeDefault;
-    return SvgPicture.asset(
+    final icon = SvgPicture.asset(
       iconPath,
       width: size,
       height: size,
@@ -51,5 +61,6 @@ class CustomIcon extends StatelessWidget {
         BlendMode.srcIn,
       ),
     );
+    return CustomBadge(show: showBadge, label: badgeLabel, child: icon);
   }
 }
