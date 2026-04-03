@@ -27,6 +27,7 @@
     "exploreFiltersLanguageLabel": "language",
     "exploreFiltersCountryLabel": "country",
     "exploreFiltersCategoryLabel": "category",
+    "exploreFiltersShowSubscribedSourcesLabel": "show followed sources",
     "exploreAddCustomSourceTitle": "add custom source by url",
     "exploreAddCustomSourceSubtitle": "enter the url of the source",
     "exploreAddCustomSourceDescription": "enter an rss, atom or json feed url, e.g.: https://example.com/rss or https://example.com/feed.json",

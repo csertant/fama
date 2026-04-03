@@ -73,8 +73,6 @@ class SourceRepositoryLocal implements SourceRepository {
           iconUrl: Value(parsedFeed.imageUrl),
           lastSyncedAt: Value(DateTime.now()),
         );
-        //TODO: If we get an id for the source, we should also sync the
-        //articles for it immediately
         return _localDataService.saveSource(source: newSource);
       case Error<ParsedFeed>():
         return Result.error(parsedFeedResult.error);

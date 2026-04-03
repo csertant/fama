@@ -129,6 +129,11 @@ class ExploreScreen extends StatelessWidget {
                   options: viewModel.availableCategories,
                   onOptionSelected: viewModel.toggleCategoryFilter,
                 ),
+                CustomSwitch(
+                  label: localizations.exploreFiltersShowSubscribedSourcesLabel,
+                  value: viewModel.showSubscribed,
+                  onChanged: (_) => viewModel.toggleShowSubscribed(),
+                ),
               ],
             );
           },

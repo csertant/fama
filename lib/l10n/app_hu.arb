@@ -27,6 +27,7 @@
     "exploreFiltersLanguageLabel": "nyelv",
     "exploreFiltersCountryLabel": "ország",
     "exploreFiltersCategoryLabel": "kategória",
+    "exploreFiltersShowSubscribedSourcesLabel": "követett források mutatása",
     "exploreAddCustomSourceTitle": "hozzáadás egyedi url alapján",
     "exploreAddCustomSourceSubtitle": "add meg az egyedi forrás url-jét",
     "exploreAddCustomSourceDescription": "adj meg egy rss, atom vagy json feed url-t, például: https://example.com/rss vagy https://example.com/feed.json",

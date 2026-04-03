@@ -211,7 +211,15 @@ class SettingsScreen extends StatelessWidget {
               },
               isLoading: viewModel.modifyProfile.running,
               children: [
-                TextField(controller: nameController),
+                TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    hintText: localizations.settingsCreateProfileSubtitle,
+                    hintStyle: theme.textTheme.bodyMedium!.copyWith(
+                      color: theme.colorScheme.onPrimary,
+                    ),
+                  ),
+                ),
                 TextField(
                   controller: descriptionController,
                   decoration: InputDecoration(

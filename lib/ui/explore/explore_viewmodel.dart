@@ -39,6 +39,7 @@ class ExploreViewModel extends ChangeNotifier {
   final Set<String> _selectedLanguages = {};
   final Set<String> _selectedCountries = {};
   final Set<String> _selectedCategories = {};
+  bool _showSubscribed = false;
 
   late Command0<void> load;
   late Command1<void, String> subscribeToSource;
@@ -58,7 +59,13 @@ class ExploreViewModel extends ChangeNotifier {
       final matchesCategory =
           _selectedCategories.isEmpty ||
           _selectedCategories.contains(rec.category);
-      return matchesLanguage && matchesCountry && matchesCategory;
+      final matchesShowSubscribed =
+          _showSubscribed ||
+          !_subscribedSources.any((source) => source.url == rec.url);
+      return matchesLanguage &&
+          matchesCountry &&
+          matchesCategory &&
+          matchesShowSubscribed;
     }).toList();
   }
 
@@ -91,6 +98,8 @@ class ExploreViewModel extends ChangeNotifier {
           ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
     return values;
   }
+
+  bool get showSubscribed => _showSubscribed;
 
   bool get hasActiveFilters =>
       _selectedLanguages.isNotEmpty ||
@@ -190,10 +199,16 @@ class ExploreViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void toggleShowSubscribed() {
+    _showSubscribed = !_showSubscribed;
+    notifyListeners();
+  }
+
   void clearFilters() {
     _selectedLanguages.clear();
     _selectedCountries.clear();
     _selectedCategories.clear();
+    _showSubscribed = false;
     notifyListeners();
   }
 
