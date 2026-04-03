@@ -67,7 +67,7 @@ class SourceRepositoryLocal implements SourceRepository {
         final newSource = SourcesCompanion.insert(
           profileId: profileId,
           url: normalizedUrl,
-          title: parsedFeed.title,
+          name: parsedFeed.title,
           description: Value(parsedFeed.description),
           siteUrl: Value(parsedFeed.siteUrl),
           iconUrl: Value(parsedFeed.imageUrl),

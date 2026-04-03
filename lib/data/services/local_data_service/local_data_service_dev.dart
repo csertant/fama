@@ -20,7 +20,7 @@ final Profile otherProfile = Profile(
 final Source exampleSource = Source(
   id: 1,
   profileId: defaultProfile.id,
-  title: 'Telex',
+  name: 'Telex',
   url: 'https://telex.hu/rss',
   description: 'Telex Legfrissebb hírek',
   siteUrl: 'https://telex.hu',
@@ -33,6 +33,7 @@ final List<Article> exampleArticles = List.generate(
     id: index + 1,
     guid: (index + 1).toString(),
     sourceId: exampleSource.id,
+    sourceName: exampleSource.name,
     profileId: defaultProfile.id,
     title: 'Example Article ${index + 1}',
     author: 'Author ${index + 1}',

@@ -30,7 +30,7 @@ class Sources extends Table {
 
   TextColumn get url => text().unique()();
 
-  TextColumn get title => text()();
+  TextColumn get name => text()();
   TextColumn get description => text().nullable()();
   TextColumn get siteUrl => text().nullable()();
   TextColumn get category => text().nullable()();
@@ -45,6 +45,7 @@ class Articles extends Table {
   IntColumn get id => integer().autoIncrement()();
 
   IntColumn get sourceId => integer().references(Sources, #id)();
+  TextColumn get sourceName => text()();
   IntColumn get profileId => integer().references(Profiles, #id)();
 
   // RSS unique identifier

@@ -12,7 +12,6 @@ class ArticleCard extends StatelessWidget {
   const ArticleCard.leadingImage({
     super.key,
     required this.article,
-    this.sourceTitle,
     required this.onConfirmDismissArticle,
     required this.dismissibleActionLeft,
     required this.dismissibleActionRight,
@@ -21,7 +20,6 @@ class ArticleCard extends StatelessWidget {
   const ArticleCard.headingImage({
     super.key,
     required this.article,
-    this.sourceTitle,
     required this.onConfirmDismissArticle,
     required this.dismissibleActionLeft,
     required this.dismissibleActionRight,
@@ -30,7 +28,6 @@ class ArticleCard extends StatelessWidget {
   const ArticleCard.normal({
     super.key,
     required this.article,
-    this.sourceTitle,
     required this.onConfirmDismissArticle,
     required this.dismissibleActionLeft,
     required this.dismissibleActionRight,
@@ -38,7 +35,6 @@ class ArticleCard extends StatelessWidget {
 
   final Article article;
   final ArticleCardLayout layout;
-  final String? sourceTitle;
 
   final ConfirmDismissCallback onConfirmDismissArticle;
 
@@ -73,7 +69,6 @@ class ArticleCard extends StatelessWidget {
             errorBuilder: (_, _, _) => placeholder,
           )
         : placeholder;
-
     switch (layout) {
       case ArticleCardLayout.leadingImage:
         return Row(
@@ -110,14 +105,12 @@ class ArticleCard extends StatelessWidget {
     final summaryOrPlaceholder = article.summary != null
         ? article.summary!
         : localizations.articleCardNoSummaryLabel;
-    //TODO: real source name
-    final sourceOrPlaceholder = sourceTitle ?? 'Source #${article.sourceId}';
     final authorOrPlaceholder = article.author != null
         ? article.author!
         : localizations.articleCardNoAuthorLabel;
     return CustomCard(
       padding: EdgeInsets.zero,
-      headline: sourceOrPlaceholder,
+      headline: article.sourceName,
       actions: [
         CustomIconButton.normal(
           onTap: () => safeShareUrl(url: Uri.parse(article.url)),

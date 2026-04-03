@@ -641,10 +641,10 @@ class $SourcesTable extends Sources with TableInfo<$SourcesTable, Source> {
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
   );
-  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedColumn<String> title = GeneratedColumn<String>(
-    'title',
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
     aliasedName,
     false,
     type: DriftSqlType.string,
@@ -734,7 +734,7 @@ class $SourcesTable extends Sources with TableInfo<$SourcesTable, Source> {
     id,
     profileId,
     url,
-    title,
+    name,
     description,
     siteUrl,
     category,
@@ -774,13 +774,13 @@ class $SourcesTable extends Sources with TableInfo<$SourcesTable, Source> {
     } else if (isInserting) {
       context.missing(_urlMeta);
     }
-    if (data.containsKey('title')) {
+    if (data.containsKey('name')) {
       context.handle(
-        _titleMeta,
-        title.isAcceptableOrUnknown(data['title']!, _titleMeta),
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
       );
     } else if (isInserting) {
-      context.missing(_titleMeta);
+      context.missing(_nameMeta);
     }
     if (data.containsKey('description')) {
       context.handle(
@@ -851,9 +851,9 @@ class $SourcesTable extends Sources with TableInfo<$SourcesTable, Source> {
         DriftSqlType.string,
         data['${effectivePrefix}url'],
       )!,
-      title: attachedDatabase.typeMapping.read(
+      name: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
-        data['${effectivePrefix}title'],
+        data['${effectivePrefix}name'],
       )!,
       description: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
@@ -896,7 +896,7 @@ class Source extends DataClass implements Insertable<Source> {
   final int id;
   final int profileId;
   final String url;
-  final String title;
+  final String name;
   final String? description;
   final String? siteUrl;
   final String? category;
@@ -908,7 +908,7 @@ class Source extends DataClass implements Insertable<Source> {
     required this.id,
     required this.profileId,
     required this.url,
-    required this.title,
+    required this.name,
     this.description,
     this.siteUrl,
     this.category,
@@ -923,7 +923,7 @@ class Source extends DataClass implements Insertable<Source> {
     map['id'] = Variable<int>(id);
     map['profile_id'] = Variable<int>(profileId);
     map['url'] = Variable<String>(url);
-    map['title'] = Variable<String>(title);
+    map['name'] = Variable<String>(name);
     if (!nullToAbsent || description != null) {
       map['description'] = Variable<String>(description);
     }
@@ -949,7 +949,7 @@ class Source extends DataClass implements Insertable<Source> {
       id: Value(id),
       profileId: Value(profileId),
       url: Value(url),
-      title: Value(title),
+      name: Value(name),
       description: description == null && nullToAbsent
           ? const Value.absent()
           : Value(description),
@@ -979,7 +979,7 @@ class Source extends DataClass implements Insertable<Source> {
       id: serializer.fromJson<int>(json['id']),
       profileId: serializer.fromJson<int>(json['profileId']),
       url: serializer.fromJson<String>(json['url']),
-      title: serializer.fromJson<String>(json['title']),
+      name: serializer.fromJson<String>(json['name']),
       description: serializer.fromJson<String?>(json['description']),
       siteUrl: serializer.fromJson<String?>(json['siteUrl']),
       category: serializer.fromJson<String?>(json['category']),
@@ -996,7 +996,7 @@ class Source extends DataClass implements Insertable<Source> {
       'id': serializer.toJson<int>(id),
       'profileId': serializer.toJson<int>(profileId),
       'url': serializer.toJson<String>(url),
-      'title': serializer.toJson<String>(title),
+      'name': serializer.toJson<String>(name),
       'description': serializer.toJson<String?>(description),
       'siteUrl': serializer.toJson<String?>(siteUrl),
       'category': serializer.toJson<String?>(category),
@@ -1011,7 +1011,7 @@ class Source extends DataClass implements Insertable<Source> {
     int? id,
     int? profileId,
     String? url,
-    String? title,
+    String? name,
     Value<String?> description = const Value.absent(),
     Value<String?> siteUrl = const Value.absent(),
     Value<String?> category = const Value.absent(),
@@ -1023,7 +1023,7 @@ class Source extends DataClass implements Insertable<Source> {
     id: id ?? this.id,
     profileId: profileId ?? this.profileId,
     url: url ?? this.url,
-    title: title ?? this.title,
+    name: name ?? this.name,
     description: description.present ? description.value : this.description,
     siteUrl: siteUrl.present ? siteUrl.value : this.siteUrl,
     category: category.present ? category.value : this.category,
@@ -1037,7 +1037,7 @@ class Source extends DataClass implements Insertable<Source> {
       id: data.id.present ? data.id.value : this.id,
       profileId: data.profileId.present ? data.profileId.value : this.profileId,
       url: data.url.present ? data.url.value : this.url,
-      title: data.title.present ? data.title.value : this.title,
+      name: data.name.present ? data.name.value : this.name,
       description: data.description.present
           ? data.description.value
           : this.description,
@@ -1058,7 +1058,7 @@ class Source extends DataClass implements Insertable<Source> {
           ..write('id: $id, ')
           ..write('profileId: $profileId, ')
           ..write('url: $url, ')
-          ..write('title: $title, ')
+          ..write('name: $name, ')
           ..write('description: $description, ')
           ..write('siteUrl: $siteUrl, ')
           ..write('category: $category, ')
@@ -1075,7 +1075,7 @@ class Source extends DataClass implements Insertable<Source> {
     id,
     profileId,
     url,
-    title,
+    name,
     description,
     siteUrl,
     category,
@@ -1091,7 +1091,7 @@ class Source extends DataClass implements Insertable<Source> {
           other.id == this.id &&
           other.profileId == this.profileId &&
           other.url == this.url &&
-          other.title == this.title &&
+          other.name == this.name &&
           other.description == this.description &&
           other.siteUrl == this.siteUrl &&
           other.category == this.category &&
@@ -1105,7 +1105,7 @@ class SourcesCompanion extends UpdateCompanion<Source> {
   final Value<int> id;
   final Value<int> profileId;
   final Value<String> url;
-  final Value<String> title;
+  final Value<String> name;
   final Value<String?> description;
   final Value<String?> siteUrl;
   final Value<String?> category;
@@ -1117,7 +1117,7 @@ class SourcesCompanion extends UpdateCompanion<Source> {
     this.id = const Value.absent(),
     this.profileId = const Value.absent(),
     this.url = const Value.absent(),
-    this.title = const Value.absent(),
+    this.name = const Value.absent(),
     this.description = const Value.absent(),
     this.siteUrl = const Value.absent(),
     this.category = const Value.absent(),
@@ -1130,7 +1130,7 @@ class SourcesCompanion extends UpdateCompanion<Source> {
     this.id = const Value.absent(),
     required int profileId,
     required String url,
-    required String title,
+    required String name,
     this.description = const Value.absent(),
     this.siteUrl = const Value.absent(),
     this.category = const Value.absent(),
@@ -1140,12 +1140,12 @@ class SourcesCompanion extends UpdateCompanion<Source> {
     this.updatedAt = const Value.absent(),
   }) : profileId = Value(profileId),
        url = Value(url),
-       title = Value(title);
+       name = Value(name);
   static Insertable<Source> custom({
     Expression<int>? id,
     Expression<int>? profileId,
     Expression<String>? url,
-    Expression<String>? title,
+    Expression<String>? name,
     Expression<String>? description,
     Expression<String>? siteUrl,
     Expression<String>? category,
@@ -1158,7 +1158,7 @@ class SourcesCompanion extends UpdateCompanion<Source> {
       if (id != null) 'id': id,
       if (profileId != null) 'profile_id': profileId,
       if (url != null) 'url': url,
-      if (title != null) 'title': title,
+      if (name != null) 'name': name,
       if (description != null) 'description': description,
       if (siteUrl != null) 'site_url': siteUrl,
       if (category != null) 'category': category,
@@ -1173,7 +1173,7 @@ class SourcesCompanion extends UpdateCompanion<Source> {
     Value<int>? id,
     Value<int>? profileId,
     Value<String>? url,
-    Value<String>? title,
+    Value<String>? name,
     Value<String?>? description,
     Value<String?>? siteUrl,
     Value<String?>? category,
@@ -1186,7 +1186,7 @@ class SourcesCompanion extends UpdateCompanion<Source> {
       id: id ?? this.id,
       profileId: profileId ?? this.profileId,
       url: url ?? this.url,
-      title: title ?? this.title,
+      name: name ?? this.name,
       description: description ?? this.description,
       siteUrl: siteUrl ?? this.siteUrl,
       category: category ?? this.category,
@@ -1209,8 +1209,8 @@ class SourcesCompanion extends UpdateCompanion<Source> {
     if (url.present) {
       map['url'] = Variable<String>(url.value);
     }
-    if (title.present) {
-      map['title'] = Variable<String>(title.value);
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
     }
     if (description.present) {
       map['description'] = Variable<String>(description.value);
@@ -1242,7 +1242,7 @@ class SourcesCompanion extends UpdateCompanion<Source> {
           ..write('id: $id, ')
           ..write('profileId: $profileId, ')
           ..write('url: $url, ')
-          ..write('title: $title, ')
+          ..write('name: $name, ')
           ..write('description: $description, ')
           ..write('siteUrl: $siteUrl, ')
           ..write('category: $category, ')
@@ -1286,6 +1286,17 @@ class $ArticlesTable extends Articles with TableInfo<$ArticlesTable, Article> {
     defaultConstraints: GeneratedColumn.constraintIsAlways(
       'REFERENCES sources (id)',
     ),
+  );
+  static const VerificationMeta _sourceNameMeta = const VerificationMeta(
+    'sourceName',
+  );
+  @override
+  late final GeneratedColumn<String> sourceName = GeneratedColumn<String>(
+    'source_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
   );
   static const VerificationMeta _profileIdMeta = const VerificationMeta(
     'profileId',
@@ -1437,6 +1448,7 @@ class $ArticlesTable extends Articles with TableInfo<$ArticlesTable, Article> {
   List<GeneratedColumn> get $columns => [
     id,
     sourceId,
+    sourceName,
     profileId,
     guid,
     url,
@@ -1473,6 +1485,14 @@ class $ArticlesTable extends Articles with TableInfo<$ArticlesTable, Article> {
       );
     } else if (isInserting) {
       context.missing(_sourceIdMeta);
+    }
+    if (data.containsKey('source_name')) {
+      context.handle(
+        _sourceNameMeta,
+        sourceName.isAcceptableOrUnknown(data['source_name']!, _sourceNameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sourceNameMeta);
     }
     if (data.containsKey('profile_id')) {
       context.handle(
@@ -1586,6 +1606,10 @@ class $ArticlesTable extends Articles with TableInfo<$ArticlesTable, Article> {
         DriftSqlType.int,
         data['${effectivePrefix}source_id'],
       )!,
+      sourceName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_name'],
+      )!,
       profileId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}profile_id'],
@@ -1650,6 +1674,7 @@ class $ArticlesTable extends Articles with TableInfo<$ArticlesTable, Article> {
 class Article extends DataClass implements Insertable<Article> {
   final int id;
   final int sourceId;
+  final String sourceName;
   final int profileId;
   final String guid;
   final String url;
@@ -1666,6 +1691,7 @@ class Article extends DataClass implements Insertable<Article> {
   const Article({
     required this.id,
     required this.sourceId,
+    required this.sourceName,
     required this.profileId,
     required this.guid,
     required this.url,
@@ -1685,6 +1711,7 @@ class Article extends DataClass implements Insertable<Article> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['source_id'] = Variable<int>(sourceId);
+    map['source_name'] = Variable<String>(sourceName);
     map['profile_id'] = Variable<int>(profileId);
     map['guid'] = Variable<String>(guid);
     map['url'] = Variable<String>(url);
@@ -1713,6 +1740,7 @@ class Article extends DataClass implements Insertable<Article> {
     return ArticlesCompanion(
       id: Value(id),
       sourceId: Value(sourceId),
+      sourceName: Value(sourceName),
       profileId: Value(profileId),
       guid: Value(guid),
       url: Value(url),
@@ -1745,6 +1773,7 @@ class Article extends DataClass implements Insertable<Article> {
     return Article(
       id: serializer.fromJson<int>(json['id']),
       sourceId: serializer.fromJson<int>(json['sourceId']),
+      sourceName: serializer.fromJson<String>(json['sourceName']),
       profileId: serializer.fromJson<int>(json['profileId']),
       guid: serializer.fromJson<String>(json['guid']),
       url: serializer.fromJson<String>(json['url']),
@@ -1766,6 +1795,7 @@ class Article extends DataClass implements Insertable<Article> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'sourceId': serializer.toJson<int>(sourceId),
+      'sourceName': serializer.toJson<String>(sourceName),
       'profileId': serializer.toJson<int>(profileId),
       'guid': serializer.toJson<String>(guid),
       'url': serializer.toJson<String>(url),
@@ -1785,6 +1815,7 @@ class Article extends DataClass implements Insertable<Article> {
   Article copyWith({
     int? id,
     int? sourceId,
+    String? sourceName,
     int? profileId,
     String? guid,
     String? url,
@@ -1801,6 +1832,7 @@ class Article extends DataClass implements Insertable<Article> {
   }) => Article(
     id: id ?? this.id,
     sourceId: sourceId ?? this.sourceId,
+    sourceName: sourceName ?? this.sourceName,
     profileId: profileId ?? this.profileId,
     guid: guid ?? this.guid,
     url: url ?? this.url,
@@ -1819,6 +1851,9 @@ class Article extends DataClass implements Insertable<Article> {
     return Article(
       id: data.id.present ? data.id.value : this.id,
       sourceId: data.sourceId.present ? data.sourceId.value : this.sourceId,
+      sourceName: data.sourceName.present
+          ? data.sourceName.value
+          : this.sourceName,
       profileId: data.profileId.present ? data.profileId.value : this.profileId,
       guid: data.guid.present ? data.guid.value : this.guid,
       url: data.url.present ? data.url.value : this.url,
@@ -1842,6 +1877,7 @@ class Article extends DataClass implements Insertable<Article> {
     return (StringBuffer('Article(')
           ..write('id: $id, ')
           ..write('sourceId: $sourceId, ')
+          ..write('sourceName: $sourceName, ')
           ..write('profileId: $profileId, ')
           ..write('guid: $guid, ')
           ..write('url: $url, ')
@@ -1863,6 +1899,7 @@ class Article extends DataClass implements Insertable<Article> {
   int get hashCode => Object.hash(
     id,
     sourceId,
+    sourceName,
     profileId,
     guid,
     url,
@@ -1883,6 +1920,7 @@ class Article extends DataClass implements Insertable<Article> {
       (other is Article &&
           other.id == this.id &&
           other.sourceId == this.sourceId &&
+          other.sourceName == this.sourceName &&
           other.profileId == this.profileId &&
           other.guid == this.guid &&
           other.url == this.url &&
@@ -1901,6 +1939,7 @@ class Article extends DataClass implements Insertable<Article> {
 class ArticlesCompanion extends UpdateCompanion<Article> {
   final Value<int> id;
   final Value<int> sourceId;
+  final Value<String> sourceName;
   final Value<int> profileId;
   final Value<String> guid;
   final Value<String> url;
@@ -1917,6 +1956,7 @@ class ArticlesCompanion extends UpdateCompanion<Article> {
   const ArticlesCompanion({
     this.id = const Value.absent(),
     this.sourceId = const Value.absent(),
+    this.sourceName = const Value.absent(),
     this.profileId = const Value.absent(),
     this.guid = const Value.absent(),
     this.url = const Value.absent(),
@@ -1934,6 +1974,7 @@ class ArticlesCompanion extends UpdateCompanion<Article> {
   ArticlesCompanion.insert({
     this.id = const Value.absent(),
     required int sourceId,
+    required String sourceName,
     required int profileId,
     required String guid,
     required String url,
@@ -1948,6 +1989,7 @@ class ArticlesCompanion extends UpdateCompanion<Article> {
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
   }) : sourceId = Value(sourceId),
+       sourceName = Value(sourceName),
        profileId = Value(profileId),
        guid = Value(guid),
        url = Value(url),
@@ -1956,6 +1998,7 @@ class ArticlesCompanion extends UpdateCompanion<Article> {
   static Insertable<Article> custom({
     Expression<int>? id,
     Expression<int>? sourceId,
+    Expression<String>? sourceName,
     Expression<int>? profileId,
     Expression<String>? guid,
     Expression<String>? url,
@@ -1973,6 +2016,7 @@ class ArticlesCompanion extends UpdateCompanion<Article> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (sourceId != null) 'source_id': sourceId,
+      if (sourceName != null) 'source_name': sourceName,
       if (profileId != null) 'profile_id': profileId,
       if (guid != null) 'guid': guid,
       if (url != null) 'url': url,
@@ -1992,6 +2036,7 @@ class ArticlesCompanion extends UpdateCompanion<Article> {
   ArticlesCompanion copyWith({
     Value<int>? id,
     Value<int>? sourceId,
+    Value<String>? sourceName,
     Value<int>? profileId,
     Value<String>? guid,
     Value<String>? url,
@@ -2009,6 +2054,7 @@ class ArticlesCompanion extends UpdateCompanion<Article> {
     return ArticlesCompanion(
       id: id ?? this.id,
       sourceId: sourceId ?? this.sourceId,
+      sourceName: sourceName ?? this.sourceName,
       profileId: profileId ?? this.profileId,
       guid: guid ?? this.guid,
       url: url ?? this.url,
@@ -2033,6 +2079,9 @@ class ArticlesCompanion extends UpdateCompanion<Article> {
     }
     if (sourceId.present) {
       map['source_id'] = Variable<int>(sourceId.value);
+    }
+    if (sourceName.present) {
+      map['source_name'] = Variable<String>(sourceName.value);
     }
     if (profileId.present) {
       map['profile_id'] = Variable<int>(profileId.value);
@@ -2081,6 +2130,7 @@ class ArticlesCompanion extends UpdateCompanion<Article> {
     return (StringBuffer('ArticlesCompanion(')
           ..write('id: $id, ')
           ..write('sourceId: $sourceId, ')
+          ..write('sourceName: $sourceName, ')
           ..write('profileId: $profileId, ')
           ..write('guid: $guid, ')
           ..write('url: $url, ')
@@ -2881,7 +2931,7 @@ typedef $$SourcesTableCreateCompanionBuilder =
       Value<int> id,
       required int profileId,
       required String url,
-      required String title,
+      required String name,
       Value<String?> description,
       Value<String?> siteUrl,
       Value<String?> category,
@@ -2895,7 +2945,7 @@ typedef $$SourcesTableUpdateCompanionBuilder =
       Value<int> id,
       Value<int> profileId,
       Value<String> url,
-      Value<String> title,
+      Value<String> name,
       Value<String?> description,
       Value<String?> siteUrl,
       Value<String?> category,
@@ -2965,8 +3015,8 @@ class $$SourcesTableFilterComposer
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get title => $composableBuilder(
-    column: $table.title,
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3073,8 +3123,8 @@ class $$SourcesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get title => $composableBuilder(
-    column: $table.title,
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -3152,8 +3202,8 @@ class $$SourcesTableAnnotationComposer
   GeneratedColumn<String> get url =>
       $composableBuilder(column: $table.url, builder: (column) => column);
 
-  GeneratedColumn<String> get title =>
-      $composableBuilder(column: $table.title, builder: (column) => column);
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
 
   GeneratedColumn<String> get description => $composableBuilder(
     column: $table.description,
@@ -3260,7 +3310,7 @@ class $$SourcesTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<int> profileId = const Value.absent(),
                 Value<String> url = const Value.absent(),
-                Value<String> title = const Value.absent(),
+                Value<String> name = const Value.absent(),
                 Value<String?> description = const Value.absent(),
                 Value<String?> siteUrl = const Value.absent(),
                 Value<String?> category = const Value.absent(),
@@ -3272,7 +3322,7 @@ class $$SourcesTableTableManager
                 id: id,
                 profileId: profileId,
                 url: url,
-                title: title,
+                name: name,
                 description: description,
                 siteUrl: siteUrl,
                 category: category,
@@ -3286,7 +3336,7 @@ class $$SourcesTableTableManager
                 Value<int> id = const Value.absent(),
                 required int profileId,
                 required String url,
-                required String title,
+                required String name,
                 Value<String?> description = const Value.absent(),
                 Value<String?> siteUrl = const Value.absent(),
                 Value<String?> category = const Value.absent(),
@@ -3298,7 +3348,7 @@ class $$SourcesTableTableManager
                 id: id,
                 profileId: profileId,
                 url: url,
-                title: title,
+                name: name,
                 description: description,
                 siteUrl: siteUrl,
                 category: category,
@@ -3390,6 +3440,7 @@ typedef $$ArticlesTableCreateCompanionBuilder =
     ArticlesCompanion Function({
       Value<int> id,
       required int sourceId,
+      required String sourceName,
       required int profileId,
       required String guid,
       required String url,
@@ -3408,6 +3459,7 @@ typedef $$ArticlesTableUpdateCompanionBuilder =
     ArticlesCompanion Function({
       Value<int> id,
       Value<int> sourceId,
+      Value<String> sourceName,
       Value<int> profileId,
       Value<String> guid,
       Value<String> url,
@@ -3473,6 +3525,11 @@ class $$ArticlesTableFilterComposer
   });
   ColumnFilters<int> get id => $composableBuilder(
     column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sourceName => $composableBuilder(
+    column: $table.sourceName,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -3597,6 +3654,11 @@ class $$ArticlesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get sourceName => $composableBuilder(
+    column: $table.sourceName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get guid => $composableBuilder(
     column: $table.guid,
     builder: (column) => ColumnOrderings(column),
@@ -3716,6 +3778,11 @@ class $$ArticlesTableAnnotationComposer
   GeneratedColumn<int> get id =>
       $composableBuilder(column: $table.id, builder: (column) => column);
 
+  GeneratedColumn<String> get sourceName => $composableBuilder(
+    column: $table.sourceName,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get guid =>
       $composableBuilder(column: $table.guid, builder: (column) => column);
 
@@ -3831,6 +3898,7 @@ class $$ArticlesTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 Value<int> sourceId = const Value.absent(),
+                Value<String> sourceName = const Value.absent(),
                 Value<int> profileId = const Value.absent(),
                 Value<String> guid = const Value.absent(),
                 Value<String> url = const Value.absent(),
@@ -3847,6 +3915,7 @@ class $$ArticlesTableTableManager
               }) => ArticlesCompanion(
                 id: id,
                 sourceId: sourceId,
+                sourceName: sourceName,
                 profileId: profileId,
                 guid: guid,
                 url: url,
@@ -3865,6 +3934,7 @@ class $$ArticlesTableTableManager
               ({
                 Value<int> id = const Value.absent(),
                 required int sourceId,
+                required String sourceName,
                 required int profileId,
                 required String guid,
                 required String url,
@@ -3881,6 +3951,7 @@ class $$ArticlesTableTableManager
               }) => ArticlesCompanion.insert(
                 id: id,
                 sourceId: sourceId,
+                sourceName: sourceName,
                 profileId: profileId,
                 guid: guid,
                 url: url,

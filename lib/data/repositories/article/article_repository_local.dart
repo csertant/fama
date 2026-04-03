@@ -114,6 +114,7 @@ class ArticleRepositoryLocal implements ArticleRepository {
             return ArticlesCompanion.insert(
               profileId: profileId,
               sourceId: source.id,
+              sourceName: source.name,
               guid: parsedArticle.guid,
               url: parsedArticle.url,
               title: parsedArticle.title,

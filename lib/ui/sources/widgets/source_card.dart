@@ -25,7 +25,7 @@ class SourceCard extends StatelessWidget {
         : localizations.sourceCardNoDescriptionLabel;
 
     return CustomCard(
-      headline: source.profileId.toString(),
+      headline: source.url,
       actions: [
         CustomIconButton.normal(
           onTap: onRemoveSource,
@@ -33,7 +33,7 @@ class SourceCard extends StatelessWidget {
           tooltip: localizations.sourceCardLabelRemove,
         ),
       ],
-      title: source.title,
+      title: source.name,
       titleUrl: source.siteUrl,
       description: descriptionOrPlaceholder,
       metadata: [
