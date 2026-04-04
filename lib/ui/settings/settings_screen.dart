@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import '../../data/database/database.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../l10n/utils.dart';
-import '../core/themes/dimensions.dart';
 import '../core/widgets/widgets.dart';
 import 'settings_viewmodel.dart';
 import 'widgets/settings_profiles_group.dart';
@@ -107,56 +106,46 @@ class SettingsScreen extends StatelessWidget {
     final descriptionController = TextEditingController();
     final localizations = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    await showModalBottomSheet<void>(
+    await showCustomModalSheet<void>(
       context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(AppDimensions.borderRadiusMedium),
-        ),
-      ),
       builder: (context) {
-        return AnimatedBuilder(
-          animation: viewModel.createProfile,
-          builder: (context, _) {
-            return CustomModalSheet(
-              title: localizations.settingsCreateProfileTitle,
-              actionLabel: localizations.settingsCreateProfileLabel,
-              onAction: () async {
-                if (nameController.text.isNotEmpty) {
-                  await viewModel.createProfile.execute(
-                    nameController.text,
-                    descriptionController.text,
-                  );
-                  if (viewModel.createProfile.completed && context.mounted) {
-                    viewModel.createProfile.clearResult();
-                    Navigator.of(context).pop();
-                  }
-                }
-              },
-              isLoading: viewModel.createProfile.running,
-              children: [
-                TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    hintText: localizations.settingsCreateProfileSubtitle,
-                    hintStyle: theme.textTheme.bodyMedium!.copyWith(
-                      color: theme.colorScheme.onPrimary,
-                    ),
-                  ),
-                ),
-                TextField(
-                  controller: descriptionController,
-                  decoration: InputDecoration(
-                    hintText: localizations.settingsCreateProfileDescription,
-                    hintStyle: theme.textTheme.bodyMedium!.copyWith(
-                      color: theme.colorScheme.onPrimary,
-                    ),
-                  ),
-                ),
-              ],
-            );
+        return CustomModalSheet(
+          listenable: viewModel.createProfile,
+          title: localizations.settingsCreateProfileTitle,
+          actionLabel: localizations.settingsCreateProfileLabel,
+          onAction: () async {
+            if (nameController.text.isNotEmpty) {
+              await viewModel.createProfile.execute(
+                nameController.text,
+                descriptionController.text,
+              );
+              if (viewModel.createProfile.completed && context.mounted) {
+                viewModel.createProfile.clearResult();
+                Navigator.of(context).pop();
+              }
+            }
           },
+          isLoading: viewModel.createProfile.running,
+          childrenBuilder: (context) => [
+            TextField(
+              controller: nameController,
+              decoration: InputDecoration(
+                hintText: localizations.settingsCreateProfileSubtitle,
+                hintStyle: theme.textTheme.bodyMedium!.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                ),
+              ),
+            ),
+            TextField(
+              controller: descriptionController,
+              decoration: InputDecoration(
+                hintText: localizations.settingsCreateProfileDescription,
+                hintStyle: theme.textTheme.bodyMedium!.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                ),
+              ),
+            ),
+          ],
         );
       },
     );
@@ -175,73 +164,63 @@ class SettingsScreen extends StatelessWidget {
     final isDefaultController = ValueNotifier<bool>(profile.isDefault);
     final localizations = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    await showModalBottomSheet<void>(
+    await showCustomModalSheet<void>(
       context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(AppDimensions.borderRadiusMedium),
-        ),
-      ),
       builder: (context) {
-        return AnimatedBuilder(
-          animation: viewModel.modifyProfile,
-          builder: (context, _) {
-            return CustomModalSheet(
-              title: localizations.settingsModifyProfileTitle,
-              actionLabel: localizations.settingsModifyProfileLabel,
-              onAction: () async {
-                if (nameController.text.isNotEmpty) {
-                  await viewModel.modifyProfile.execute(
-                    profile.copyWith(
-                      name: nameController.text,
-                      description: Value(
-                        descriptionController.text.isNotEmpty
-                            ? descriptionController.text
-                            : null,
-                      ),
-                      isDefault: isDefaultController.value,
-                    ),
-                  );
-                  if (viewModel.modifyProfile.completed && context.mounted) {
-                    viewModel.modifyProfile.clearResult();
-                    Navigator.of(context).pop();
-                  }
-                }
-              },
-              isLoading: viewModel.modifyProfile.running,
-              children: [
-                TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    hintText: localizations.settingsCreateProfileSubtitle,
-                    hintStyle: theme.textTheme.bodyMedium!.copyWith(
-                      color: theme.colorScheme.onPrimary,
-                    ),
+        return CustomModalSheet(
+          listenable: viewModel.modifyProfile,
+          title: localizations.settingsModifyProfileTitle,
+          actionLabel: localizations.settingsModifyProfileLabel,
+          onAction: () async {
+            if (nameController.text.isNotEmpty) {
+              await viewModel.modifyProfile.execute(
+                profile.copyWith(
+                  name: nameController.text,
+                  description: Value(
+                    descriptionController.text.isNotEmpty
+                        ? descriptionController.text
+                        : null,
                   ),
+                  isDefault: isDefaultController.value,
                 ),
-                TextField(
-                  controller: descriptionController,
-                  decoration: InputDecoration(
-                    hintText: localizations.settingsCreateProfileDescription,
-                    hintStyle: theme.textTheme.bodyMedium!.copyWith(
-                      color: theme.colorScheme.onPrimary,
-                    ),
-                  ),
-                ),
-                ValueListenableBuilder<bool>(
-                  valueListenable: isDefaultController,
-                  builder: (context, isDefault, _) {
-                    return CustomSwitch(
-                      label: localizations.settingsModifyProfileIsDefaultLabel,
-                      value: isDefault,
-                      onChanged: (value) => isDefaultController.value = value,
-                    );
-                  },
-                ),
-              ],
-            );
+              );
+              if (viewModel.modifyProfile.completed && context.mounted) {
+                viewModel.modifyProfile.clearResult();
+                Navigator.of(context).pop();
+              }
+            }
           },
+          isLoading: viewModel.modifyProfile.running,
+          childrenBuilder: (context) => [
+            TextField(
+              controller: nameController,
+              decoration: InputDecoration(
+                hintText: localizations.settingsCreateProfileSubtitle,
+                hintStyle: theme.textTheme.bodyMedium!.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                ),
+              ),
+            ),
+            TextField(
+              controller: descriptionController,
+              decoration: InputDecoration(
+                hintText: localizations.settingsCreateProfileDescription,
+                hintStyle: theme.textTheme.bodyMedium!.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                ),
+              ),
+            ),
+            ValueListenableBuilder<bool>(
+              valueListenable: isDefaultController,
+              builder: (context, isDefault, _) {
+                return CustomSwitch(
+                  label: localizations.settingsModifyProfileIsDefaultLabel,
+                  value: isDefault,
+                  onChanged: (value) => isDefaultController.value = value,
+                );
+              },
+            ),
+          ],
         );
       },
     );

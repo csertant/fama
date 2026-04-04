@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/generated/app_localizations.dart';
+import '../../l10n/utils.dart';
 import '../core/themes/colors.dart';
 import '../core/themes/dimensions.dart';
 import '../core/widgets/widgets.dart';
@@ -23,7 +24,7 @@ class FeedScreen extends StatelessWidget {
         actions: [
           CustomIconButton.normal(
             icon: CustomIcons.filter,
-            onTap: () {},
+            onTap: () => _showFiltersModal(context),
             tooltip: localizations.navigationLabelFilter,
           ),
         ],
@@ -46,17 +47,19 @@ class FeedScreen extends StatelessWidget {
         child: ListenableBuilder(
           listenable: viewModel,
           builder: (context, child) {
-            return viewModel.articles.isNotEmpty
+            return viewModel.filteredArticles.isNotEmpty
                 ? ListView.builder(
                     padding: const EdgeInsets.symmetric(
                       vertical: AppDimensions.paddingMedium,
                     ),
-                    itemCount: viewModel.articles.length,
+                    itemCount: viewModel.filteredArticles.length,
                     itemBuilder: _buildArticleCard,
                   )
                 : Center(
                     child: Text(
-                      localizations.feedEmptyLabel,
+                      viewModel.articles.isEmpty
+                          ? localizations.feedEmptyLabel
+                          : localizations.filtersNoMatchesLabel,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   );
@@ -67,7 +70,7 @@ class FeedScreen extends StatelessWidget {
   }
 
   Widget _buildArticleCard(BuildContext context, int index) {
-    final article = viewModel.articles[index];
+    final article = viewModel.filteredArticles[index];
     return ArticleCard.headingImage(
       article: article,
       onConfirmDismissArticle: (direction) async {
@@ -101,6 +104,54 @@ class FeedScreen extends StatelessWidget {
       dismissibleActionRight: const CustomDismissibleAction.right(
         icon: CustomIcons.read,
       ),
+    );
+  }
+
+  Future<void> _showFiltersModal(BuildContext context) async {
+    final localizations = AppLocalizations.of(context)!;
+    await showCustomModalSheet<void>(
+      context: context,
+      builder: (context) {
+        return CustomModalSheet(
+          listenable: viewModel,
+          title: localizations.filtersTitle,
+          actionLabel: localizations.filtersActionLabel,
+          onAction: viewModel.clearFilters,
+          childrenBuilder: (context) => [
+            CustomFilter(
+              label: localizations.feedFiltersSourcesLabel,
+              selected: viewModel.selectedSources,
+              options: viewModel.availableSources,
+              onOptionSelected: viewModel.toggleSourceFilter,
+            ),
+            CustomFilter(
+              label: localizations.feedFiltersAuthorsLabel,
+              selected: viewModel.selectedAuthors,
+              options: viewModel.availableAuthors,
+              onOptionSelected: viewModel.toggleAuthorFilter,
+            ),
+            CustomFilter(
+              label: localizations.feedFiltersDurationLabel,
+              selected: [viewModel.selectedDuration],
+              options: FilterDuration.all,
+              onOptionSelected: viewModel.setDuration,
+              optionLabelBuilder: (option) =>
+                  mapDurationToString(context, option),
+            ),
+            CustomFilter(
+              label: localizations.feedFiltersLimitLabel,
+              selected: [viewModel.selectedLimit],
+              options: FilterLimit.all,
+              onOptionSelected: viewModel.setLimit,
+            ),
+            CustomSwitch(
+              label: localizations.feedFiltersShowReadArticlesLabel,
+              value: viewModel.showRead,
+              onChanged: (_) => viewModel.toggleShowRead(),
+            ),
+          ],
+        );
+      },
     );
   }
 }

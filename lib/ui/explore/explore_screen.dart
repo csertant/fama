@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../l10n/generated/app_localizations.dart';
+import '../../l10n/utils.dart';
 import '../core/themes/dimensions.dart';
 import '../core/widgets/widgets.dart';
 import 'explore_viewmodel.dart';
@@ -70,7 +71,7 @@ class ExploreScreen extends StatelessWidget {
                     child: Text(
                       viewModel.sourceRecommendations.isEmpty
                           ? localizations.exploreEmptyLabel
-                          : localizations.exploreFiltersNoMatchesLabel,
+                          : localizations.filtersNoMatchesLabel,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   );
@@ -94,49 +95,41 @@ class ExploreScreen extends StatelessWidget {
 
   Future<void> _showFiltersModal(BuildContext context) async {
     final localizations = AppLocalizations.of(context)!;
-    await showModalBottomSheet<void>(
+    await showCustomModalSheet<void>(
       context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(AppDimensions.borderRadiusMedium),
-        ),
-      ),
       builder: (context) {
-        return AnimatedBuilder(
-          animation: viewModel,
-          builder: (context, _) {
-            return CustomModalSheet(
-              title: localizations.exploreFiltersTitle,
-              actionLabel: localizations.exploreFiltersActionLabel,
-              onAction: viewModel.clearFilters,
-              children: [
-                CustomFilter(
-                  label: localizations.exploreFiltersLanguageLabel,
-                  selected: viewModel.selectedLanguages,
-                  options: viewModel.availableLanguages,
-                  onOptionSelected: viewModel.toggleLanguageFilter,
-                ),
-                CustomFilter(
-                  label: localizations.exploreFiltersCountryLabel,
-                  selected: viewModel.selectedCountries,
-                  options: viewModel.availableCountries,
-                  onOptionSelected: viewModel.toggleCountryFilter,
-                ),
-                CustomFilter(
-                  label: localizations.exploreFiltersCategoryLabel,
-                  selected: viewModel.selectedCategories,
-                  options: viewModel.availableCategories,
-                  onOptionSelected: viewModel.toggleCategoryFilter,
-                ),
-                CustomSwitch(
-                  label: localizations.exploreFiltersShowSubscribedSourcesLabel,
-                  value: viewModel.showSubscribed,
-                  onChanged: (_) => viewModel.toggleShowSubscribed(),
-                ),
-              ],
-            );
-          },
+        return CustomModalSheet(
+          listenable: viewModel,
+          title: localizations.filtersTitle,
+          actionLabel: localizations.filtersActionLabel,
+          onAction: viewModel.clearFilters,
+          childrenBuilder: (context) => [
+            CustomFilter(
+              label: localizations.exploreFiltersLanguageLabel,
+              selected: viewModel.selectedLanguages,
+              options: viewModel.availableLanguages,
+              onOptionSelected: viewModel.toggleLanguageFilter,
+              optionLabelBuilder: (option) =>
+                  mapLanguageCodeToString(context, option),
+            ),
+            CustomFilter(
+              label: localizations.exploreFiltersCountryLabel,
+              selected: viewModel.selectedCountries,
+              options: viewModel.availableCountries,
+              onOptionSelected: viewModel.toggleCountryFilter,
+            ),
+            CustomFilter(
+              label: localizations.exploreFiltersCategoryLabel,
+              selected: viewModel.selectedCategories,
+              options: viewModel.availableCategories,
+              onOptionSelected: viewModel.toggleCategoryFilter,
+            ),
+            CustomSwitch(
+              label: localizations.exploreFiltersShowSubscribedSourcesLabel,
+              value: viewModel.showSubscribed,
+              onChanged: (_) => viewModel.toggleShowSubscribed(),
+            ),
+          ],
         );
       },
     );
@@ -146,46 +139,35 @@ class ExploreScreen extends StatelessWidget {
     final urlController = TextEditingController();
     final localizations = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    await showModalBottomSheet<void>(
+    await showCustomModalSheet<void>(
       context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(AppDimensions.borderRadiusMedium),
-        ),
-      ),
       builder: (context) {
-        return AnimatedBuilder(
-          animation: viewModel.subscribeToSource,
-          builder: (context, _) {
-            return CustomModalSheet(
-              title: localizations.exploreAddCustomSourceTitle,
-              description: localizations.exploreAddCustomSourceDescription,
-              actionLabel: localizations.exploreAddCustomSourceActionLabel,
-              onAction: () async {
-                if (urlController.text.isNotEmpty) {
-                  await viewModel.subscribeToSource.execute(urlController.text);
-                  if (viewModel.subscribeToSource.completed &&
-                      context.mounted) {
-                    viewModel.subscribeToSource.clearResult();
-                    Navigator.of(context).pop();
-                  }
-                }
-              },
-              isLoading: viewModel.subscribeToSource.running,
-              children: [
-                TextField(
-                  controller: urlController,
-                  decoration: InputDecoration(
-                    hintText: localizations.exploreAddCustomSourceSubtitle,
-                    hintStyle: theme.textTheme.bodyMedium!.copyWith(
-                      color: theme.colorScheme.onPrimary,
-                    ),
-                  ),
-                ),
-              ],
-            );
+        return CustomModalSheet(
+          listenable: viewModel.subscribeToSource,
+          title: localizations.exploreAddCustomSourceTitle,
+          description: localizations.exploreAddCustomSourceDescription,
+          actionLabel: localizations.exploreAddCustomSourceActionLabel,
+          onAction: () async {
+            if (urlController.text.isNotEmpty) {
+              await viewModel.subscribeToSource.execute(urlController.text);
+              if (viewModel.subscribeToSource.completed && context.mounted) {
+                viewModel.subscribeToSource.clearResult();
+                Navigator.of(context).pop();
+              }
+            }
           },
+          isLoading: viewModel.subscribeToSource.running,
+          childrenBuilder: (context) => [
+            TextField(
+              controller: urlController,
+              decoration: InputDecoration(
+                hintText: localizations.exploreAddCustomSourceSubtitle,
+                hintStyle: theme.textTheme.bodyMedium!.copyWith(
+                  color: theme.colorScheme.onPrimary,
+                ),
+              ),
+            ),
+          ],
         );
       },
     );

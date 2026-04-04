@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../data/services/shared_preferences_service/app_settings.dart';
+import '../ui/core/widgets/custom_filter.dart';
 import 'generated/app_localizations.dart';
 
 String mapThemeModeToString(final BuildContext context, final ThemeMode theme) {
@@ -27,5 +28,27 @@ String mapLanguageCodeToString(
       return localizations.settingsLanguageOptionEnglish;
     default:
       return localizations.settingsLanguageOptionUnknown;
+  }
+}
+
+String mapDurationToString(
+  final BuildContext context,
+  final Duration duration,
+) {
+  final localizations = AppLocalizations.of(context)!;
+  if (duration.inHours == FilterDuration.hour.inHours) {
+    return localizations.filtersDurationOptionHour;
+  } else if (duration.inHours == FilterDuration.sixHours.inHours) {
+    return localizations.filtersDurationOptionSixHours;
+  } else if (duration.inDays == FilterDuration.day.inDays) {
+    return localizations.filtersDurationOptionDay;
+  } else if (duration.inDays == FilterDuration.threeDays.inDays) {
+    return localizations.filtersDurationOptionThreeDays;
+  } else if (duration.inDays == FilterDuration.week.inDays) {
+    return localizations.filtersDurationOptionWeek;
+  } else if (duration.inDays == FilterDuration.month.inDays) {
+    return localizations.filtersDurationOptionMonth;
+  } else {
+    return localizations.filtersDurationOptionYear;
   }
 }

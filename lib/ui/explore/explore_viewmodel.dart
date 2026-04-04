@@ -101,15 +101,6 @@ class ExploreViewModel extends ChangeNotifier {
 
   bool get showSubscribed => _showSubscribed;
 
-  bool get hasActiveFilters =>
-      _selectedLanguages.isNotEmpty ||
-      _selectedCountries.isNotEmpty ||
-      _selectedCategories.isNotEmpty;
-  int get activeFiltersCount =>
-      _selectedLanguages.length +
-      _selectedCountries.length +
-      _selectedCategories.length;
-
   Future<Result<void>> _load() async {
     try {
       final profileId = _sessionManager.profileId;
