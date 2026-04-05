@@ -25,39 +25,32 @@ class RemoteDataService {
 
       if (response.statusCode != 200) {
         return Result.error(
-          RemoteDataException(
+          DataStorageException(
             'Error fetching recommendations: HTTP ${response.statusCode}',
           ),
         );
       }
+
       final jsonString = utf8.decode(response.bodyBytes);
       final recommendations = _parseRecommendations(jsonString);
       return Result.ok(recommendations);
     } on Exception catch (e) {
-      return Result.error(
-        RemoteDataException('Error fetching recommendations: $e'),
-      );
+      return Result.error(AppException.fromError(e));
     }
   }
 
   List<SourceRecommendation> _parseRecommendations(String jsonString) {
-    try {
-      final decoded = json.decode(jsonString);
-      if (decoded is! JsonMap) {
-        throw ValidationException(
-          'Recommendations payload must be a JSON object.',
-        );
-      }
-
-      final version = decoded['version'];
-      if (version is! num || version.toInt() != _config.schemaVersion) {
-        return [];
-      }
-
-      final recommendations = SourceRecommendations.fromJson(decoded);
-      return recommendations.sources;
-    } on Exception catch (e) {
-      throw RemoteDataException('Error parsing recommendations: $e');
+    final decoded = json.decode(jsonString);
+    if (decoded is! JsonMap) {
+      throw const FormatException(
+        'Recommendations payload must be a JSON object.',
+      );
     }
+    final version = decoded['version'];
+    if (version is! num || version.toInt() != _config.schemaVersion) {
+      return [];
+    }
+    final recommendations = SourceRecommendations.fromJson(decoded);
+    return recommendations.sources;
   }
 }

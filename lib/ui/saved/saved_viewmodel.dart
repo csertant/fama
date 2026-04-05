@@ -91,9 +91,7 @@ class SavedViewModel extends ChangeNotifier {
     try {
       final profileId = _sessionManager.profileId;
       if (profileId == null) {
-        return Result.error(
-          LocalDataNotFoundException('No active session found'),
-        );
+        return Result.error(DataNotFoundException('No active session found'));
       }
       final savedArticlesResult = await _articleRepository.getSavedArticles(
         profileId: profileId,
@@ -105,8 +103,6 @@ class SavedViewModel extends ChangeNotifier {
         case Error<List<Article>>():
           return Result.error(savedArticlesResult.error);
       }
-    } on Exception catch (e) {
-      return Result.error(e);
     } finally {
       notifyListeners();
     }
@@ -118,16 +114,10 @@ class SavedViewModel extends ChangeNotifier {
 
   Future<Result<void>> _markAsUnsaved(Article article) async {
     try {
-      final unsaveResult = await _articleRepository.markAsUnsaved(
+      return await _articleRepository.markAsUnsaved(
         profileId: article.profileId,
         articleId: article.id,
       );
-      switch (unsaveResult) {
-        case Ok<void>():
-          return const Result.ok(null);
-        case Error<void>():
-          return unsaveResult;
-      }
     } finally {
       notifyListeners();
     }
@@ -135,16 +125,10 @@ class SavedViewModel extends ChangeNotifier {
 
   Future<Result<void>> _markAsRead(Article article) async {
     try {
-      final markAsReadResult = await _articleRepository.markAsRead(
+      return await _articleRepository.markAsRead(
         profileId: article.profileId,
         articleId: article.id,
       );
-      switch (markAsReadResult) {
-        case Ok<void>():
-          return const Result.ok(null);
-        case Error<void>():
-          return markAsReadResult;
-      }
     } finally {
       notifyListeners();
     }

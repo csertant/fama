@@ -23,21 +23,15 @@ class ProfileRepositoryLocal implements ProfileRepository {
       case Ok<Profile>():
         return result;
       case Error<Profile>(error: final error):
-        if (error is LocalDataNotFoundException) {
+        if (error is DataNotFoundException || error is DataStorageException) {
           final saveResult = await _localDataService.saveProfile(
             profile: defaultProfile,
           );
           switch (saveResult) {
             case Ok<void>():
-              final newResult = await _localDataService.getDefaultProfile();
-              return newResult;
+              return _localDataService.getDefaultProfile();
             case Error<void>(error: final saveError):
-              return Result.error(
-                LocalDataStorageException(
-                  'Failed to create default profile',
-                  cause: saveError,
-                ),
-              );
+              return Result.error(saveError);
           }
         } else {
           return result;
@@ -79,32 +73,14 @@ class ProfileRepositoryLocal implements ProfileRepository {
             case Ok<void>():
               break;
             case Error<void>(error: final demoteError):
-              return Result.error(
-                LocalDataStorageException(
-                  'Failed to demote existing default profile',
-                  cause: demoteError,
-                ),
-              );
+              return Result.error(demoteError);
           }
         }
-        final promoteResult = await _localDataService.saveProfile(
+        return _localDataService.saveProfile(
           profile: profile.toCompanion(true),
         );
-        switch (promoteResult) {
-          case Ok<void>():
-            return const Result.ok(null);
-          case Error<void>(error: final promoteError):
-            return Result.error(
-              LocalDataStorageException(
-                'Failed to save modified profile',
-                cause: promoteError,
-              ),
-            );
-        }
-      case Error<Profile>():
-        return Result.error(
-          LocalDataNotFoundException('Failed to retrieve default profile'),
-        );
+      case Error<Profile>(error: final error):
+        return Result.error(error);
     }
   }
 
@@ -115,21 +91,16 @@ class ProfileRepositoryLocal implements ProfileRepository {
       case Ok<List<Profile>>(value: final profilesList):
         if (profilesList.length <= 1) {
           return Result.error(
-            LocalDataStorageException('Cannot delete the only profile'),
+            ValidationException('Cannot delete the only profile'),
           );
         }
         if (profilesList.any((p) => p.id == profileId && p.isDefault)) {
           return Result.error(
-            LocalDataStorageException('Cannot delete the default profile'),
+            ValidationException('Cannot delete the default profile'),
           );
         }
       case Error<List<Profile>>(error: final error):
-        return Result.error(
-          LocalDataStorageException(
-            'Failed to retrieve profiles',
-            cause: error,
-          ),
-        );
+        return Result.error(error);
     }
     return _localDataService.removeProfile(profileId: profileId);
   }

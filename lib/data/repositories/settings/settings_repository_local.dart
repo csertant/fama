@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../../../utils/result.dart';
+import '../../../utils/utils.dart';
 import '../../services/shared_preferences_service/app_settings.dart';
 import '../../services/shared_preferences_service/shared_preferences_service.dart';
 import 'settings_repository.dart';
@@ -21,40 +21,20 @@ class SettingsRepositoryLocal extends SettingsRepository {
 
   final SharedPreferencesService _sharedPreferencesService;
   AppSettings _appSettings = _defaultSettings;
-  bool _isLoading = false;
 
   @override
   AppSettings get appSettings => _appSettings;
 
   @override
   Future<Result<void>> load() async {
-    if (_isLoading) {
-      return const Result.ok(null);
-    }
-    _isLoading = true;
-    try {
-      final appSettingsResult = await _getAppSettingsOrDefault();
-      switch (appSettingsResult) {
-        case Ok<AppSettings>():
-          _appSettings = appSettingsResult.value;
-          notifyListeners();
-          return const Result.ok(null);
-        case Error<AppSettings>():
-          return appSettingsResult;
-      }
-    } finally {
-      _isLoading = false;
-    }
-  }
-
-  @override
-  Future<Result<AppSettings>> getAppSettings() async {
-    final loadResult = await load();
-    switch (loadResult) {
-      case Ok<void>():
-        return Result.ok(_appSettings);
-      case Error<void>():
-        return Result.error(loadResult.error);
+    final appSettingsResult = await _getAppSettingsOrDefault();
+    switch (appSettingsResult) {
+      case Ok<AppSettings>():
+        _appSettings = appSettingsResult.value;
+        notifyListeners();
+        return const Result.ok(null);
+      case Error<AppSettings>(error: final error):
+        return Result.error(error);
     }
   }
 
@@ -68,15 +48,14 @@ class SettingsRepositoryLocal extends SettingsRepository {
         final updatedAppSettings = _appSettings.copyWith(
           languageCode: languageCode,
         );
-        final saveResult = await _saveAppSettings(updatedAppSettings);
-        switch (saveResult) {
-          case Ok<void>():
-            _appSettings = updatedAppSettings;
-            notifyListeners();
-            return saveResult;
-          case Error<void>():
-            return saveResult;
+        final saveResult = await _sharedPreferencesService.saveAppSettings(
+          appSettings: updatedAppSettings,
+        );
+        if (saveResult is Ok<void>) {
+          _appSettings = updatedAppSettings;
+          notifyListeners();
         }
+        return saveResult;
       case Error<void>():
         return loadResult;
     }
@@ -88,22 +67,17 @@ class SettingsRepositoryLocal extends SettingsRepository {
     switch (loadResult) {
       case Ok<void>():
         final updatedAppSettings = _appSettings.copyWith(theme: theme);
-        final saveResult = await _saveAppSettings(updatedAppSettings);
-        switch (saveResult) {
-          case Ok<void>():
-            _appSettings = updatedAppSettings;
-            notifyListeners();
-            return saveResult;
-          case Error<void>():
-            return saveResult;
+        final saveResult = await _sharedPreferencesService.saveAppSettings(
+          appSettings: updatedAppSettings,
+        );
+        if (saveResult is Ok<void>) {
+          _appSettings = updatedAppSettings;
+          notifyListeners();
         }
+        return saveResult;
       case Error<void>():
         return loadResult;
     }
-  }
-
-  Future<Result<void>> _saveAppSettings(final AppSettings appSettings) {
-    return _sharedPreferencesService.saveAppSettings(appSettings: appSettings);
   }
 
   Future<Result<AppSettings>> _getAppSettingsOrDefault() async {
@@ -111,8 +85,11 @@ class SettingsRepositoryLocal extends SettingsRepository {
     switch (appSettingsResult) {
       case Ok<AppSettings>():
         return appSettingsResult;
-      case Error<AppSettings>():
-        return Result.ok(_defaultSettings);
+      case Error<AppSettings>(error: final error):
+        if (error is DataNotFoundException || error is DataStorageException) {
+          return Result.ok(_defaultSettings);
+        }
+        return Result.error(error);
     }
   }
 }

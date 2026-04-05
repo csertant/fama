@@ -106,7 +106,7 @@ class ExploreViewModel extends ChangeNotifier {
       final profileId = _sessionManager.profileId;
       if (profileId == null) {
         return Result.error(
-          LocalDataNotFoundException('No active profile session found'),
+          DataNotFoundException('No active profile session found'),
         );
       }
       final sourcesResult = await _sourceRepository.getSourcesForProfile(
@@ -127,8 +127,6 @@ class ExploreViewModel extends ChangeNotifier {
           return sourceRecommendationsResult;
       }
       return const Result.ok(null);
-    } on Exception catch (e) {
-      return Result.error(e);
     } finally {
       notifyListeners();
     }
@@ -143,21 +141,12 @@ class ExploreViewModel extends ChangeNotifier {
       final profileId = _sessionManager.profileId;
       if (profileId == null) {
         return Result.error(
-          LocalDataNotFoundException('No active profile session found'),
+          DataNotFoundException('No active profile session found'),
         );
       }
-      final subscribeResult = await _sourceRepository.saveSource(
-        profileId: profileId,
-        url: url,
-      );
-      switch (subscribeResult) {
-        case Ok<void>():
-          return const Result.ok(null);
-        case Error<void>():
-          return subscribeResult;
-      }
+      return await _sourceRepository.saveSource(profileId: profileId, url: url);
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(AppException.fromError(e));
     } finally {
       notifyListeners();
     }

@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../../../utils/utils.dart';
 import 'session_manager.dart';
 
-/// Currently [SessionManagerDev] simulates that the test user (7)
+/// Currently [SessionManagerDev] simulates that the test user
 /// has an active session and is always logged in.
 class SessionManagerDev extends ChangeNotifier implements SessionManager {
   SessionManagerDev();

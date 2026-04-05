@@ -69,8 +69,8 @@ class SettingsViewModel extends ChangeNotifier {
   Future<Result<void>> _load() async {
     try {
       return await _settingsRepository.load();
-    } on Exception catch (e) {
-      return Result.error(e);
+    } finally {
+      notifyListeners();
     }
   }
 
@@ -132,17 +132,14 @@ class SettingsViewModel extends ChangeNotifier {
       final removeResult = await _profileRepository.removeProfile(
         profileId: profile.id,
       );
-      switch (removeResult) {
-        case Ok<void>():
-          if (isActiveProfile && remainingProfiles.isNotEmpty) {
-            return _sessionManager.initializeSession(
-              profileId: remainingProfiles.first.id,
-            );
-          }
-          return const Result.ok(null);
-        case Error<void>():
-          return removeResult;
+      if (removeResult is Ok<void> &&
+          isActiveProfile &&
+          remainingProfiles.isNotEmpty) {
+        return _sessionManager.initializeSession(
+          profileId: remainingProfiles.first.id,
+        );
       }
+      return removeResult;
     } finally {
       notifyListeners();
     }

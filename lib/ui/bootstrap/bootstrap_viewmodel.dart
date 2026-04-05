@@ -29,33 +29,26 @@ class BootstrapViewModel extends ChangeNotifier {
   Future<Result<void>> _load() async {
     try {
       final settingsResult = await _settingsRepository.load();
-      switch (settingsResult) {
-        case Ok<void>():
-          break;
-        case Error<void>():
-          return settingsResult;
+      if (settingsResult is Error<void>) {
+        return settingsResult;
       }
       final defaultProfileResult = await _profileRepository.getDefaultProfile();
       switch (defaultProfileResult) {
-        case Ok<Profile>():
-          final defaultProfile = defaultProfileResult.value;
+        case Ok<Profile>(value: final defaultProfile):
           final savedSessionResult = await _sessionManager.loadSavedSession();
-          switch (savedSessionResult) {
-            case Ok<void>():
-              if (_sessionManager.hasSessionPresent) {
-                return const Result.ok(null);
-              }
-            case Error<void>():
-              break;
+          if (savedSessionResult is Ok<void>) {
+            if (_sessionManager.hasSessionPresent) {
+              return const Result.ok(null);
+            }
           }
           return _sessionManager.initializeSession(
             profileId: defaultProfile.id,
           );
-        case Error<Profile>():
-          return Result.error(defaultProfileResult.error);
+        case Error<Profile>(error: final error):
+          return Result.error(error);
       }
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(AppException.fromError(e));
     } finally {
       notifyListeners();
     }

@@ -32,14 +32,11 @@ class SourceRepositoryLocal implements SourceRepository {
     }
     final parsedRecommendationsResult = await _remoteDataService
         .fetchSourceRecommendations();
-    switch (parsedRecommendationsResult) {
-      case Ok<List<SourceRecommendation>>():
-        final recommendations = parsedRecommendationsResult.value;
-        _recommendationsCache[recommendationsCacheKey] = recommendations;
-        return Result.ok(recommendations);
-      case Error<List<SourceRecommendation>>():
-        return parsedRecommendationsResult;
+    if (parsedRecommendationsResult is Ok<List<SourceRecommendation>>) {
+      final recommendations = parsedRecommendationsResult.value;
+      _recommendationsCache[recommendationsCacheKey] = recommendations;
     }
+    return parsedRecommendationsResult;
   }
 
   @override
@@ -61,21 +58,20 @@ class SourceRepositoryLocal implements SourceRepository {
   }) async {
     final normalizedUrl = normalizeUrl(url);
     final parsedFeedResult = await _rssService.fetchFeed(url: normalizedUrl);
-    switch (parsedFeedResult) {
-      case Ok<ParsedFeed>():
-        final parsedFeed = parsedFeedResult.value;
-        final newSource = SourcesCompanion.insert(
-          profileId: profileId,
-          url: normalizedUrl,
-          name: parsedFeed.title,
-          description: Value(parsedFeed.description),
-          siteUrl: Value(parsedFeed.siteUrl),
-          iconUrl: Value(parsedFeed.imageUrl),
-          lastSyncedAt: Value(DateTime.now()),
-        );
-        return _localDataService.saveSource(source: newSource);
-      case Error<ParsedFeed>():
-        return Result.error(parsedFeedResult.error);
+    if (parsedFeedResult is Ok<ParsedFeed>) {
+      final parsedFeed = parsedFeedResult.value;
+      final newSource = SourcesCompanion.insert(
+        profileId: profileId,
+        url: normalizedUrl,
+        name: parsedFeed.title,
+        description: Value(parsedFeed.description),
+        siteUrl: Value(parsedFeed.siteUrl),
+        iconUrl: Value(parsedFeed.imageUrl),
+        lastSyncedAt: Value(DateTime.now()),
+      );
+      return _localDataService.saveSource(source: newSource);
+    } else {
+      return parsedFeedResult;
     }
   }
 

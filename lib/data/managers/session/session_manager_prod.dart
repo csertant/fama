@@ -22,13 +22,10 @@ class SessionManagerProd extends ChangeNotifier implements SessionManager {
   @override
   Future<Result<void>> loadSavedSession() async {
     final result = await _localDataService.getSession();
-    switch (result) {
-      case Ok<Session>():
-        _session = result.value;
-      case Error<Session>():
-        _session = null;
+    if (result is Ok<Session>) {
+      _session = result.value;
+      notifyListeners();
     }
-    notifyListeners();
     return switch (result) {
       Ok<Session>() => const Result.ok(null),
       Error<Session>() => Result.error(result.error),
@@ -44,20 +41,20 @@ class SessionManagerProd extends ChangeNotifier implements SessionManager {
       profileId: profileId,
     );
     final result = await _localDataService.saveSession(session: session);
-    switch (result) {
-      case Ok<void>():
-        _session = Session(id: 1, profileId: profileId);
-        notifyListeners();
-      case Error<void>():
-        break;
+    if (result is Ok<void>) {
+      _session = Session(id: 1, profileId: profileId);
+      notifyListeners();
     }
     return result;
   }
 
   @override
   Future<Result<void>> endSession() {
-    _session = null;
-    notifyListeners();
-    return _localDataService.removeSession();
+    final removeResult = _localDataService.removeSession();
+    if (removeResult is Ok<void>) {
+      _session = null;
+      notifyListeners();
+    }
+    return removeResult;
   }
 }

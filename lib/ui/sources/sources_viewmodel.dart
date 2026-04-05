@@ -46,7 +46,7 @@ class SourcesViewModel extends ChangeNotifier {
       final profileId = _sessionManager.profileId;
       if (profileId == null) {
         return Result.error(
-          LocalDataNotFoundException('No active profile session found'),
+          DataNotFoundException('No active profile session found'),
         );
       }
       final sourcesResult = await _sourceRepository.getSourcesForProfile(
@@ -59,8 +59,6 @@ class SourcesViewModel extends ChangeNotifier {
         case Error<List<Source>>():
           return sourcesResult;
       }
-    } on Exception catch (e) {
-      return Result.error(e);
     } finally {
       notifyListeners();
     }
@@ -72,16 +70,10 @@ class SourcesViewModel extends ChangeNotifier {
 
   Future<Result<void>> _modifySource(Source source) async {
     try {
-      final saveResult = await _sourceRepository.modifySource(
+      return await _sourceRepository.modifySource(
         profileId: source.profileId,
         source: source,
       );
-      switch (saveResult) {
-        case Ok<void>():
-          return const Result.ok(null);
-        case Error<void>():
-          return saveResult;
-      }
     } finally {
       notifyListeners();
     }
@@ -89,16 +81,10 @@ class SourcesViewModel extends ChangeNotifier {
 
   Future<Result<void>> _removeSource(Source source) async {
     try {
-      final removeResult = await _sourceRepository.removeSource(
+      return await _sourceRepository.removeSource(
         profileId: source.profileId,
         sourceId: source.id,
       );
-      switch (removeResult) {
-        case Ok<void>():
-          return const Result.ok(null);
-        case Error<void>():
-          return removeResult;
-      }
     } finally {
       notifyListeners();
     }

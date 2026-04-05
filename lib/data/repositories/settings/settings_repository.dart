@@ -8,8 +8,6 @@ abstract class SettingsRepository extends ChangeNotifier {
 
   Future<Result<void>> load();
 
-  Future<Result<AppSettings>> getAppSettings();
-
   Future<Result<void>> updateLanguage({required final String languageCode});
 
   Future<Result<void>> updateTheme({required final ThemeMode theme});

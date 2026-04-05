@@ -11,10 +11,7 @@ class LocalDataServiceProd implements LocalDataService {
 
   @override
   Future<Result<Session>> getSession() {
-    return guardNotNull(
-      _database.getSession,
-      notFoundException: LocalDataNotFoundException('No session found'),
-    );
+    return guardNotNull(_database.getSession);
   }
 
   @override

@@ -81,23 +81,23 @@ class ArticleRepositoryLocal implements ArticleRepository {
 
   @override
   Future<Result<void>> syncArticlesForProfile({required Id profileId}) async {
-    try {
-      final sourcesResult = await _localDataService.getSourcesForProfile(
-        profileId: profileId,
-      );
-      switch (sourcesResult) {
-        case Ok<List<Source>>():
-          final sources = sourcesResult.value;
-          final syncTasks = sources.map(
-            (source) => _syncSingleSource(profileId: profileId, source: source),
-          );
-          await Future.wait(syncTasks);
-          return const Result.ok(null);
-        case Error<List<Source>>():
-          return sourcesResult;
-      }
-    } on Exception catch (e) {
-      return Result.error(e);
+    final sourcesResult = await _localDataService.getSourcesForProfile(
+      profileId: profileId,
+    );
+    switch (sourcesResult) {
+      case Ok<List<Source>>(value: final sources):
+        final syncTasks = sources.map(
+          (source) => _syncSingleSource(profileId: profileId, source: source),
+        );
+        final syncResults = await Future.wait(syncTasks);
+        for (final syncResult in syncResults) {
+          if (syncResult case Error<void>(error: final error)) {
+            return Result.error(error);
+          }
+        }
+        return const Result.ok(null);
+      case Error<List<Source>>(error: final error):
+        return Result.error(error);
     }
   }
 
@@ -105,33 +105,28 @@ class ArticleRepositoryLocal implements ArticleRepository {
     required ProfileId profileId,
     required Source source,
   }) async {
-    try {
-      final parsedFeedResult = await _rssService.fetchFeed(url: source.url);
-      switch (parsedFeedResult) {
-        case Ok<ParsedFeed>():
-          final parsedFeed = parsedFeedResult.value;
-          final newArticles = parsedFeed.articles.map((parsedArticle) {
-            return ArticlesCompanion.insert(
-              profileId: profileId,
-              sourceId: source.id,
-              sourceName: source.name,
-              guid: parsedArticle.guid,
-              url: parsedArticle.url,
-              title: parsedArticle.title,
-              content: Value(parsedArticle.content),
-              summary: Value(parsedArticle.summary),
-              author: Value(parsedArticle.author),
-              imageUrl: Value(parsedArticle.imageUrl),
-              publishedAt: parsedArticle.publishedAt,
-              updatedAt: Value(DateTime.now()),
-            );
-          }).toList();
-          return _localDataService.saveArticles(articles: newArticles);
-        case Error<ParsedFeed>():
-          return Result.error(parsedFeedResult.error);
-      }
-    } on Exception catch (e) {
-      return Result.error(e);
+    final parsedFeedResult = await _rssService.fetchFeed(url: source.url);
+    switch (parsedFeedResult) {
+      case Ok<ParsedFeed>(value: final parsedFeed):
+        final newArticles = parsedFeed.articles.map((parsedArticle) {
+          return ArticlesCompanion.insert(
+            profileId: profileId,
+            sourceId: source.id,
+            sourceName: source.name,
+            guid: parsedArticle.guid,
+            url: parsedArticle.url,
+            title: parsedArticle.title,
+            content: Value(parsedArticle.content),
+            summary: Value(parsedArticle.summary),
+            author: Value(parsedArticle.author),
+            imageUrl: Value(parsedArticle.imageUrl),
+            publishedAt: parsedArticle.publishedAt,
+            updatedAt: Value(DateTime.now()),
+          );
+        }).toList();
+        return _localDataService.saveArticles(articles: newArticles);
+      case Error<ParsedFeed>(error: final error):
+        return Result.error(error);
     }
   }
 }

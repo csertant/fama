@@ -80,7 +80,7 @@ class AppDatabase extends _$AppDatabase {
 
   static QueryExecutor _openConnection() {
     return driftDatabase(
-      name: 'fama_db',
+      name: 'fama',
       native: const DriftNativeOptions(
         databaseDirectory: getApplicationSupportDirectory,
       ),

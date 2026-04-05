@@ -97,9 +97,7 @@ class FeedViewModel extends ChangeNotifier {
     try {
       final profileId = _sessionManager.profileId;
       if (profileId == null) {
-        return Result.error(
-          LocalDataNotFoundException('No active session found'),
-        );
+        return Result.error(DataNotFoundException('No active session found'));
       }
       final syncResult = await _articleRepository.syncArticlesForProfile(
         profileId: profileId,
@@ -119,8 +117,6 @@ class FeedViewModel extends ChangeNotifier {
         case Error<void>():
           return syncResult;
       }
-    } on Exception catch (e) {
-      return Result.error(e);
     } finally {
       notifyListeners();
     }
@@ -132,16 +128,10 @@ class FeedViewModel extends ChangeNotifier {
 
   Future<Result<void>> _markAsSaved(Article article) async {
     try {
-      final saveResult = await _articleRepository.markAsSaved(
+      return await _articleRepository.markAsSaved(
         profileId: article.profileId,
         articleId: article.id,
       );
-      switch (saveResult) {
-        case Ok<void>():
-          return const Result.ok(null);
-        case Error<void>():
-          return saveResult;
-      }
     } finally {
       notifyListeners();
     }
@@ -149,16 +139,10 @@ class FeedViewModel extends ChangeNotifier {
 
   Future<Result<void>> _markAsRead(Article article) async {
     try {
-      final markAsReadResult = await _articleRepository.markAsRead(
+      return await _articleRepository.markAsRead(
         profileId: article.profileId,
         articleId: article.id,
       );
-      switch (markAsReadResult) {
-        case Ok<void>():
-          return const Result.ok(null);
-        case Error<void>():
-          return markAsReadResult;
-      }
     } finally {
       notifyListeners();
     }
