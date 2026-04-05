@@ -23,6 +23,11 @@ class FeedScreen extends StatelessWidget {
         ),
         actions: [
           CustomIconButton.normal(
+            icon: CustomIcons.refresh,
+            onTap: viewModel.load.execute,
+            tooltip: localizations.navigationLabelRefresh,
+          ),
+          CustomIconButton.normal(
             icon: CustomIcons.filter,
             onTap: () => _showFiltersModal(context),
             tooltip: localizations.navigationLabelFilter,
@@ -49,6 +54,7 @@ class FeedScreen extends StatelessWidget {
           builder: (context, child) {
             return viewModel.filteredArticles.isNotEmpty
                 ? ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
                     padding: const EdgeInsets.symmetric(
                       vertical: AppDimensions.paddingMedium,
                     ),

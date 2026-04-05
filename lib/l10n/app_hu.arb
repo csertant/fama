@@ -8,6 +8,7 @@
     "navigationLabelSaved": "mentve",
     "navigationLabelSettings": "beállítások",
     "navigationLabelFilter": "szűrés",
+    "navigationLabelRefresh": "frissítés",
     "navigationLabelExplore": "felfedezés",
     "buttonLabelMarkAllAsRead": "összes megjelölése olvasottként",
     "feedLoadErrorTitle": "nem sikerült betölteni a híreket",

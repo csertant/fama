@@ -21,6 +21,11 @@ class ExploreScreen extends StatelessWidget {
         title: localizations.exploreTitle,
         actions: [
           CustomIconButton.normal(
+            icon: CustomIcons.refresh,
+            onTap: viewModel.load.execute,
+            tooltip: localizations.navigationLabelRefresh,
+          ),
+          CustomIconButton.normal(
             icon: CustomIcons.filter,
             onTap: () => _showFiltersModal(context),
             tooltip: localizations.navigationLabelFilter,

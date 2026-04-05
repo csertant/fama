@@ -8,6 +8,7 @@
     "navigationLabelSaved": "saved",
     "navigationLabelSettings": "settings",
     "navigationLabelFilter": "filter",
+    "navigationLabelRefresh": "refresh",
     "navigationLabelExplore": "explore",
     "buttonLabelMarkAllAsRead": "mark all as read",
     "feedLoadErrorTitle": "failed to load feed",
