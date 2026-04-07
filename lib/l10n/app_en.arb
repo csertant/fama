@@ -1,6 +1,7 @@
 {
     "@@locale": "en",
     "appTitle": "fáma",
+    "noInternetConnectionTitle": "no internet connection",
     "bootstrapLoadErrorTitle": "failed to initialize app",
     "bootstrapLoadErrorLabel": "retry",
     "navigationLabelFeed": "feed",

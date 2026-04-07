@@ -3,22 +3,33 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../../../config/remote_data_service_config.dart';
-import '../../../utils/exceptions.dart';
-import '../../../utils/result.dart';
-import '../../../utils/types.dart';
+import '../../../utils/utils.dart';
+import '../connectivity_service/connectivity_service.dart';
 import 'models.dart';
 
 class RemoteDataService {
-  RemoteDataService({http.Client? client, RemoteDataServiceConfig? config})
-    : _client = client ?? http.Client(),
-      _config = config ?? RemoteDataServiceConfig.defaults;
+  RemoteDataService({
+    required ConnectivityService connectivityService,
+    http.Client? client,
+    RemoteDataServiceConfig? config,
+  }) : _connectivityService = connectivityService,
+       _client = client ?? http.Client(),
+       _config = config ?? RemoteDataServiceConfig.defaults;
 
+  final ConnectivityService _connectivityService;
   final http.Client _client;
   final RemoteDataServiceConfig _config;
 
   Future<Result<List<SourceRecommendation>>>
   fetchSourceRecommendations() async {
     try {
+      await _connectivityService.refreshConnectionStatus();
+      if (_connectivityService.isOffline) {
+        return Result.error(
+          NetworkNoInternetException('No internet connection available'),
+        );
+      }
+
       final response = await _client
           .get(Uri.parse(_config.recommendationsUrl))
           .timeout(_config.requestTimeout);

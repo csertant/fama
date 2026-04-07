@@ -2,20 +2,34 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:universal_feed/universal_feed.dart';
+
 import '../../../config/rss_service_config.dart';
 import '../../../utils/utils.dart';
+import '../connectivity_service/connectivity_service.dart';
 import 'models.dart';
 
 class RssService {
-  RssService({http.Client? client, RssServiceConfig? config})
-    : _client = client ?? http.Client(),
-      _config = config ?? RssServiceConfig.defaults;
+  RssService({
+    required ConnectivityService connectivityService,
+    http.Client? client,
+    RssServiceConfig? config,
+  }) : _connectivityService = connectivityService,
+       _client = client ?? http.Client(),
+       _config = config ?? RssServiceConfig.defaults;
 
+  final ConnectivityService _connectivityService;
   final http.Client _client;
   final RssServiceConfig _config;
 
   Future<Result<ParsedFeed>> fetchFeed({required String url}) async {
     try {
+      await _connectivityService.refreshConnectionStatus();
+      if (_connectivityService.isOffline) {
+        return Result.error(
+          NetworkNoInternetException('No internet connection available'),
+        );
+      }
+
       final response = await _client
           .get(Uri.parse(url))
           .timeout(_config.requestTimeout);

@@ -7,6 +7,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
+import 'mock_connectivity_service.dart';
+
 void main() {
   group('RssService.fetchFeed', () {
     test('parses malformed RSS by sanitizing invalid entities', () async {
@@ -39,7 +41,10 @@ void main() {
         );
       });
 
-      final service = RssService(client: client);
+      final service = RssService(
+        client: client,
+        connectivityService: MockConnectivityService(),
+      );
       final result = await service.fetchFeed(url: 'https://telex.hu/rss');
 
       expect(result, isA<Ok<ParsedFeed>>());

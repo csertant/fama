@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../data/services/connectivity_service/connectivity_service.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../l10n/utils.dart';
 import '../core/themes/colors.dart';
@@ -15,6 +17,7 @@ class FeedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final connectivityService = context.watch<ConnectivityService>();
     return Scaffold(
       appBar: CustomAppBar(
         leading: const CustomIcon(
@@ -34,43 +37,51 @@ class FeedScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ListenableBuilder(
-        listenable: viewModel.load,
-        builder: (context, child) {
-          if (viewModel.load.completed) {
-            return child!;
-          } else if (viewModel.load.running) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            return ErrorIndicator(
-              title: localizations.feedLoadErrorTitle,
-              label: localizations.feedLoadErrorLabel,
-              onPressed: viewModel.load.execute,
-            );
-          }
-        },
-        child: ListenableBuilder(
-          listenable: viewModel,
-          builder: (context, child) {
-            return viewModel.filteredArticles.isNotEmpty
-                ? ListView.builder(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(
-                      vertical: AppDimensions.paddingMedium,
-                    ),
-                    itemCount: viewModel.filteredArticles.length,
-                    itemBuilder: _buildArticleCard,
-                  )
-                : Center(
-                    child: Text(
-                      viewModel.articles.isEmpty
-                          ? localizations.feedEmptyLabel
-                          : localizations.filtersNoMatchesLabel,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
+      body: Column(
+        children: [
+          if (connectivityService.isOffline)
+            CustomErrorBanner(message: localizations.noInternetConnectionTitle),
+          Expanded(
+            child: ListenableBuilder(
+              listenable: viewModel.load,
+              builder: (context, child) {
+                if (viewModel.load.completed) {
+                  return child!;
+                } else if (viewModel.load.running) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  return ErrorIndicator(
+                    title: localizations.feedLoadErrorTitle,
+                    label: localizations.feedLoadErrorLabel,
+                    onPressed: viewModel.load.execute,
                   );
-          },
-        ),
+                }
+              },
+              child: ListenableBuilder(
+                listenable: viewModel,
+                builder: (context, child) {
+                  return viewModel.filteredArticles.isNotEmpty
+                      ? ListView.builder(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: AppDimensions.paddingMedium,
+                          ),
+                          itemCount: viewModel.filteredArticles.length,
+                          itemBuilder: _buildArticleCard,
+                        )
+                      : Center(
+                          child: Text(
+                            viewModel.articles.isEmpty
+                                ? localizations.feedEmptyLabel
+                                : localizations.filtersNoMatchesLabel,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

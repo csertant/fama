@@ -1,6 +1,7 @@
 {
     "@@locale": "hu",
     "appTitle": "fáma",
+    "noInternetConnectionTitle": "nincs internetkapcsolat",
     "bootstrapLoadErrorTitle": "nem sikerült inicializálni az alkalmazást",
     "bootstrapLoadErrorLabel": "újrapróbálás",
     "navigationLabelFeed": "hírek",

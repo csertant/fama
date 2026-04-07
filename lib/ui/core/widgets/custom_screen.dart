@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
-import 'custom_icon.dart';
+import 'widgets.dart';
 
 class CustomScreen extends StatelessWidget {
   const CustomScreen({super.key, required this.navigationShell});

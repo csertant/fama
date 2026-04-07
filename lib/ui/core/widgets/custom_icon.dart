@@ -15,6 +15,7 @@ abstract class CustomIcons {
   static const String settings = '$_basePath/settings.svg';
 
   static const String refresh = '$_basePath/refresh.svg';
+  static const String noInternet = '$_basePath/no_internet.svg';
 
   static const String read = '$_basePath/read.svg';
   static const String unread = '$_basePath/unread.svg';

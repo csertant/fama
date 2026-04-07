@@ -13,6 +13,7 @@ import '../data/repositories/settings/settings_repository.dart';
 import '../data/repositories/settings/settings_repository_local.dart';
 import '../data/repositories/source/source_repository.dart';
 import '../data/repositories/source/source_repository_local.dart';
+import '../data/services/connectivity_service/connectivity_service.dart';
 import '../data/services/local_data_service/local_data_service.dart';
 import '../data/services/local_data_service/local_data_service_dev.dart';
 import '../data/services/local_data_service/local_data_service_prod.dart';
@@ -21,8 +22,16 @@ import '../data/services/rss_service/rss_service.dart';
 import '../data/services/shared_preferences_service/shared_preferences_service.dart';
 
 List<SingleChildWidget> _sharedProviders = [
-  Provider(create: (final context) => RemoteDataService()),
-  Provider(create: (final context) => RssService()),
+  ChangeNotifierProvider(create: (final context) => ConnectivityService()),
+  Provider(
+    create: (final context) => RemoteDataService(
+      connectivityService: context.read<ConnectivityService>(),
+    ),
+  ),
+  Provider(
+    create: (final context) =>
+        RssService(connectivityService: context.read<ConnectivityService>()),
+  ),
   Provider(create: (final context) => SharedPreferencesService()),
   Provider(
     create: (final context) =>

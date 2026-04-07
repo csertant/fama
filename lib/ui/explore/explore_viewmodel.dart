@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../data/database/database.dart';
 import '../../data/managers/session/session_manager.dart';
 import '../../data/repositories/source/source_repository.dart';
+import '../../data/services/connectivity_service/connectivity_service.dart';
 import '../../data/services/remote_data_service/models.dart';
 import '../../utils/utils.dart';
 
@@ -13,12 +14,16 @@ class ExploreViewModel extends ChangeNotifier {
   ExploreViewModel({
     required SourceRepository sourceRepository,
     required SessionManager sessionManager,
+    required ConnectivityService connectivityService,
   }) : _sourceRepository = sourceRepository,
-       _sessionManager = sessionManager {
+       _sessionManager = sessionManager,
+       _connectivityService = connectivityService,
+       _lastConnectionStatus = connectivityService.connectionStatus {
     load = Command0(_load);
     subscribeToSource = Command1(_subscribeToSource);
 
     _sessionManager.addListener(_onSessionChanged);
+    _connectivityService.addListener(_onConnectivityChanged);
     _sourcesSubscription = _sourceRepository
         .watchSourcesForProfile(profileId: _sessionManager.profileId!)
         .listen((sources) {
@@ -32,6 +37,8 @@ class ExploreViewModel extends ChangeNotifier {
   final SessionManager _sessionManager;
   final SourceRepository _sourceRepository;
   late final StreamSubscription<List<Source>> _sourcesSubscription;
+  final ConnectivityService _connectivityService;
+  ConnectionStatus _lastConnectionStatus;
 
   List<Source> _subscribedSources = [];
   List<SourceRecommendation> _sourceRecommendations = [];
@@ -136,6 +143,15 @@ class ExploreViewModel extends ChangeNotifier {
     unawaited(load.execute());
   }
 
+  void _onConnectivityChanged() {
+    final currentStatus = _connectivityService.connectionStatus;
+    if (_lastConnectionStatus == ConnectionStatus.offline &&
+        currentStatus == ConnectionStatus.online) {
+      unawaited(load.execute());
+    }
+    _lastConnectionStatus = currentStatus;
+  }
+
   Future<Result<void>> _subscribeToSource(String url) async {
     try {
       final profileId = _sessionManager.profileId;
@@ -195,6 +211,7 @@ class ExploreViewModel extends ChangeNotifier {
   @override
   Future<void> dispose() async {
     _sessionManager.removeListener(_onSessionChanged);
+    _connectivityService.removeListener(_onConnectivityChanged);
     await _sourcesSubscription.cancel();
     super.dispose();
   }

@@ -6,6 +6,7 @@ import '../data/repositories/article/article_repository.dart';
 import '../data/repositories/profile/profile_repository.dart';
 import '../data/repositories/settings/settings_repository.dart';
 import '../data/repositories/source/source_repository.dart';
+import '../data/services/connectivity_service/connectivity_service.dart';
 import '../ui/core/widgets/custom_screen.dart';
 import '../ui/explore/explore_screen.dart';
 import '../ui/explore/explore_viewmodel.dart';
@@ -36,6 +37,7 @@ GoRouter router() => GoRouter(
                 final viewModel = FeedViewModel(
                   sessionManager: context.read<SessionManager>(),
                   articleRepository: context.read<ArticleRepository>(),
+                  connectivityService: context.read<ConnectivityService>(),
                 );
                 return FeedScreen(viewModel: viewModel);
               },
@@ -60,6 +62,7 @@ GoRouter router() => GoRouter(
                     final viewModel = ExploreViewModel(
                       sessionManager: context.read<SessionManager>(),
                       sourceRepository: context.read<SourceRepository>(),
+                      connectivityService: context.read<ConnectivityService>(),
                     );
                     return ExploreScreen(viewModel: viewModel);
                   },

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../data/services/connectivity_service/connectivity_service.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../l10n/utils.dart';
 import '../core/themes/dimensions.dart';
@@ -16,6 +18,7 @@ class ExploreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final connectivityService = context.watch<ConnectivityService>();
     return Scaffold(
       appBar: CustomAppBar(
         title: localizations.exploreTitle,
@@ -32,56 +35,68 @@ class ExploreScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ListenableBuilder(
-        listenable: viewModel.load,
-        builder: (context, child) {
-          if (viewModel.load.completed) {
-            return child!;
-          } else if (viewModel.load.running) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            return ErrorIndicator(
-              title: localizations.exploreLoadErrorTitle,
-              label: localizations.exploreLoadErrorLabel,
-              onPressed: viewModel.load.execute,
-            );
-          }
-        },
-        child: ListenableBuilder(
-          listenable: viewModel,
-          builder: (context, child) {
-            return viewModel.filteredRecommendations.isNotEmpty
-                ? ListView.builder(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: AppDimensions.paddingMedium,
-                    ),
-                    itemCount: viewModel.filteredRecommendations.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return Padding(
+      body: Column(
+        children: [
+          if (connectivityService.isOffline)
+            CustomErrorBanner(message: localizations.noInternetConnectionTitle),
+          Expanded(
+            child: ListenableBuilder(
+              listenable: viewModel.load,
+              builder: (context, child) {
+                if (viewModel.load.completed) {
+                  return child!;
+                } else if (viewModel.load.running) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  return ErrorIndicator(
+                    title: localizations.exploreLoadErrorTitle,
+                    label: localizations.exploreLoadErrorLabel,
+                    onPressed: viewModel.load.execute,
+                  );
+                }
+              },
+              child: ListenableBuilder(
+                listenable: viewModel,
+                builder: (context, child) {
+                  return viewModel.filteredRecommendations.isNotEmpty
+                      ? ListView.builder(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: AppDimensions.paddingMedium,
+                            vertical: AppDimensions.paddingMedium,
                           ),
-                          child: SourceByCustomUrlCard(
-                            title: localizations.exploreAddCustomSourceTitle,
-                            onSubscribe: () =>
-                                _showSubscribeToCustomSourceModal(context),
+                          itemCount:
+                              viewModel.filteredRecommendations.length + 1,
+                          itemBuilder: (context, index) {
+                            if (index == 0) {
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: AppDimensions.paddingMedium,
+                                ),
+                                child: SourceByCustomUrlCard(
+                                  title:
+                                      localizations.exploreAddCustomSourceTitle,
+                                  onSubscribe: () =>
+                                      _showSubscribeToCustomSourceModal(
+                                        context,
+                                      ),
+                                ),
+                              );
+                            }
+                            return _buildRecommendationCard(context, index - 1);
+                          },
+                        )
+                      : Center(
+                          child: Text(
+                            viewModel.sourceRecommendations.isEmpty
+                                ? localizations.exploreEmptyLabel
+                                : localizations.filtersNoMatchesLabel,
+                            style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         );
-                      }
-                      return _buildRecommendationCard(context, index - 1);
-                    },
-                  )
-                : Center(
-                    child: Text(
-                      viewModel.sourceRecommendations.isEmpty
-                          ? localizations.exploreEmptyLabel
-                          : localizations.filtersNoMatchesLabel,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  );
-          },
-        ),
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
