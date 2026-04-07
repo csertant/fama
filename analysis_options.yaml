@@ -6,7 +6,12 @@ analyzer:
     strict-inference: true
     strict-raw-types: true
   exclude:
-    - lib/models/*.g.dart
+    - lib/data/database/database.g.dart
+    - lib/data/services/remote_data_service/models.g.dart
+    - lib/l10n/generated/**
+    - lib/l10n/app_hu.arb
+    - lib/l10n/app_en.arb
+    - .dart_tool/**
 linter:
   rules:
     - always_declare_return_types
