@@ -105,7 +105,6 @@ class SettingsScreen extends StatelessWidget {
     final nameController = TextEditingController();
     final descriptionController = TextEditingController();
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     await showCustomModalSheet<void>(
       context: context,
       builder: (context) {
@@ -127,23 +126,13 @@ class SettingsScreen extends StatelessWidget {
           },
           isLoading: viewModel.createProfile.running,
           childrenBuilder: (context) => [
-            TextField(
+            CustomTextField(
               controller: nameController,
-              decoration: InputDecoration(
-                hintText: localizations.settingsCreateProfileSubtitle,
-                hintStyle: theme.textTheme.bodyMedium!.copyWith(
-                  color: theme.colorScheme.onPrimary,
-                ),
-              ),
+              hintText: localizations.settingsCreateProfileSubtitle,
             ),
-            TextField(
+            CustomTextField(
               controller: descriptionController,
-              decoration: InputDecoration(
-                hintText: localizations.settingsCreateProfileDescription,
-                hintStyle: theme.textTheme.bodyMedium!.copyWith(
-                  color: theme.colorScheme.onPrimary,
-                ),
-              ),
+              hintText: localizations.settingsCreateProfileDescription,
             ),
           ],
         );
@@ -163,7 +152,6 @@ class SettingsScreen extends StatelessWidget {
     );
     final isDefaultController = ValueNotifier<bool>(profile.isDefault);
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     await showCustomModalSheet<void>(
       context: context,
       builder: (context) {
@@ -192,23 +180,13 @@ class SettingsScreen extends StatelessWidget {
           },
           isLoading: viewModel.modifyProfile.running,
           childrenBuilder: (context) => [
-            TextField(
+            CustomTextField(
               controller: nameController,
-              decoration: InputDecoration(
-                hintText: localizations.settingsCreateProfileSubtitle,
-                hintStyle: theme.textTheme.bodyMedium!.copyWith(
-                  color: theme.colorScheme.onPrimary,
-                ),
-              ),
+              hintText: localizations.settingsCreateProfileSubtitle,
             ),
-            TextField(
+            CustomTextField(
               controller: descriptionController,
-              decoration: InputDecoration(
-                hintText: localizations.settingsCreateProfileDescription,
-                hintStyle: theme.textTheme.bodyMedium!.copyWith(
-                  color: theme.colorScheme.onPrimary,
-                ),
-              ),
+              hintText: localizations.settingsCreateProfileDescription,
             ),
             ValueListenableBuilder<bool>(
               valueListenable: isDefaultController,

@@ -158,7 +158,6 @@ class ExploreScreen extends StatelessWidget {
   Future<void> _showSubscribeToCustomSourceModal(BuildContext context) async {
     final urlController = TextEditingController();
     final localizations = AppLocalizations.of(context)!;
-    final theme = Theme.of(context);
     await showCustomModalSheet<void>(
       context: context,
       builder: (context) {
@@ -178,14 +177,9 @@ class ExploreScreen extends StatelessWidget {
           },
           isLoading: viewModel.subscribeToSource.running,
           childrenBuilder: (context) => [
-            TextField(
+            CustomTextField(
               controller: urlController,
-              decoration: InputDecoration(
-                hintText: localizations.exploreAddCustomSourceSubtitle,
-                hintStyle: theme.textTheme.bodyMedium!.copyWith(
-                  color: theme.colorScheme.onPrimary,
-                ),
-              ),
+              hintText: localizations.exploreAddCustomSourceSubtitle,
             ),
           ],
         );
