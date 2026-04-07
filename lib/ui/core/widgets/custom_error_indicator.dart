@@ -22,20 +22,19 @@ class ErrorIndicator extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(AppDimensions.paddingMedium),
         child: Column(
+          spacing: AppDimensions.paddingSmall,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomIcon(
               iconPath: CustomIcons.error,
               color: theme.colorScheme.error,
             ),
-            const SizedBox(height: AppDimensions.paddingSmall),
             Text(
               title,
               style: theme.textTheme.titleMedium?.copyWith(
                 color: theme.colorScheme.error,
               ),
             ),
-            const SizedBox(height: AppDimensions.paddingSmall),
             FilledButton.tonal(
               onPressed: onPressed,
               style: ButtonStyle(
