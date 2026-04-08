@@ -1,3 +1,4 @@
+import 'package:cached_network_image_ce/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../data/database/database.dart';
@@ -63,10 +64,12 @@ class ArticleCard extends StatelessWidget {
       size: AppDimensions.iconSizeMedium,
     );
     final imageOrPlaceholder = article.imageUrl != null
-        ? Image.network(
-            article.imageUrl!,
+        ? CachedNetworkImage(
+            imageUrl: article.imageUrl!,
             fit: BoxFit.cover,
-            errorBuilder: (_, _, _) => placeholder,
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                CircularProgressIndicator(value: downloadProgress.progress),
+            errorBuilder: (context, url, error) => placeholder,
           )
         : placeholder;
     switch (layout) {

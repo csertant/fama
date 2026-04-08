@@ -31,11 +31,6 @@ class _FamaAppState extends State<FamaApp> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(final BuildContext context) {
     final appSettings = context.watch<SettingsRepository>().appSettings;
     switch (widget.type) {

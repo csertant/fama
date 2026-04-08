@@ -8,9 +8,10 @@ import '../../data/managers/session/session_manager.dart';
 import '../../data/repositories/article/article_repository.dart';
 import '../../data/services/connectivity_service/connectivity_service.dart';
 import '../../utils/utils.dart';
+import '../core/mixins/article_filter_mixin.dart';
 import '../core/widgets/widgets.dart';
 
-class FeedViewModel extends ChangeNotifier {
+class FeedViewModel extends ChangeNotifier with ArticleFilterMixin {
   FeedViewModel({
     required ArticleRepository articleRepository,
     required SessionManager sessionManager,
@@ -29,6 +30,7 @@ class FeedViewModel extends ChangeNotifier {
         .watchArticles(profileId: _sessionManager.profileId!)
         .listen((articles) {
           _articles = articles;
+          invalidateFilterData();
           notifyListeners();
         });
 
@@ -42,63 +44,23 @@ class FeedViewModel extends ChangeNotifier {
   ConnectionStatus _lastConnectionStatus;
 
   List<Article> _articles = [];
+  @override
+  List<Article> get baseFilterArticles => _articles;
 
-  final Set<String> _selectedSources = {};
-  final Set<String> _selectedAuthors = {};
-  bool _showRead = false;
   int _selectedLimit = FilterLimit.defaultLimit;
-  Duration _selectedDuration = FilterDuration.defaultDuration;
 
   late Command0<void> load;
   late Command1<void, Article> markAsSaved;
   late Command1<void, Article> markAsRead;
 
   List<Article> get articles => UnmodifiableListView(_articles);
+
+  @override
   List<Article> get filteredArticles {
-    final now = DateTime.now();
-    return _articles
-        .where((article) {
-          final matchesSource =
-              _selectedSources.isEmpty ||
-              _selectedSources.contains(article.sourceName);
-          final matchesAuthor =
-              _selectedAuthors.isEmpty ||
-              _selectedAuthors.contains(article.author);
-          final matchesReadStatus = _showRead || !article.isRead;
-          final matchesDuration =
-              now.difference(article.publishedAt) <= _selectedDuration;
-          return matchesSource &&
-              matchesAuthor &&
-              matchesReadStatus &&
-              matchesDuration;
-        })
-        .take(_selectedLimit)
-        .toList();
+    return super.filteredArticles.take(_selectedLimit).toList();
   }
 
-  List<String> get selectedSources => UnmodifiableListView(_selectedSources);
-  List<String> get availableSources {
-    final values = _articles.map((rec) => rec.sourceName).toSet().toList()
-      ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
-    return values;
-  }
-
-  List<String> get selectedAuthors => UnmodifiableListView(_selectedAuthors);
-  List<String> get availableAuthors {
-    final values =
-        _articles
-            .map((rec) => rec.author?.trim())
-            .whereType<String>()
-            .where((author) => author.isNotEmpty)
-            .toSet()
-            .toList()
-          ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
-    return values;
-  }
-
-  bool get showRead => _showRead;
   int get selectedLimit => _selectedLimit;
-  Duration get selectedDuration => _selectedDuration;
 
   Future<Result<void>> _load() async {
     try {
@@ -113,6 +75,7 @@ class FeedViewModel extends ChangeNotifier {
       switch (articlesResult) {
         case Ok<List<Article>>():
           _articles = articlesResult.value;
+          invalidateFilterData();
           return const Result.ok(null);
         case Error<List<Article>>():
           return Result.error(articlesResult.error);
@@ -157,46 +120,15 @@ class FeedViewModel extends ChangeNotifier {
     }
   }
 
-  void toggleSourceFilter(String source) {
-    if (_selectedSources.contains(source)) {
-      _selectedSources.remove(source);
-    } else {
-      _selectedSources.add(source);
-    }
-    notifyListeners();
-  }
-
-  void toggleAuthorFilter(String author) {
-    if (_selectedAuthors.contains(author)) {
-      _selectedAuthors.remove(author);
-    } else {
-      _selectedAuthors.add(author);
-    }
-    notifyListeners();
-  }
-
-  void toggleShowRead() {
-    _showRead = !_showRead;
-    notifyListeners();
-  }
-
   void setLimit(int limit) {
     _selectedLimit = limit;
     notifyListeners();
   }
 
-  void setDuration(Duration duration) {
-    _selectedDuration = duration;
-    notifyListeners();
-  }
-
+  @override
   void clearFilters() {
-    _selectedSources.clear();
-    _selectedAuthors.clear();
-    _showRead = false;
+    super.clearFilters();
     _selectedLimit = FilterLimit.defaultLimit;
-    _selectedDuration = FilterDuration.defaultDuration;
-    notifyListeners();
   }
 
   @override

@@ -9,6 +9,7 @@ class ConnectivityService extends ChangeNotifier {
   ConnectivityService() {
     _connectivitySubscription = Connectivity().onConnectivityChanged.listen(
       _updateConnectionStatus,
+      onError: (error) => _connectionStatus = ConnectionStatus.unknown,
     );
     unawaited(refreshConnectionStatus());
   }

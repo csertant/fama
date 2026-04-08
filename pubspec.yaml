@@ -9,6 +9,7 @@ environment:
   sdk: ^3.10.0
 
 dependencies:
+  cached_network_image_ce: ^4.6.4
   connectivity_plus: ^7.1.0
   drift: ^2.32.1
   drift_flutter: ^0.3.0
