@@ -32,6 +32,7 @@ class SourceRecommendation {
     required this.language,
     required this.country,
     required this.category,
+    required this.genre,
   });
 
   factory SourceRecommendation.fromJson(final Map<String, dynamic> json) =>
@@ -46,6 +47,7 @@ class SourceRecommendation {
   final String language;
   final String country;
   final String category;
+  final String genre;
 
   Map<String, dynamic> toJson() => _$SourceRecommendationToJson(this);
 }

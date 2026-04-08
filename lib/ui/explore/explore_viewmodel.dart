@@ -46,6 +46,7 @@ class ExploreViewModel extends ChangeNotifier {
   final Set<String> _selectedLanguages = {};
   final Set<String> _selectedCountries = {};
   final Set<String> _selectedCategories = {};
+  final Set<String> _selectedGenres = {};
   bool _showSubscribed = false;
 
   late Command0<void> load;
@@ -66,12 +67,15 @@ class ExploreViewModel extends ChangeNotifier {
       final matchesCategory =
           _selectedCategories.isEmpty ||
           _selectedCategories.contains(rec.category);
+      final matchesGenre =
+          _selectedGenres.isEmpty || _selectedGenres.contains(rec.genre);
       final matchesShowSubscribed =
           _showSubscribed ||
           !_subscribedSources.any((source) => source.url == rec.url);
       return matchesLanguage &&
           matchesCountry &&
           matchesCategory &&
+          matchesGenre &&
           matchesShowSubscribed;
     }).toList();
   }
@@ -89,10 +93,7 @@ class ExploreViewModel extends ChangeNotifier {
       UnmodifiableListView(_selectedCountries);
   List<String> get availableCountries {
     final values =
-        _sourceRecommendations
-            .map((rec) => rec.country.toUpperCase())
-            .toSet()
-            .toList()
+        _sourceRecommendations.map((rec) => rec.country).toSet().toList()
           ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
     return values;
   }
@@ -102,6 +103,14 @@ class ExploreViewModel extends ChangeNotifier {
   List<String> get availableCategories {
     final values =
         _sourceRecommendations.map((rec) => rec.category).toSet().toList()
+          ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
+    return values;
+  }
+
+  List<String> get selectedGenres => UnmodifiableListView(_selectedGenres);
+  List<String> get availableGenres {
+    final values =
+        _sourceRecommendations.map((rec) => rec.genre).toSet().toList()
           ..sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
     return values;
   }
@@ -195,6 +204,15 @@ class ExploreViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void toggleGenreFilter(String genre) {
+    if (_selectedGenres.contains(genre)) {
+      _selectedGenres.remove(genre);
+    } else {
+      _selectedGenres.add(genre);
+    }
+    notifyListeners();
+  }
+
   void toggleShowSubscribed() {
     _showSubscribed = !_showSubscribed;
     notifyListeners();
@@ -204,6 +222,7 @@ class ExploreViewModel extends ChangeNotifier {
     _selectedLanguages.clear();
     _selectedCountries.clear();
     _selectedCategories.clear();
+    _selectedGenres.clear();
     _showSubscribed = false;
     notifyListeners();
   }

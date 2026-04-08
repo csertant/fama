@@ -172,6 +172,15 @@ class _ExploreScreenState extends State<ExploreScreen> {
               selected: widget.viewModel.selectedCategories,
               options: widget.viewModel.availableCategories,
               onOptionSelected: widget.viewModel.toggleCategoryFilter,
+              optionLabelBuilder: (option) =>
+                  mapCategoryToString(context, option),
+            ),
+            CustomFilter(
+              label: localizations.exploreFiltersGenreTypeLabel,
+              selected: widget.viewModel.selectedGenres,
+              options: widget.viewModel.availableGenres,
+              onOptionSelected: widget.viewModel.toggleGenreFilter,
+              optionLabelBuilder: (option) => mapGenreToString(context, option),
             ),
             CustomSwitch(
               label: localizations.exploreFiltersShowSubscribedSourcesLabel,

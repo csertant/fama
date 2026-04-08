@@ -34,6 +34,7 @@ SourceRecommendation _$SourceRecommendationFromJson(
   language: json['language'] as String,
   country: json['country'] as String,
   category: json['category'] as String,
+  genre: json['genre'] as String,
 );
 
 Map<String, dynamic> _$SourceRecommendationToJson(
@@ -46,4 +47,5 @@ Map<String, dynamic> _$SourceRecommendationToJson(
   'language': instance.language,
   'country': instance.country,
   'category': instance.category,
+  'genre': instance.genre,
 };

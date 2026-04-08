@@ -52,3 +52,31 @@ String mapDurationToString(
     return localizations.filtersDurationOptionYear;
   }
 }
+
+String mapCategoryToString(final BuildContext context, final String category) {
+  final localizations = AppLocalizations.of(context)!;
+  switch (category) {
+    case 'general':
+      return localizations.filtersCategoryOptionGeneral;
+    case 'economy':
+      return localizations.filtersCategoryOptionEconomy;
+    case 'media':
+      return localizations.filtersCategoryOptionMedia;
+    case 'science':
+      return localizations.filtersCategoryOptionScience;
+    default:
+      return localizations.filtersCategoryOptionUnknown;
+  }
+}
+
+String mapGenreToString(final BuildContext context, final String genre) {
+  final localizations = AppLocalizations.of(context)!;
+  switch (genre) {
+    case 'general':
+      return localizations.filtersGenreOptionGeneral;
+    case 'longform':
+      return localizations.filtersGenreOptionLongform;
+    default:
+      return localizations.filtersCategoryOptionUnknown;
+  }
+}
