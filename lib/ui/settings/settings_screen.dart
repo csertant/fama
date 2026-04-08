@@ -11,10 +11,42 @@ import 'settings_viewmodel.dart';
 import 'widgets/settings_profiles_group.dart';
 import 'widgets/settings_radio_group.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key, required this.viewModel});
 
   final SettingsViewModel viewModel;
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    widget.viewModel.createProfile.addListener(_onCreateProfileResult);
+    widget.viewModel.modifyProfile.addListener(_onModifyProfileResult);
+    widget.viewModel.removeProfile.addListener(_onRemoveProfileResult);
+  }
+
+  @override
+  void didUpdateWidget(covariant SettingsScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    oldWidget.viewModel.createProfile.removeListener(_onCreateProfileResult);
+    widget.viewModel.createProfile.addListener(_onCreateProfileResult);
+    oldWidget.viewModel.modifyProfile.removeListener(_onModifyProfileResult);
+    widget.viewModel.modifyProfile.addListener(_onModifyProfileResult);
+    oldWidget.viewModel.removeProfile.removeListener(_onRemoveProfileResult);
+    widget.viewModel.removeProfile.addListener(_onRemoveProfileResult);
+  }
+
+  @override
+  void dispose() {
+    widget.viewModel.createProfile.removeListener(_onCreateProfileResult);
+    widget.viewModel.modifyProfile.removeListener(_onModifyProfileResult);
+    widget.viewModel.removeProfile.removeListener(_onRemoveProfileResult);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,22 +54,22 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(title: localizations.settingsTitle),
       body: ListenableBuilder(
-        listenable: viewModel.load,
+        listenable: widget.viewModel.load,
         builder: (context, child) {
-          if (viewModel.load.completed) {
+          if (widget.viewModel.load.completed) {
             return child!;
-          } else if (viewModel.load.running) {
+          } else if (widget.viewModel.load.running) {
             return const Center(child: CircularProgressIndicator());
           } else {
             return ErrorIndicator(
               title: localizations.settingsLoadErrorTitle,
               label: localizations.settingsLoadErrorLabel,
-              onPressed: viewModel.load.execute,
+              onPressed: widget.viewModel.load.execute,
             );
           }
         },
         child: ListenableBuilder(
-          listenable: viewModel,
+          listenable: widget.viewModel,
           builder: (context, child) {
             return SingleChildScrollView(
               child: Column(
@@ -45,49 +77,52 @@ class SettingsScreen extends StatelessWidget {
                   SettingsProfilesGroup(
                     title: localizations.settingsProfilesTitle,
                     subtitle: localizations.settingsProfilesSubtitle,
-                    profiles: viewModel.profiles,
-                    selectedProfile: viewModel.activeProfile,
+                    profiles: widget.viewModel.profiles,
+                    selectedProfile: widget.viewModel.activeProfile,
                     onNewProfile: () => _showCreateProfileModal(context),
                     onModifyProfile: (profile) =>
                         _showModifyProfileModal(context, profile),
-                    onRemoveProfile: (profile) =>
-                        unawaited(viewModel.removeProfile.execute(profile)),
+                    onRemoveProfile: (profile) => unawaited(
+                      widget.viewModel.removeProfile.execute(profile),
+                    ),
                     onSwitchProfile: (profile) => {
                       if (profile != null)
-                        unawaited(viewModel.switchProfile.execute(profile)),
+                        unawaited(
+                          widget.viewModel.switchProfile.execute(profile),
+                        ),
                     },
                   ),
                   SettingsRadioGroup<ThemeMode>(
                     title: localizations.settingsThemeTitle,
                     subtitle: localizations.settingsThemeSubtitle,
-                    options: viewModel.availableThemes,
-                    optionLabels: viewModel.availableThemes
+                    options: widget.viewModel.availableThemes,
+                    optionLabels: widget.viewModel.availableThemes
                         .map((e) => mapThemeModeToString(context, e))
                         .toList(),
-                    selectedOption: viewModel.theme,
+                    selectedOption: widget.viewModel.theme,
                     onChanged: (theme) {
                       if (theme != null) {
-                        unawaited(viewModel.updateTheme.execute(theme));
+                        unawaited(widget.viewModel.updateTheme.execute(theme));
                       }
                     },
                   ),
                   SettingsRadioGroup<String>(
                     title: localizations.settingsLanguageTitle,
                     subtitle: localizations.settingsLanguageSubtitle,
-                    options: viewModel.availableLocales
+                    options: widget.viewModel.availableLocales
                         .map((e) => e.languageCode)
                         .toList(),
-                    optionLabels: viewModel.availableLocales
+                    optionLabels: widget.viewModel.availableLocales
                         .map(
                           (e) =>
                               mapLanguageCodeToString(context, e.languageCode),
                         )
                         .toList(),
-                    selectedOption: viewModel.language,
+                    selectedOption: widget.viewModel.language,
                     onChanged: (languageCode) {
                       if (languageCode != null) {
                         unawaited(
-                          viewModel.updateLanguage.execute(languageCode),
+                          widget.viewModel.updateLanguage.execute(languageCode),
                         );
                       }
                     },
@@ -109,22 +144,22 @@ class SettingsScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return CustomModalSheet(
-          listenable: viewModel.createProfile,
+          listenable: widget.viewModel.createProfile,
           title: localizations.settingsCreateProfileTitle,
           actionLabel: localizations.settingsCreateProfileLabel,
           onAction: () async {
             if (nameController.text.isNotEmpty) {
-              await viewModel.createProfile.execute(
+              await widget.viewModel.createProfile.execute(
                 nameController.text,
                 descriptionController.text,
               );
-              if (viewModel.createProfile.completed && context.mounted) {
-                viewModel.createProfile.clearResult();
+              if (widget.viewModel.createProfile.completed && context.mounted) {
+                widget.viewModel.createProfile.clearResult();
                 Navigator.of(context).pop();
               }
             }
           },
-          isLoading: viewModel.createProfile.running,
+          isLoading: widget.viewModel.createProfile.running,
           childrenBuilder: (context) => [
             CustomTextField(
               controller: nameController,
@@ -156,12 +191,12 @@ class SettingsScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return CustomModalSheet(
-          listenable: viewModel.modifyProfile,
+          listenable: widget.viewModel.modifyProfile,
           title: localizations.settingsModifyProfileTitle,
           actionLabel: localizations.settingsModifyProfileLabel,
           onAction: () async {
             if (nameController.text.isNotEmpty) {
-              await viewModel.modifyProfile.execute(
+              await widget.viewModel.modifyProfile.execute(
                 profile.copyWith(
                   name: nameController.text,
                   description: Value(
@@ -172,13 +207,13 @@ class SettingsScreen extends StatelessWidget {
                   isDefault: isDefaultController.value,
                 ),
               );
-              if (viewModel.modifyProfile.completed && context.mounted) {
-                viewModel.modifyProfile.clearResult();
+              if (widget.viewModel.modifyProfile.completed && context.mounted) {
+                widget.viewModel.modifyProfile.clearResult();
                 Navigator.of(context).pop();
               }
             }
           },
-          isLoading: viewModel.modifyProfile.running,
+          isLoading: widget.viewModel.modifyProfile.running,
           childrenBuilder: (context) => [
             CustomTextField(
               controller: nameController,
@@ -201,6 +236,36 @@ class SettingsScreen extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  void _onCreateProfileResult() {
+    final localizations = AppLocalizations.of(context)!;
+    showFeedbackOnResult(
+      context: context,
+      action: widget.viewModel.createProfile,
+      successMessage: localizations.settingsProfileCreated,
+      errorMessage: localizations.errorWhileCreatingProfile,
+    );
+  }
+
+  void _onModifyProfileResult() {
+    final localizations = AppLocalizations.of(context)!;
+    showFeedbackOnResult(
+      context: context,
+      action: widget.viewModel.modifyProfile,
+      successMessage: localizations.settingsProfileModified,
+      errorMessage: localizations.errorWhileModifyingProfile,
+    );
+  }
+
+  void _onRemoveProfileResult() {
+    final localizations = AppLocalizations.of(context)!;
+    showFeedbackOnResult(
+      context: context,
+      action: widget.viewModel.removeProfile,
+      successMessage: localizations.settingsProfileRemoved,
+      errorMessage: localizations.errorWhileRemovingProfile,
     );
   }
 }

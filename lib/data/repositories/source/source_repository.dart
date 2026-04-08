@@ -16,11 +16,6 @@ abstract class SourceRepository {
     required final String url,
   });
 
-  Future<Result<void>> modifySource({
-    required final Id profileId,
-    required final Source source,
-  });
-
   Future<Result<void>> removeSource({
     required final Id profileId,
     required final Id sourceId,

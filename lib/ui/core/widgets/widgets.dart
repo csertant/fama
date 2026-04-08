@@ -1,4 +1,5 @@
 export 'article_card.dart';
+export 'command_feedback.dart';
 export 'custom_app_bar.dart';
 export 'custom_badge.dart';
 export 'custom_card.dart';

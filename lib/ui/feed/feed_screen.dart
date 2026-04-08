@@ -202,47 +202,21 @@ class _FeedScreenState extends State<FeedScreen> {
 
   void _onMarkAsReadResult() {
     final localizations = AppLocalizations.of(context)!;
-    if (widget.viewModel.markAsRead.completed) {
-      widget.viewModel.markAsRead.clearResult();
-      ScaffoldMessenger.of(context).showSnackBar(
-        CustomSnackBar.info(
-          context: context,
-          content: localizations.articleMarkedAsRead,
-        ),
-      );
-    }
-
-    if (widget.viewModel.markAsRead.error) {
-      widget.viewModel.markAsRead.clearResult();
-      ScaffoldMessenger.of(context).showSnackBar(
-        CustomSnackBar.error(
-          context: context,
-          content: localizations.errorWhileMarkingArticleAsRead,
-        ),
-      );
-    }
+    showFeedbackOnResult(
+      context: context,
+      action: widget.viewModel.markAsRead,
+      successMessage: localizations.articleMarkedAsRead,
+      errorMessage: localizations.errorWhileMarkingArticleAsRead,
+    );
   }
 
   void _onMarkAsSavedResult() {
     final localizations = AppLocalizations.of(context)!;
-    if (widget.viewModel.markAsSaved.completed) {
-      widget.viewModel.markAsSaved.clearResult();
-      ScaffoldMessenger.of(context).showSnackBar(
-        CustomSnackBar.info(
-          context: context,
-          content: localizations.articleMarkedAsSaved,
-        ),
-      );
-    }
-
-    if (widget.viewModel.markAsSaved.error) {
-      widget.viewModel.markAsSaved.clearResult();
-      ScaffoldMessenger.of(context).showSnackBar(
-        CustomSnackBar.error(
-          context: context,
-          content: localizations.errorWhileSavingArticle,
-        ),
-      );
-    }
+    showFeedbackOnResult(
+      context: context,
+      action: widget.viewModel.markAsSaved,
+      successMessage: localizations.articleMarkedAsSaved,
+      errorMessage: localizations.errorWhileSavingArticle,
+    );
   }
 }

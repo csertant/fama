@@ -19,6 +19,7 @@ class CustomErrorBanner extends StatelessWidget {
         vertical: AppDimensions.paddingSmall,
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         spacing: AppDimensions.borderRadiusMedium,
         children: [
           const CustomIcon(iconPath: CustomIcons.noInternet),

@@ -10,10 +10,38 @@ import 'explore_viewmodel.dart';
 import 'widgets/source_by_custom_url_card.dart';
 import 'widgets/source_recommendation_card.dart';
 
-class ExploreScreen extends StatelessWidget {
+class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key, required this.viewModel});
 
   final ExploreViewModel viewModel;
+
+  @override
+  State<ExploreScreen> createState() => _ExploreScreenState();
+}
+
+class _ExploreScreenState extends State<ExploreScreen> {
+  @override
+  void initState() {
+    super.initState();
+    widget.viewModel.subscribeToSource.addListener(_onSubscribeToSourceResult);
+  }
+
+  @override
+  void didUpdateWidget(covariant ExploreScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    oldWidget.viewModel.subscribeToSource.removeListener(
+      _onSubscribeToSourceResult,
+    );
+    widget.viewModel.subscribeToSource.addListener(_onSubscribeToSourceResult);
+  }
+
+  @override
+  void dispose() {
+    widget.viewModel.subscribeToSource.removeListener(
+      _onSubscribeToSourceResult,
+    );
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +53,7 @@ class ExploreScreen extends StatelessWidget {
         actions: [
           CustomIconButton.normal(
             icon: CustomIcons.refresh,
-            onTap: viewModel.load.execute,
+            onTap: widget.viewModel.load.execute,
             tooltip: localizations.navigationLabelRefresh,
           ),
           CustomIconButton.normal(
@@ -41,30 +69,31 @@ class ExploreScreen extends StatelessWidget {
             CustomErrorBanner(message: localizations.noInternetConnectionTitle),
           Expanded(
             child: ListenableBuilder(
-              listenable: viewModel.load,
+              listenable: widget.viewModel.load,
               builder: (context, child) {
-                if (viewModel.load.completed) {
+                if (widget.viewModel.load.completed) {
                   return child!;
-                } else if (viewModel.load.running) {
+                } else if (widget.viewModel.load.running) {
                   return const Center(child: CircularProgressIndicator());
                 } else {
                   return ErrorIndicator(
                     title: localizations.exploreLoadErrorTitle,
                     label: localizations.exploreLoadErrorLabel,
-                    onPressed: viewModel.load.execute,
+                    onPressed: widget.viewModel.load.execute,
                   );
                 }
               },
               child: ListenableBuilder(
-                listenable: viewModel,
+                listenable: widget.viewModel,
                 builder: (context, child) {
-                  return viewModel.filteredRecommendations.isNotEmpty
+                  return widget.viewModel.filteredRecommendations.isNotEmpty
                       ? ListView.builder(
                           padding: const EdgeInsets.symmetric(
                             vertical: AppDimensions.paddingMedium,
                           ),
                           itemCount:
-                              viewModel.filteredRecommendations.length + 1,
+                              widget.viewModel.filteredRecommendations.length +
+                              1,
                           itemBuilder: (context, index) {
                             if (index == 0) {
                               return Padding(
@@ -86,7 +115,7 @@ class ExploreScreen extends StatelessWidget {
                         )
                       : Center(
                           child: Text(
-                            viewModel.sourceRecommendations.isEmpty
+                            widget.viewModel.sourceRecommendations.isEmpty
                                 ? localizations.exploreEmptyLabel
                                 : localizations.filtersNoMatchesLabel,
                             style: Theme.of(context).textTheme.bodyMedium,
@@ -102,14 +131,14 @@ class ExploreScreen extends StatelessWidget {
   }
 
   Widget _buildRecommendationCard(BuildContext context, int index) {
-    final recommendation = viewModel.filteredRecommendations[index];
+    final recommendation = widget.viewModel.filteredRecommendations[index];
     return SourceRecommendationCard(
       recommendation: recommendation,
-      subscribed: viewModel.subscribedSources.any(
+      subscribed: widget.viewModel.subscribedSources.any(
         (s) => s.url == recommendation.url,
       ),
       onSubscribe: () =>
-          viewModel.subscribeToSource.execute(recommendation.url),
+          widget.viewModel.subscribeToSource.execute(recommendation.url),
     );
   }
 
@@ -119,35 +148,35 @@ class ExploreScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return CustomModalSheet(
-          listenable: viewModel,
+          listenable: widget.viewModel,
           title: localizations.filtersTitle,
           actionLabel: localizations.filtersActionLabel,
-          onAction: viewModel.clearFilters,
+          onAction: widget.viewModel.clearFilters,
           childrenBuilder: (context) => [
             CustomFilter(
               label: localizations.exploreFiltersLanguageLabel,
-              selected: viewModel.selectedLanguages,
-              options: viewModel.availableLanguages,
-              onOptionSelected: viewModel.toggleLanguageFilter,
+              selected: widget.viewModel.selectedLanguages,
+              options: widget.viewModel.availableLanguages,
+              onOptionSelected: widget.viewModel.toggleLanguageFilter,
               optionLabelBuilder: (option) =>
                   mapLanguageCodeToString(context, option),
             ),
             CustomFilter(
               label: localizations.exploreFiltersCountryLabel,
-              selected: viewModel.selectedCountries,
-              options: viewModel.availableCountries,
-              onOptionSelected: viewModel.toggleCountryFilter,
+              selected: widget.viewModel.selectedCountries,
+              options: widget.viewModel.availableCountries,
+              onOptionSelected: widget.viewModel.toggleCountryFilter,
             ),
             CustomFilter(
               label: localizations.exploreFiltersCategoryLabel,
-              selected: viewModel.selectedCategories,
-              options: viewModel.availableCategories,
-              onOptionSelected: viewModel.toggleCategoryFilter,
+              selected: widget.viewModel.selectedCategories,
+              options: widget.viewModel.availableCategories,
+              onOptionSelected: widget.viewModel.toggleCategoryFilter,
             ),
             CustomSwitch(
               label: localizations.exploreFiltersShowSubscribedSourcesLabel,
-              value: viewModel.showSubscribed,
-              onChanged: (_) => viewModel.toggleShowSubscribed(),
+              value: widget.viewModel.showSubscribed,
+              onChanged: (_) => widget.viewModel.toggleShowSubscribed(),
             ),
           ],
         );
@@ -162,20 +191,23 @@ class ExploreScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return CustomModalSheet(
-          listenable: viewModel.subscribeToSource,
+          listenable: widget.viewModel.subscribeToSource,
           title: localizations.exploreAddCustomSourceTitle,
           description: localizations.exploreAddCustomSourceDescription,
           actionLabel: localizations.exploreAddCustomSourceActionLabel,
           onAction: () async {
             if (urlController.text.isNotEmpty) {
-              await viewModel.subscribeToSource.execute(urlController.text);
-              if (viewModel.subscribeToSource.completed && context.mounted) {
-                viewModel.subscribeToSource.clearResult();
+              await widget.viewModel.subscribeToSource.execute(
+                urlController.text,
+              );
+              if (widget.viewModel.subscribeToSource.completed &&
+                  context.mounted) {
+                widget.viewModel.subscribeToSource.clearResult();
                 Navigator.of(context).pop();
               }
             }
           },
-          isLoading: viewModel.subscribeToSource.running,
+          isLoading: widget.viewModel.subscribeToSource.running,
           childrenBuilder: (context) => [
             CustomTextField(
               controller: urlController,
@@ -184,6 +216,16 @@ class ExploreScreen extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  void _onSubscribeToSourceResult() {
+    final localizations = AppLocalizations.of(context)!;
+    showFeedbackOnResult(
+      context: context,
+      action: widget.viewModel.subscribeToSource,
+      successMessage: localizations.sourceSubscribed,
+      errorMessage: localizations.errorWhileSubscribingToSource,
     );
   }
 }

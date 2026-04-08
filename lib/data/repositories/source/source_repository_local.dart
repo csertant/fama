@@ -76,14 +76,6 @@ class SourceRepositoryLocal implements SourceRepository {
   }
 
   @override
-  Future<Result<void>> modifySource({
-    required final Id profileId,
-    required final Source source,
-  }) {
-    return _localDataService.saveSource(source: source.toCompanion(true));
-  }
-
-  @override
   Future<Result<void>> removeSource({
     required final Id profileId,
     required final Id sourceId,

@@ -8,10 +8,38 @@ import '../core/themes/dimensions.dart';
 import '../core/widgets/widgets.dart';
 import 'saved_viewmodel.dart';
 
-class SavedScreen extends StatelessWidget {
+class SavedScreen extends StatefulWidget {
   const SavedScreen({super.key, required this.viewModel});
 
   final SavedViewModel viewModel;
+
+  @override
+  State<SavedScreen> createState() => _SavedScreenState();
+}
+
+class _SavedScreenState extends State<SavedScreen> {
+  @override
+  void initState() {
+    super.initState();
+    widget.viewModel.markAsRead.addListener(_onMarkAsReadResult);
+    widget.viewModel.markAsUnsaved.addListener(_onMarkAsUnSavedResult);
+  }
+
+  @override
+  void didUpdateWidget(covariant SavedScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    oldWidget.viewModel.markAsRead.removeListener(_onMarkAsReadResult);
+    widget.viewModel.markAsRead.addListener(_onMarkAsReadResult);
+    oldWidget.viewModel.markAsUnsaved.removeListener(_onMarkAsUnSavedResult);
+    widget.viewModel.markAsUnsaved.addListener(_onMarkAsUnSavedResult);
+  }
+
+  @override
+  void dispose() {
+    widget.viewModel.markAsRead.removeListener(_onMarkAsReadResult);
+    widget.viewModel.markAsUnsaved.removeListener(_onMarkAsUnSavedResult);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,34 +62,35 @@ class SavedScreen extends StatelessWidget {
             CustomErrorBanner(message: localizations.noInternetConnectionTitle),
           Expanded(
             child: ListenableBuilder(
-              listenable: viewModel.load,
+              listenable: widget.viewModel.load,
               builder: (context, child) {
-                if (viewModel.load.completed) {
+                if (widget.viewModel.load.completed) {
                   return child!;
-                } else if (viewModel.load.running) {
+                } else if (widget.viewModel.load.running) {
                   return const Center(child: CircularProgressIndicator());
                 } else {
                   return ErrorIndicator(
                     title: localizations.savedLoadErrorTitle,
                     label: localizations.savedLoadErrorLabel,
-                    onPressed: viewModel.load.execute,
+                    onPressed: widget.viewModel.load.execute,
                   );
                 }
               },
               child: ListenableBuilder(
-                listenable: viewModel,
+                listenable: widget.viewModel,
                 builder: (context, child) {
-                  return viewModel.filteredSavedArticles.isNotEmpty
+                  return widget.viewModel.filteredSavedArticles.isNotEmpty
                       ? ListView.builder(
                           padding: const EdgeInsets.symmetric(
                             vertical: AppDimensions.paddingMedium,
                           ),
-                          itemCount: viewModel.filteredSavedArticles.length,
+                          itemCount:
+                              widget.viewModel.filteredSavedArticles.length,
                           itemBuilder: _buildArticleCard,
                         )
                       : Center(
                           child: Text(
-                            viewModel.savedArticles.isEmpty
+                            widget.viewModel.savedArticles.isEmpty
                                 ? localizations.savedEmptyLabel
                                 : localizations.filtersNoMatchesLabel,
                             style: Theme.of(context).textTheme.bodyMedium,
@@ -77,21 +106,21 @@ class SavedScreen extends StatelessWidget {
   }
 
   Widget _buildArticleCard(BuildContext context, int index) {
-    final article = viewModel.filteredSavedArticles[index];
+    final article = widget.viewModel.filteredSavedArticles[index];
     return ArticleCard.leadingImage(
       article: article,
       onConfirmDismissArticle: (direction) async {
         switch (direction) {
           case DismissDirection.startToEnd:
-            await viewModel.markAsUnsaved.execute(article);
-            if (viewModel.markAsUnsaved.completed) {
+            await widget.viewModel.markAsUnsaved.execute(article);
+            if (widget.viewModel.markAsUnsaved.completed) {
               return true;
             } else {
               return false;
             }
           case DismissDirection.endToStart:
-            await viewModel.markAsRead.execute(article);
-            if (viewModel.markAsRead.completed) {
+            await widget.viewModel.markAsRead.execute(article);
+            if (widget.viewModel.markAsRead.completed) {
               return true;
             } else {
               return false;
@@ -120,39 +149,59 @@ class SavedScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return CustomModalSheet(
-          listenable: viewModel,
+          listenable: widget.viewModel,
           title: localizations.filtersTitle,
           actionLabel: localizations.filtersActionLabel,
-          onAction: viewModel.clearFilters,
+          onAction: widget.viewModel.clearFilters,
           childrenBuilder: (context) => [
             CustomFilter(
               label: localizations.feedFiltersSourcesLabel,
-              selected: viewModel.selectedSources,
-              options: viewModel.availableSources,
-              onOptionSelected: viewModel.toggleSourceFilter,
+              selected: widget.viewModel.selectedSources,
+              options: widget.viewModel.availableSources,
+              onOptionSelected: widget.viewModel.toggleSourceFilter,
             ),
             CustomFilter(
               label: localizations.feedFiltersAuthorsLabel,
-              selected: viewModel.selectedAuthors,
-              options: viewModel.availableAuthors,
-              onOptionSelected: viewModel.toggleAuthorFilter,
+              selected: widget.viewModel.selectedAuthors,
+              options: widget.viewModel.availableAuthors,
+              onOptionSelected: widget.viewModel.toggleAuthorFilter,
             ),
             CustomFilter(
               label: localizations.feedFiltersDurationLabel,
-              selected: [viewModel.selectedDuration],
+              selected: [widget.viewModel.selectedDuration],
               options: FilterDuration.all,
-              onOptionSelected: viewModel.setDuration,
+              onOptionSelected: widget.viewModel.setDuration,
               optionLabelBuilder: (option) =>
                   mapDurationToString(context, option),
             ),
             CustomSwitch(
               label: localizations.feedFiltersShowReadArticlesLabel,
-              value: viewModel.showRead,
-              onChanged: (_) => viewModel.toggleShowRead(),
+              value: widget.viewModel.showRead,
+              onChanged: (_) => widget.viewModel.toggleShowRead(),
             ),
           ],
         );
       },
+    );
+  }
+
+  void _onMarkAsReadResult() {
+    final localizations = AppLocalizations.of(context)!;
+    showFeedbackOnResult(
+      context: context,
+      action: widget.viewModel.markAsRead,
+      successMessage: localizations.articleMarkedAsRead,
+      errorMessage: localizations.errorWhileMarkingArticleAsRead,
+    );
+  }
+
+  void _onMarkAsUnSavedResult() {
+    final localizations = AppLocalizations.of(context)!;
+    showFeedbackOnResult(
+      context: context,
+      action: widget.viewModel.markAsUnsaved,
+      successMessage: localizations.articleMarkedAsUnsaved,
+      errorMessage: localizations.errorWhileUnSavingArticle,
     );
   }
 }

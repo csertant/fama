@@ -11,10 +11,34 @@ import '../core/widgets/widgets.dart';
 import 'sources_viewmodel.dart';
 import 'widgets/source_card.dart';
 
-class SourcesScreen extends StatelessWidget {
+class SourcesScreen extends StatefulWidget {
   const SourcesScreen({super.key, required this.viewModel});
 
   final SourcesViewModel viewModel;
+
+  @override
+  State<SourcesScreen> createState() => _SourcesScreenState();
+}
+
+class _SourcesScreenState extends State<SourcesScreen> {
+  @override
+  void initState() {
+    super.initState();
+    widget.viewModel.removeSource.addListener(_onRemoveSourceResult);
+  }
+
+  @override
+  void didUpdateWidget(covariant SourcesScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    oldWidget.viewModel.removeSource.removeListener(_onRemoveSourceResult);
+    widget.viewModel.removeSource.addListener(_onRemoveSourceResult);
+  }
+
+  @override
+  void dispose() {
+    widget.viewModel.removeSource.removeListener(_onRemoveSourceResult);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,29 +62,29 @@ class SourcesScreen extends StatelessWidget {
             CustomErrorBanner(message: localizations.noInternetConnectionTitle),
           Expanded(
             child: ListenableBuilder(
-              listenable: viewModel.load,
+              listenable: widget.viewModel.load,
               builder: (context, child) {
-                if (viewModel.load.completed) {
+                if (widget.viewModel.load.completed) {
                   return child!;
-                } else if (viewModel.load.running) {
+                } else if (widget.viewModel.load.running) {
                   return const Center(child: CircularProgressIndicator());
                 } else {
                   return ErrorIndicator(
                     title: localizations.sourcesLoadErrorTitle,
                     label: localizations.sourcesLoadErrorLabel,
-                    onPressed: viewModel.load.execute,
+                    onPressed: widget.viewModel.load.execute,
                   );
                 }
               },
               child: ListenableBuilder(
-                listenable: viewModel,
+                listenable: widget.viewModel,
                 builder: (context, child) {
-                  return viewModel.sources.isNotEmpty
+                  return widget.viewModel.sources.isNotEmpty
                       ? ListView.builder(
                           padding: const EdgeInsets.symmetric(
                             vertical: AppDimensions.paddingMedium,
                           ),
-                          itemCount: viewModel.sources.length,
+                          itemCount: widget.viewModel.sources.length,
                           itemBuilder: _buildSourceCard,
                         )
                       : Center(
@@ -79,12 +103,22 @@ class SourcesScreen extends StatelessWidget {
   }
 
   Widget _buildSourceCard(BuildContext context, int index) {
-    final source = viewModel.sources[index];
+    final source = widget.viewModel.sources[index];
     return SourceCard(
       source: source,
       onRemoveSource: () {
-        unawaited(viewModel.removeSource.execute(source));
+        unawaited(widget.viewModel.removeSource.execute(source));
       },
+    );
+  }
+
+  void _onRemoveSourceResult() {
+    final localizations = AppLocalizations.of(context)!;
+    showFeedbackOnResult(
+      context: context,
+      action: widget.viewModel.removeSource,
+      successMessage: localizations.sourceRemoved,
+      errorMessage: localizations.errorWhileRemovingSource,
     );
   }
 }

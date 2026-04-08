@@ -15,7 +15,6 @@ class SourcesViewModel extends ChangeNotifier {
   }) : _sourceRepository = sourceRepository,
        _sessionManager = sessionManager {
     load = Command0(_load);
-    modifySource = Command1(_modifySource);
     removeSource = Command1(_removeSource);
 
     _sessionManager.addListener(_onSessionChanged);
@@ -36,7 +35,6 @@ class SourcesViewModel extends ChangeNotifier {
   List<Source> _sources = [];
 
   late Command0<void> load;
-  late Command1<void, Source> modifySource;
   late Command1<void, Source> removeSource;
 
   List<Source> get sources => UnmodifiableListView(_sources);
@@ -66,17 +64,6 @@ class SourcesViewModel extends ChangeNotifier {
 
   void _onSessionChanged() {
     unawaited(load.execute());
-  }
-
-  Future<Result<void>> _modifySource(Source source) async {
-    try {
-      return await _sourceRepository.modifySource(
-        profileId: source.profileId,
-        source: source,
-      );
-    } finally {
-      notifyListeners();
-    }
   }
 
   Future<Result<void>> _removeSource(Source source) async {
