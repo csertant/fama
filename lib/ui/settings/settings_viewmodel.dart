@@ -85,13 +85,8 @@ class SettingsViewModel extends ChangeNotifier {
   Future<Result<void>> _createProfile(
     final String name,
     final String? description,
-  ) async {
+  ) {
     try {
-      if (name.trim().isEmpty) {
-        return Result.error(
-          ValidationException('Profile name must not be empty'),
-        );
-      }
       return _profileRepository.saveProfile(
         name: name.trim(),
         description: description?.trim(),
@@ -105,13 +100,8 @@ class SettingsViewModel extends ChangeNotifier {
     return _sessionManager.initializeSession(profileId: profile.id);
   }
 
-  Future<Result<void>> _modifyProfile(final Profile profile) async {
+  Future<Result<void>> _modifyProfile(final Profile profile) {
     try {
-      if (profile.name.trim().isEmpty) {
-        return Result.error(
-          ValidationException('Profile name must not be empty'),
-        );
-      }
       return _profileRepository.modifyProfile(
         profile: profile.copyWith(
           name: profile.name.trim(),

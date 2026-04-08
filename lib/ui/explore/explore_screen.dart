@@ -187,33 +187,52 @@ class _ExploreScreenState extends State<ExploreScreen> {
   Future<void> _showSubscribeToCustomSourceModal(BuildContext context) async {
     final urlController = TextEditingController();
     final localizations = AppLocalizations.of(context)!;
+    String? errorText;
+
     await showCustomModalSheet<void>(
       context: context,
       builder: (context) {
-        return CustomModalSheet(
-          listenable: widget.viewModel.subscribeToSource,
-          title: localizations.exploreAddCustomSourceTitle,
-          description: localizations.exploreAddCustomSourceDescription,
-          actionLabel: localizations.exploreAddCustomSourceActionLabel,
-          onAction: () async {
-            if (urlController.text.isNotEmpty) {
-              await widget.viewModel.subscribeToSource.execute(
-                urlController.text,
-              );
-              if (widget.viewModel.subscribeToSource.completed &&
-                  context.mounted) {
-                widget.viewModel.subscribeToSource.clearResult();
-                Navigator.of(context).pop();
-              }
-            }
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return CustomModalSheet(
+              listenable: widget.viewModel.subscribeToSource,
+              title: localizations.exploreAddCustomSourceTitle,
+              description: localizations.exploreAddCustomSourceDescription,
+              actionLabel: localizations.exploreAddCustomSourceActionLabel,
+              onAction: () async {
+                final input = urlController.text.trim();
+                if (input.isEmpty) {
+                  setState(
+                    () => errorText =
+                        localizations.exploreValidationUrlCannotBeEmpty,
+                  );
+                  return;
+                }
+                final uri = Uri.tryParse(input);
+                if (uri == null || !uri.hasScheme || !uri.hasAuthority) {
+                  setState(
+                    () => errorText = localizations.exploreValidationUrlInvalid,
+                  );
+                  return;
+                }
+                setState(() => errorText = null);
+                await widget.viewModel.subscribeToSource.execute(input);
+                if (widget.viewModel.subscribeToSource.completed &&
+                    context.mounted) {
+                  widget.viewModel.subscribeToSource.clearResult();
+                  Navigator.of(context).pop();
+                }
+              },
+              isLoading: widget.viewModel.subscribeToSource.running,
+              childrenBuilder: (context) => [
+                CustomTextField(
+                  controller: urlController,
+                  hintText: localizations.exploreAddCustomSourceSubtitle,
+                  errorText: errorText,
+                ),
+              ],
+            );
           },
-          isLoading: widget.viewModel.subscribeToSource.running,
-          childrenBuilder: (context) => [
-            CustomTextField(
-              controller: urlController,
-              hintText: localizations.exploreAddCustomSourceSubtitle,
-            ),
-          ],
         );
       },
     );

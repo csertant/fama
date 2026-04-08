@@ -140,36 +140,51 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final nameController = TextEditingController();
     final descriptionController = TextEditingController();
     final localizations = AppLocalizations.of(context)!;
+    String? nameErrorText;
+
     await showCustomModalSheet<void>(
       context: context,
       builder: (context) {
-        return CustomModalSheet(
-          listenable: widget.viewModel.createProfile,
-          title: localizations.settingsCreateProfileTitle,
-          actionLabel: localizations.settingsCreateProfileLabel,
-          onAction: () async {
-            if (nameController.text.isNotEmpty) {
-              await widget.viewModel.createProfile.execute(
-                nameController.text,
-                descriptionController.text,
-              );
-              if (widget.viewModel.createProfile.completed && context.mounted) {
-                widget.viewModel.createProfile.clearResult();
-                Navigator.of(context).pop();
-              }
-            }
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return CustomModalSheet(
+              listenable: widget.viewModel.createProfile,
+              title: localizations.settingsCreateProfileTitle,
+              actionLabel: localizations.settingsCreateProfileLabel,
+              onAction: () async {
+                final name = nameController.text.trim();
+                if (name.isEmpty) {
+                  setState(
+                    () => nameErrorText = localizations
+                        .settingsValidationProfileNameCannotBeEmpty,
+                  );
+                  return;
+                }
+                setState(() => nameErrorText = null);
+                await widget.viewModel.createProfile.execute(
+                  name,
+                  descriptionController.text,
+                );
+                if (widget.viewModel.createProfile.completed &&
+                    context.mounted) {
+                  widget.viewModel.createProfile.clearResult();
+                  Navigator.of(context).pop();
+                }
+              },
+              isLoading: widget.viewModel.createProfile.running,
+              childrenBuilder: (context) => [
+                CustomTextField(
+                  controller: nameController,
+                  hintText: localizations.settingsCreateProfileSubtitle,
+                  errorText: nameErrorText,
+                ),
+                CustomTextField(
+                  controller: descriptionController,
+                  hintText: localizations.settingsCreateProfileDescription,
+                ),
+              ],
+            );
           },
-          isLoading: widget.viewModel.createProfile.running,
-          childrenBuilder: (context) => [
-            CustomTextField(
-              controller: nameController,
-              hintText: localizations.settingsCreateProfileSubtitle,
-            ),
-            CustomTextField(
-              controller: descriptionController,
-              hintText: localizations.settingsCreateProfileDescription,
-            ),
-          ],
         );
       },
     );
@@ -187,53 +202,68 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
     final isDefaultController = ValueNotifier<bool>(profile.isDefault);
     final localizations = AppLocalizations.of(context)!;
+    String? nameErrorText;
+
     await showCustomModalSheet<void>(
       context: context,
       builder: (context) {
-        return CustomModalSheet(
-          listenable: widget.viewModel.modifyProfile,
-          title: localizations.settingsModifyProfileTitle,
-          actionLabel: localizations.settingsModifyProfileLabel,
-          onAction: () async {
-            if (nameController.text.isNotEmpty) {
-              await widget.viewModel.modifyProfile.execute(
-                profile.copyWith(
-                  name: nameController.text,
-                  description: Value(
-                    descriptionController.text.isNotEmpty
-                        ? descriptionController.text
-                        : null,
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return CustomModalSheet(
+              listenable: widget.viewModel.modifyProfile,
+              title: localizations.settingsModifyProfileTitle,
+              actionLabel: localizations.settingsModifyProfileLabel,
+              onAction: () async {
+                final name = nameController.text.trim();
+                if (name.isEmpty) {
+                  setState(
+                    () => nameErrorText = localizations
+                        .settingsValidationProfileNameCannotBeEmpty,
+                  );
+                  return;
+                }
+                setState(() => nameErrorText = null);
+                await widget.viewModel.modifyProfile.execute(
+                  profile.copyWith(
+                    name: name,
+                    description: Value(
+                      descriptionController.text.isNotEmpty
+                          ? descriptionController.text
+                          : null,
+                    ),
+                    isDefault: isDefaultController.value,
                   ),
-                  isDefault: isDefaultController.value,
-                ),
-              );
-              if (widget.viewModel.modifyProfile.completed && context.mounted) {
-                widget.viewModel.modifyProfile.clearResult();
-                Navigator.of(context).pop();
-              }
-            }
-          },
-          isLoading: widget.viewModel.modifyProfile.running,
-          childrenBuilder: (context) => [
-            CustomTextField(
-              controller: nameController,
-              hintText: localizations.settingsCreateProfileSubtitle,
-            ),
-            CustomTextField(
-              controller: descriptionController,
-              hintText: localizations.settingsCreateProfileDescription,
-            ),
-            ValueListenableBuilder<bool>(
-              valueListenable: isDefaultController,
-              builder: (context, isDefault, _) {
-                return CustomSwitch(
-                  label: localizations.settingsModifyProfileIsDefaultLabel,
-                  value: isDefault,
-                  onChanged: (value) => isDefaultController.value = value,
                 );
+                if (widget.viewModel.modifyProfile.completed &&
+                    context.mounted) {
+                  widget.viewModel.modifyProfile.clearResult();
+                  Navigator.of(context).pop();
+                }
               },
-            ),
-          ],
+              isLoading: widget.viewModel.modifyProfile.running,
+              childrenBuilder: (context) => [
+                CustomTextField(
+                  controller: nameController,
+                  hintText: localizations.settingsCreateProfileSubtitle,
+                  errorText: nameErrorText,
+                ),
+                CustomTextField(
+                  controller: descriptionController,
+                  hintText: localizations.settingsCreateProfileDescription,
+                ),
+                ValueListenableBuilder<bool>(
+                  valueListenable: isDefaultController,
+                  builder: (context, isDefault, _) {
+                    return CustomSwitch(
+                      label: localizations.settingsModifyProfileIsDefaultLabel,
+                      value: isDefault,
+                      onChanged: (value) => isDefaultController.value = value,
+                    );
+                  },
+                ),
+              ],
+            );
+          },
         );
       },
     );
