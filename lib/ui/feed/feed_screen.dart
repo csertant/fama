@@ -9,10 +9,38 @@ import '../core/themes/dimensions.dart';
 import '../core/widgets/widgets.dart';
 import 'feed_viewmodel.dart';
 
-class FeedScreen extends StatelessWidget {
+class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key, required this.viewModel});
 
   final FeedViewModel viewModel;
+
+  @override
+  State<FeedScreen> createState() => _FeedScreenState();
+}
+
+class _FeedScreenState extends State<FeedScreen> {
+  @override
+  void initState() {
+    super.initState();
+    widget.viewModel.markAsRead.addListener(_onMarkAsReadResult);
+    widget.viewModel.markAsSaved.addListener(_onMarkAsSavedResult);
+  }
+
+  @override
+  void didUpdateWidget(covariant FeedScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    oldWidget.viewModel.markAsRead.removeListener(_onMarkAsReadResult);
+    widget.viewModel.markAsRead.addListener(_onMarkAsReadResult);
+    oldWidget.viewModel.markAsSaved.removeListener(_onMarkAsSavedResult);
+    widget.viewModel.markAsSaved.addListener(_onMarkAsSavedResult);
+  }
+
+  @override
+  void dispose() {
+    widget.viewModel.markAsRead.removeListener(_onMarkAsReadResult);
+    widget.viewModel.markAsSaved.removeListener(_onMarkAsSavedResult);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +55,7 @@ class FeedScreen extends StatelessWidget {
         actions: [
           CustomIconButton.normal(
             icon: CustomIcons.refresh,
-            onTap: viewModel.load.execute,
+            onTap: widget.viewModel.load.execute,
             tooltip: localizations.navigationLabelRefresh,
           ),
           CustomIconButton.normal(
@@ -43,35 +71,35 @@ class FeedScreen extends StatelessWidget {
             CustomErrorBanner(message: localizations.noInternetConnectionTitle),
           Expanded(
             child: ListenableBuilder(
-              listenable: viewModel.load,
+              listenable: widget.viewModel.load,
               builder: (context, child) {
-                if (viewModel.load.completed) {
+                if (widget.viewModel.load.completed) {
                   return child!;
-                } else if (viewModel.load.running) {
+                } else if (widget.viewModel.load.running) {
                   return const Center(child: CircularProgressIndicator());
                 } else {
                   return ErrorIndicator(
                     title: localizations.feedLoadErrorTitle,
                     label: localizations.feedLoadErrorLabel,
-                    onPressed: viewModel.load.execute,
+                    onPressed: widget.viewModel.load.execute,
                   );
                 }
               },
               child: ListenableBuilder(
-                listenable: viewModel,
+                listenable: widget.viewModel,
                 builder: (context, child) {
-                  return viewModel.filteredArticles.isNotEmpty
+                  return widget.viewModel.filteredArticles.isNotEmpty
                       ? ListView.builder(
                           physics: const AlwaysScrollableScrollPhysics(),
                           padding: const EdgeInsets.symmetric(
                             vertical: AppDimensions.paddingMedium,
                           ),
-                          itemCount: viewModel.filteredArticles.length,
+                          itemCount: widget.viewModel.filteredArticles.length,
                           itemBuilder: _buildArticleCard,
                         )
                       : Center(
                           child: Text(
-                            viewModel.articles.isEmpty
+                            widget.viewModel.articles.isEmpty
                                 ? localizations.feedEmptyLabel
                                 : localizations.filtersNoMatchesLabel,
                             style: Theme.of(context).textTheme.bodyMedium,
@@ -87,21 +115,21 @@ class FeedScreen extends StatelessWidget {
   }
 
   Widget _buildArticleCard(BuildContext context, int index) {
-    final article = viewModel.filteredArticles[index];
+    final article = widget.viewModel.filteredArticles[index];
     return ArticleCard.headingImage(
       article: article,
       onConfirmDismissArticle: (direction) async {
         switch (direction) {
           case DismissDirection.startToEnd:
-            await viewModel.markAsSaved.execute(article);
-            if (viewModel.markAsSaved.completed) {
+            await widget.viewModel.markAsSaved.execute(article);
+            if (widget.viewModel.markAsSaved.completed) {
               return true;
             } else {
               return false;
             }
           case DismissDirection.endToStart:
-            await viewModel.markAsRead.execute(article);
-            if (viewModel.markAsRead.completed) {
+            await widget.viewModel.markAsRead.execute(article);
+            if (widget.viewModel.markAsRead.completed) {
               return true;
             } else {
               return false;
@@ -130,45 +158,91 @@ class FeedScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return CustomModalSheet(
-          listenable: viewModel,
+          listenable: widget.viewModel,
           title: localizations.filtersTitle,
           actionLabel: localizations.filtersActionLabel,
-          onAction: viewModel.clearFilters,
+          onAction: widget.viewModel.clearFilters,
           childrenBuilder: (context) => [
             CustomFilter(
               label: localizations.feedFiltersSourcesLabel,
-              selected: viewModel.selectedSources,
-              options: viewModel.availableSources,
-              onOptionSelected: viewModel.toggleSourceFilter,
+              selected: widget.viewModel.selectedSources,
+              options: widget.viewModel.availableSources,
+              onOptionSelected: widget.viewModel.toggleSourceFilter,
             ),
             CustomFilter(
               label: localizations.feedFiltersAuthorsLabel,
-              selected: viewModel.selectedAuthors,
-              options: viewModel.availableAuthors,
-              onOptionSelected: viewModel.toggleAuthorFilter,
+              selected: widget.viewModel.selectedAuthors,
+              options: widget.viewModel.availableAuthors,
+              onOptionSelected: widget.viewModel.toggleAuthorFilter,
             ),
             CustomFilter(
               label: localizations.feedFiltersDurationLabel,
-              selected: [viewModel.selectedDuration],
+              selected: [widget.viewModel.selectedDuration],
               options: FilterDuration.all,
-              onOptionSelected: viewModel.setDuration,
+              onOptionSelected: widget.viewModel.setDuration,
               optionLabelBuilder: (option) =>
                   mapDurationToString(context, option),
             ),
             CustomFilter(
               label: localizations.feedFiltersLimitLabel,
-              selected: [viewModel.selectedLimit],
+              selected: [widget.viewModel.selectedLimit],
               options: FilterLimit.all,
-              onOptionSelected: viewModel.setLimit,
+              onOptionSelected: widget.viewModel.setLimit,
             ),
             CustomSwitch(
               label: localizations.feedFiltersShowReadArticlesLabel,
-              value: viewModel.showRead,
-              onChanged: (_) => viewModel.toggleShowRead(),
+              value: widget.viewModel.showRead,
+              onChanged: (_) => widget.viewModel.toggleShowRead(),
             ),
           ],
         );
       },
     );
+  }
+
+  void _onMarkAsReadResult() {
+    final localizations = AppLocalizations.of(context)!;
+    if (widget.viewModel.markAsRead.completed) {
+      widget.viewModel.markAsRead.clearResult();
+      ScaffoldMessenger.of(context).showSnackBar(
+        CustomSnackBar.info(
+          context: context,
+          content: localizations.articleMarkedAsRead,
+        ),
+      );
+    }
+
+    if (widget.viewModel.markAsRead.error) {
+      widget.viewModel.markAsRead.clearResult();
+      ScaffoldMessenger.of(context).showSnackBar(
+        CustomSnackBar.error(
+          context: context,
+          content: localizations.errorWhileMarkingArticleAsRead,
+        ),
+      );
+    }
+  }
+
+  void _onMarkAsSavedResult() {
+    final localizations = AppLocalizations.of(context)!;
+    if (widget.viewModel.markAsSaved.completed) {
+      widget.viewModel.markAsSaved.clearResult();
+      ScaffoldMessenger.of(context).showSnackBar(
+        CustomSnackBar.info(
+          context: context,
+          content: localizations.articleMarkedAsSaved,
+        ),
+      );
+    }
+
+    if (widget.viewModel.markAsSaved.error) {
+      widget.viewModel.markAsSaved.clearResult();
+      ScaffoldMessenger.of(context).showSnackBar(
+        CustomSnackBar.error(
+          context: context,
+          content: localizations.errorWhileSavingArticle,
+        ),
+      );
+    }
   }
 }
