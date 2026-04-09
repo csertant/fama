@@ -1,4 +1,4 @@
-package com.example.fama
+package hu.famaapp.fama
 
 import io.flutter.embedding.android.FlutterActivity
 
