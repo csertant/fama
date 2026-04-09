@@ -80,12 +80,14 @@ class _SourcesScreenState extends State<SourcesScreen> {
                 listenable: widget.viewModel,
                 builder: (context, child) {
                   return widget.viewModel.sources.isNotEmpty
-                      ? ListView.builder(
+                      ? ListView.separated(
                           padding: const EdgeInsets.symmetric(
                             vertical: AppDimensions.paddingMedium,
                           ),
                           itemCount: widget.viewModel.sources.length,
                           itemBuilder: _buildSourceCard,
+                          separatorBuilder: (context, index) =>
+                              const CustomDivider(),
                         )
                       : Center(
                           child: Text(

@@ -87,7 +87,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 listenable: widget.viewModel,
                 builder: (context, child) {
                   return widget.viewModel.filteredRecommendations.isNotEmpty
-                      ? ListView.builder(
+                      ? ListView.separated(
                           padding: const EdgeInsets.symmetric(
                             vertical: AppDimensions.paddingMedium,
                           ),
@@ -112,6 +112,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             }
                             return _buildRecommendationCard(context, index - 1);
                           },
+                          separatorBuilder: (context, index) =>
+                              const CustomDivider(),
                         )
                       : Center(
                           child: Text(
