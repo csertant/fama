@@ -93,10 +93,22 @@ class AppDatabase extends _$AppDatabase {
       beforeOpen: (details) async {
         await customStatement('PRAGMA foreign_keys = ON');
 
+        // Fix any string timestamps left from previous version's faulty insert.
+        await customStatement(
+          'UPDATE profiles SET '
+          "created_at = cast(strftime('%s', created_at) as integer) "
+          "WHERE typeof(created_at) = 'text'",
+        );
+        await customStatement(
+          'UPDATE profiles SET '
+          "updated_at = cast(strftime('%s', updated_at) as integer) "
+          "WHERE typeof(updated_at) = 'text'",
+        );
+
         // Ensure at least one profile exists.
         await customStatement(
           'INSERT INTO profiles (name, is_default, created_at, updated_at) '
-          "SELECT 'Default Profile', 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP "
+          "SELECT 'Default Profile', 1, cast(strftime('%s', 'now') as integer), cast(strftime('%s', 'now') as integer) "
           'WHERE NOT EXISTS (SELECT 1 FROM profiles)',
         );
 

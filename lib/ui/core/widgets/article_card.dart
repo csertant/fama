@@ -47,6 +47,7 @@ class ArticleCard extends StatelessWidget {
     return Dismissible(
       key: ValueKey(article.id),
       confirmDismiss: onConfirmDismissArticle,
+      onDismissed: (_) {},
       background: dismissibleActionLeft,
       secondaryBackground: dismissibleActionRight,
       child: Card(
@@ -68,7 +69,11 @@ class ArticleCard extends StatelessWidget {
             imageUrl: article.imageUrl!,
             fit: BoxFit.cover,
             progressIndicatorBuilder: (context, url, downloadProgress) =>
-                CircularProgressIndicator(value: downloadProgress.progress),
+                Center(
+                  child: CircularProgressIndicator(
+                    value: downloadProgress.progress,
+                  ),
+                ),
             errorBuilder: (context, url, error) => placeholder,
           )
         : placeholder;

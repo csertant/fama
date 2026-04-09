@@ -31,6 +31,7 @@ class ErrorIndicator extends StatelessWidget {
             ),
             Text(
               title,
+              textAlign: TextAlign.center,
               style: theme.textTheme.titleMedium?.copyWith(
                 color: theme.colorScheme.error,
               ),

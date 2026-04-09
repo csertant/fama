@@ -122,15 +122,11 @@ class _FeedScreenState extends State<FeedScreen> {
         switch (direction) {
           case DismissDirection.startToEnd:
             await widget.viewModel.markAsSaved.execute(article);
-            if (widget.viewModel.markAsSaved.completed) {
-              return true;
-            } else {
-              return false;
-            }
+            return false;
           case DismissDirection.endToStart:
             await widget.viewModel.markAsRead.execute(article);
             if (widget.viewModel.markAsRead.completed) {
-              return true;
+              return !widget.viewModel.showRead;
             } else {
               return false;
             }

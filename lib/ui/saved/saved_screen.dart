@@ -107,7 +107,7 @@ class _SavedScreenState extends State<SavedScreen> {
 
   Widget _buildArticleCard(BuildContext context, int index) {
     final article = widget.viewModel.filteredSavedArticles[index];
-    return ArticleCard.leadingImage(
+    return ArticleCard.headingImage(
       article: article,
       onConfirmDismissArticle: (direction) async {
         switch (direction) {
@@ -121,7 +121,7 @@ class _SavedScreenState extends State<SavedScreen> {
           case DismissDirection.endToStart:
             await widget.viewModel.markAsRead.execute(article);
             if (widget.viewModel.markAsRead.completed) {
-              return true;
+              return !widget.viewModel.showRead;
             } else {
               return false;
             }
