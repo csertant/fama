@@ -104,17 +104,10 @@
     "articleCardNoAuthorLabel": "unknown author",
     "articleCardLabelShare": "share",
     "sourceCardNoDescriptionLabel": "no description available for this source",
+    "sourceCardLastSyncTitle": "last synced at:",
     "sourceCardNotSyncedYetLabel": "not synced yet",
     "sourceCardLabelModify": "modify",
     "sourceCardLabelRemove": "remove",
-    "sourceCardLastSyncLabel": "last synced at: {date}",
-    "@sourceCardLastSyncLabel": {
-        "placeholders": {
-            "date": {
-                "type": "String"
-            }
-        }
-    },
     "sourceRecommendationCardNoDescriptionLabel": "no description available for this recommendation",
     "sourceRecommendationCardLabelSubscribed": "subscribed",
     "sourceRecommendationCardLabelSubscribe": "subscribe",

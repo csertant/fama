@@ -104,17 +104,10 @@
     "articleCardNoAuthorLabel": "ismeretlen szerző",
     "articleCardLabelShare": "megosztás",
     "sourceCardNoDescriptionLabel": "nincs leírás ehhez a forráshoz",
+    "sourceCardLastSyncTitle": "utolsó szinkronizálás:",
     "sourceCardNotSyncedYetLabel": "még nincs szinkronizálva",
     "sourceCardLabelModify": "módosítás",
     "sourceCardLabelRemove": "eltávolítás",
-    "sourceCardLastSyncLabel": "utolsó szinkronizálás: {date}",
-    "@sourceCardLastSyncLabel": {
-        "placeholders": {
-            "date": {
-                "type": "String"
-            }
-        }
-    },
     "sourceRecommendationCardNoDescriptionLabel": "nincs leírás ehhez az ajánláshoz",
     "sourceRecommendationCardLabelSubscribed": "feliratkozva",
     "sourceRecommendationCardLabelSubscribe": "feliratkozás",

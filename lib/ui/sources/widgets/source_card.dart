@@ -37,7 +37,7 @@ class SourceCard extends StatelessWidget {
       titleUrl: source.siteUrl,
       description: descriptionOrPlaceholder,
       metadata: [
-        source.url,
+        localizations.sourceCardLastSyncTitle,
         if (source.lastSyncedAt != null)
           AppDateFormat.dateTime.format(source.lastSyncedAt!)
         else

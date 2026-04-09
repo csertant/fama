@@ -60,9 +60,29 @@ class ProfileRepositoryLocal implements ProfileRepository {
 
   @override
   Future<Result<void>> modifyProfile({required Profile profile}) async {
+    final profilesResult = await _localDataService.getProfiles();
+    switch (profilesResult) {
+      case Ok<List<Profile>>(value: final profilesList):
+        if (profilesList.length <= 1 && !profile.isDefault) {
+          return Result.error(
+            ValidationException(
+              'Cannot remove default status from the only profile',
+            ),
+          );
+        }
+      case Error<List<Profile>>(error: final error):
+        return Result.error(error);
+    }
     final defaultProfileResult = await _localDataService.getDefaultProfile();
     switch (defaultProfileResult) {
       case Ok<Profile>(value: final defaultProfile):
+        if (defaultProfile.id == profile.id && !profile.isDefault) {
+          return Result.error(
+            ValidationException(
+              'Cannot remove default status from the default profile',
+            ),
+          );
+        }
         if (defaultProfile.id != profile.id && profile.isDefault) {
           final demoteResult = await _localDataService.saveProfile(
             profile: defaultProfile
@@ -79,8 +99,10 @@ class ProfileRepositoryLocal implements ProfileRepository {
         return _localDataService.saveProfile(
           profile: profile.toCompanion(true),
         );
-      case Error<Profile>(error: final error):
-        return Result.error(error);
+      case Error<Profile>():
+        return _localDataService.saveProfile(
+          profile: profile.toCompanion(true),
+        );
     }
   }
 

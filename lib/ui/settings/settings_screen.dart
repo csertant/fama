@@ -257,7 +257,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     return CustomSwitch(
                       label: localizations.settingsModifyProfileIsDefaultLabel,
                       value: isDefault,
-                      onChanged: (value) => isDefaultController.value = value,
+                      onChanged: profile.isDefault
+                          ? null
+                          : (value) => isDefaultController.value = value,
                     );
                   },
                 ),

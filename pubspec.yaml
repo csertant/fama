@@ -64,13 +64,13 @@ flutter_native_splash:
   android_12:
     color: "#F5F5F5"
     color_dark: "#0A0A0A"
-    image: "assets/icons/icon_2x.png"
-    image_dark: "assets/icons/icon_white_2x.png"
+    image: "assets/icons/appicon_2x.png"
+    image_dark: "assets/icons/appicon_white_2x.png"
 
 flutter_launcher_icons:
   android: true
   adaptive_icon_background: "#0A0A0A"
-  adaptive_icon_foreground: "assets/icons/icon_white_2x.png"
+  adaptive_icon_foreground: "assets/icons/appicon_white_2x.png"
   adaptive_icon_foreground_inset: 16
   ios: true
   remove_alpha_ios: true

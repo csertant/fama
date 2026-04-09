@@ -42,8 +42,9 @@ class SettingsProfilesGroup extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(title, style: theme.textTheme.titleMedium),
-                const Spacer(),
+                Expanded(
+                  child: Text(title, style: theme.textTheme.titleMedium),
+                ),
                 CustomIconButton.normal(
                   icon: CustomIcons.add,
                   onTap: onNewProfile,
@@ -55,6 +56,7 @@ class SettingsProfilesGroup extends StatelessWidget {
             const SizedBox(height: AppDimensions.paddingMedium),
             ...profiles.map(
               (profile) => RadioListTile<Profile>(
+                contentPadding: EdgeInsets.zero,
                 value: profile,
                 title: Text(profile.name),
                 subtitle: profile.description != null

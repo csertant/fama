@@ -40,6 +40,7 @@ class SettingsRadioGroup<T> extends StatelessWidget {
             const SizedBox(height: AppDimensions.paddingMedium),
             ...options.map(
               (option) => RadioListTile<T>(
+                contentPadding: EdgeInsets.zero,
                 value: option,
                 title: Text(optionLabels[options.indexOf(option)]),
               ),

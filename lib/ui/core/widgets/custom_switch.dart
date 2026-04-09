@@ -5,12 +5,12 @@ class CustomSwitch extends StatelessWidget {
     super.key,
     required this.label,
     this.value = false,
-    required this.onChanged,
+    this.onChanged,
   });
 
   final String label;
   final bool value;
-  final ValueChanged<bool> onChanged;
+  final ValueChanged<bool>? onChanged;
 
   @override
   Widget build(BuildContext context) {
