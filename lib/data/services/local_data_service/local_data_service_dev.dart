@@ -105,6 +105,14 @@ class LocalDataServiceDev implements LocalDataService {
   }
 
   @override
+  Future<Result<void>> updateSourceLastSyncedAt({
+    required Id sourceId,
+    required DateTime lastSyncedAt,
+  }) async {
+    return const Result.ok(null);
+  }
+
+  @override
   Future<Result<void>> removeSource({
     required ProfileId profileId,
     required Id sourceId,

@@ -124,7 +124,18 @@ class ArticleRepositoryLocal implements ArticleRepository {
             updatedAt: Value(DateTime.now()),
           );
         }).toList();
-        return _localDataService.saveArticles(articles: newArticles);
+        final saveArticlesResult = await _localDataService.saveArticles(
+          articles: newArticles,
+        );
+        switch (saveArticlesResult) {
+          case Ok<void>():
+            return _localDataService.updateSourceLastSyncedAt(
+              sourceId: source.id,
+              lastSyncedAt: DateTime.now(),
+            );
+          case Error<void>(error: final error):
+            return Result.error(error);
+        }
       case Error<ParsedFeed>(error: final error):
         return Result.error(error);
     }

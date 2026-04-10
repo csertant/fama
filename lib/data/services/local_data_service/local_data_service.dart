@@ -24,6 +24,11 @@ abstract class LocalDataService {
 
   Future<Result<void>> saveSource({required SourcesCompanion source});
 
+  Future<Result<void>> updateSourceLastSyncedAt({
+    required Id sourceId,
+    required DateTime lastSyncedAt,
+  });
+
   Future<Result<void>> removeSource({
     required ProfileId profileId,
     required Id sourceId,

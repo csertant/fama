@@ -30,6 +30,20 @@ class CustomCard extends StatelessWidget {
     final parsedTitleUrl = titleUrl == null || titleUrl!.isEmpty
         ? null
         : Uri.tryParse(titleUrl!);
+    final metadataWidgets = [
+      for (var index = 0; index < metadata.length; index++)
+        if (index == 0)
+          Expanded(
+            child: Text(
+              metadata[index],
+              style: theme.textTheme.labelMedium,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          )
+        else
+          Text(metadata[index], style: theme.textTheme.labelMedium),
+    ];
     return Padding(
       padding: padding,
       child: Column(
@@ -73,13 +87,8 @@ class CustomCard extends StatelessWidget {
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            spacing: AppDimensions.paddingSmall,
-            children: metadata
-                .map((data) => Text(data, style: theme.textTheme.labelMedium))
-                .toList(),
-          ),
+          if (metadataWidgets.isNotEmpty)
+            Row(spacing: AppDimensions.paddingSmall, children: metadataWidgets),
         ],
       ),
     );

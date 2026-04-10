@@ -195,7 +195,22 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<void> insertOrUpdateSource({required SourcesCompanion source}) {
-    return into(sources).insertOnConflictUpdate(source);
+    return into(sources).insert(
+      source,
+      onConflict: DoUpdate(
+        (_) => source,
+        target: [sources.profileId, sources.url],
+      ),
+    );
+  }
+
+  Future<void> updateSourceLastSyncedAt({
+    required Id sourceId,
+    required DateTime lastSyncedAt,
+  }) {
+    return (update(sources)..where((s) => s.id.equals(sourceId))).write(
+      SourcesCompanion(lastSyncedAt: Value(lastSyncedAt)),
+    );
   }
 
   Future<void> deleteSource({
@@ -259,7 +274,16 @@ class AppDatabase extends _$AppDatabase {
     required List<ArticlesCompanion> articles,
   }) {
     return batch((final batch) {
-      batch.insertAllOnConflictUpdate(this.articles, articles);
+      for (final article in articles) {
+        batch.insert(
+          this.articles,
+          article,
+          onConflict: DoUpdate(
+            (_) => article,
+            target: [this.articles.sourceId, this.articles.guid],
+          ),
+        );
+      }
     });
   }
 

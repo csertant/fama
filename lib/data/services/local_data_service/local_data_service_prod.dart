@@ -66,6 +66,19 @@ class LocalDataServiceProd implements LocalDataService {
   }
 
   @override
+  Future<Result<void>> updateSourceLastSyncedAt({
+    required Id sourceId,
+    required DateTime lastSyncedAt,
+  }) {
+    return guardVoid(
+      () => _database.updateSourceLastSyncedAt(
+        sourceId: sourceId,
+        lastSyncedAt: lastSyncedAt,
+      ),
+    );
+  }
+
+  @override
   Future<Result<void>> removeSource({
     required ProfileId profileId,
     required Id sourceId,
