@@ -80,14 +80,14 @@ class RssService {
       title: feed.title ?? 'Unknown Source',
       siteUrl: _pickSiteUrl(feed),
       imageUrl: feed.image?.url ?? feed.icon?.url,
-      description: feed.description,
+      description: _cleanFeedText(feed.description),
       copyright: feed.copyright,
       articles: feed.items.map((item) {
         return ParsedArticle(
           guid: item.guid ?? _pickItemUrl(item),
           url: _pickItemUrl(item),
           title: item.title ?? 'Unknown Article',
-          summary: item.description,
+          summary: _cleanFeedText(item.description),
           content: _pickItemContent(item),
           author: item.authors.map((a) => a.name).toList().join(', '),
           imageUrl: _pickItemImageUrl(item),
@@ -158,6 +158,76 @@ class RssService {
         return enclosure.url;
       }
     }
-    return null;
+    final contentImage = _extractImageUrlFromHtml(_pickItemContent(item));
+    if (contentImage != null) {
+      return contentImage;
+    }
+    return _extractImageUrlFromHtml(item.description);
+  }
+
+  String? _extractImageUrlFromHtml(String? html) {
+    if (html == null || html.isEmpty) {
+      return null;
+    }
+    final srcMatch = RegExp(
+      '<img[^>]*\\ssrc\\s*=\\s*["\\\']([^"\\\']+)["\\\']',
+      caseSensitive: false,
+    ).firstMatch(html);
+    if (srcMatch == null) {
+      return null;
+    }
+    final url = srcMatch.group(1)?.trim();
+    if (url == null || url.isEmpty) {
+      return null;
+    }
+    return url;
+  }
+
+  String? _cleanFeedText(String? value) {
+    if (value == null || value.isEmpty) {
+      return value;
+    }
+    var cleaned = value;
+    cleaned = cleaned.replaceAll(RegExp('<[^>]+>', dotAll: true), ' ');
+    cleaned = _decodeHtmlEntities(cleaned);
+
+    cleaned = cleaned.replaceAll(
+      RegExp(
+        r'The post\b[\s\S]*?\bfirst appeared on\b[\s\S]*$',
+        caseSensitive: false,
+        dotAll: true,
+      ),
+      ' ',
+    );
+    cleaned = cleaned
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .replaceAllMapped(RegExp(r'\s+([,.;:!?])'), (match) => match.group(1)!)
+        .trim();
+    return cleaned.isEmpty ? null : cleaned;
+  }
+
+  String _decodeHtmlEntities(String text) {
+    var decoded = text
+        .replaceAll('&nbsp;', ' ')
+        .replaceAll('&amp;', '&')
+        .replaceAll('&lt;', '<')
+        .replaceAll('&gt;', '>')
+        .replaceAll('&quot;', '"')
+        .replaceAll('&apos;', "'");
+    decoded = decoded.replaceAllMapped(RegExp(r'&#(\d+);'), (match) {
+      final codePoint = int.tryParse(match.group(1)!);
+      if (codePoint == null) {
+        return match.group(0)!;
+      }
+      return String.fromCharCode(codePoint);
+    });
+    decoded = decoded.replaceAllMapped(RegExp('&#x([0-9A-Fa-f]+);'), (match) {
+      final codePoint = int.tryParse(match.group(1)!, radix: 16);
+      if (codePoint == null) {
+        return match.group(0)!;
+      }
+      return String.fromCharCode(codePoint);
+    });
+    return decoded;
   }
 }
