@@ -26,17 +26,14 @@ class ExploreViewModel extends ChangeNotifier {
     _connectivityService.addListener(_onConnectivityChanged);
     _sourcesSubscription = _sourceRepository
         .watchSourcesForProfile(profileId: _sessionManager.profileId!)
-        .listen((sources) {
-          _subscribedSources = sources;
-          notifyListeners();
-        });
+        .listen(_onSourcesChanged);
 
     unawaited(load.execute());
   }
 
   final SessionManager _sessionManager;
   final SourceRepository _sourceRepository;
-  late final StreamSubscription<List<Source>> _sourcesSubscription;
+  StreamSubscription<List<Source>>? _sourcesSubscription;
   final ConnectivityService _connectivityService;
   ConnectionStatus _lastConnectionStatus;
 
@@ -148,8 +145,17 @@ class ExploreViewModel extends ChangeNotifier {
     }
   }
 
-  void _onSessionChanged() {
+  Future<void> _onSessionChanged() async {
+    await _sourcesSubscription?.cancel();
+    _sourcesSubscription = _sourceRepository
+        .watchSourcesForProfile(profileId: _sessionManager.profileId!)
+        .listen(_onSourcesChanged);
     unawaited(load.execute());
+  }
+
+  void _onSourcesChanged(List<Source> sources) {
+    _subscribedSources = sources;
+    notifyListeners();
   }
 
   void _onConnectivityChanged() {
@@ -231,7 +237,7 @@ class ExploreViewModel extends ChangeNotifier {
   Future<void> dispose() async {
     _sessionManager.removeListener(_onSessionChanged);
     _connectivityService.removeListener(_onConnectivityChanged);
-    await _sourcesSubscription.cancel();
+    await _sourcesSubscription?.cancel();
     super.dispose();
   }
 }

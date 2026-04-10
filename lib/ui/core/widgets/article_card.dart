@@ -47,7 +47,6 @@ class ArticleCard extends StatelessWidget {
     return Dismissible(
       key: ValueKey(article.id),
       confirmDismiss: onConfirmDismissArticle,
-      onDismissed: (_) {},
       background: dismissibleActionLeft,
       secondaryBackground: dismissibleActionRight,
       child: Card(

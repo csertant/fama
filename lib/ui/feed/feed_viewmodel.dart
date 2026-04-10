@@ -28,18 +28,14 @@ class FeedViewModel extends ChangeNotifier with ArticleFilterMixin {
     _connectivityService.addListener(_onConnectivityChanged);
     _articlesSubscription = _articleRepository
         .watchArticles(profileId: _sessionManager.profileId!)
-        .listen((articles) {
-          _articles = articles;
-          invalidateFilterData();
-          notifyListeners();
-        });
+        .listen(_onArticlesChanged);
 
     unawaited(load.execute());
   }
 
   final SessionManager _sessionManager;
   final ArticleRepository _articleRepository;
-  late final StreamSubscription<List<Article>> _articlesSubscription;
+  StreamSubscription<List<Article>>? _articlesSubscription;
   final ConnectivityService _connectivityService;
   ConnectionStatus _lastConnectionStatus;
 
@@ -85,8 +81,18 @@ class FeedViewModel extends ChangeNotifier with ArticleFilterMixin {
     }
   }
 
-  void _onSessionChanged() {
+  Future<void> _onSessionChanged() async {
+    await _articlesSubscription?.cancel();
+    _articlesSubscription = _articleRepository
+        .watchArticles(profileId: _sessionManager.profileId!)
+        .listen(_onArticlesChanged);
     unawaited(load.execute());
+  }
+
+  void _onArticlesChanged(List<Article> articles) {
+    _articles = articles;
+    invalidateFilterData();
+    notifyListeners();
   }
 
   void _onConnectivityChanged() {
@@ -100,10 +106,14 @@ class FeedViewModel extends ChangeNotifier with ArticleFilterMixin {
 
   Future<Result<void>> _markAsSaved(Article article) async {
     try {
-      return await _articleRepository.markAsSaved(
+      final result = await _articleRepository.markAsSaved(
         profileId: article.profileId,
         articleId: article.id,
       );
+      if (result is Ok<void>) {
+        _updateLocalArticle(articleId: article.id, isSaved: true);
+      }
+      return result;
     } finally {
       notifyListeners();
     }
@@ -111,13 +121,35 @@ class FeedViewModel extends ChangeNotifier with ArticleFilterMixin {
 
   Future<Result<void>> _markAsRead(Article article) async {
     try {
-      return await _articleRepository.markAsRead(
+      final result = await _articleRepository.markAsRead(
         profileId: article.profileId,
         articleId: article.id,
       );
+      if (result is Ok<void>) {
+        _updateLocalArticle(articleId: article.id, isRead: true);
+      }
+      return result;
     } finally {
       notifyListeners();
     }
+  }
+
+  void _updateLocalArticle({
+    required Id articleId,
+    bool? isRead,
+    bool? isSaved,
+  }) {
+    final index = _articles.indexWhere((article) => article.id == articleId);
+    if (index == -1) {
+      return;
+    }
+
+    _articles[index] = _articles[index].copyWith(
+      isRead: isRead,
+      isSaved: isSaved,
+      updatedAt: DateTime.now(),
+    );
+    invalidateFilterData();
   }
 
   void setLimit(int limit) {
@@ -135,7 +167,7 @@ class FeedViewModel extends ChangeNotifier with ArticleFilterMixin {
   Future<void> dispose() async {
     _sessionManager.removeListener(_onSessionChanged);
     _connectivityService.removeListener(_onConnectivityChanged);
-    await _articlesSubscription.cancel();
+    await _articlesSubscription?.cancel();
     super.dispose();
   }
 }

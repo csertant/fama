@@ -30,7 +30,7 @@ class Sources extends Table {
   IntColumn get profileId =>
       integer().references(Profiles, #id, onDelete: KeyAction.cascade)();
 
-  TextColumn get url => text().unique()();
+  TextColumn get url => text()();
 
   TextColumn get name => text()();
   TextColumn get description => text().nullable()();
@@ -41,6 +41,11 @@ class Sources extends Table {
   DateTimeColumn get lastSyncedAt => dateTime().nullable()();
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
+
+  @override
+  List<Set<Column>> get uniqueKeys => [
+    {profileId, url},
+  ];
 }
 
 class Articles extends Table {

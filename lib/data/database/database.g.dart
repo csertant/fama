@@ -639,7 +639,6 @@ class $SourcesTable extends Sources with TableInfo<$SourcesTable, Source> {
     false,
     type: DriftSqlType.string,
     requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
   );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
@@ -835,6 +834,10 @@ class $SourcesTable extends Sources with TableInfo<$SourcesTable, Source> {
 
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {profileId, url},
+  ];
   @override
   Source map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
