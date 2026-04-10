@@ -149,6 +149,10 @@ class RssService {
     if (itemImage != null && itemImage.isNotEmpty) {
       return itemImage;
     }
+    final mediaImage = _pickImageUrlFromItemMedia(item);
+    if (mediaImage != null) {
+      return mediaImage;
+    }
     for (final enclosure in item.enclosures) {
       if (enclosure.url.isEmpty) {
         continue;
@@ -163,6 +167,32 @@ class RssService {
       return contentImage;
     }
     return _extractImageUrlFromHtml(item.description);
+  }
+
+  String? _pickImageUrlFromItemMedia(Item item) {
+    final media = item.media;
+    if (media == null) {
+      return null;
+    }
+    for (final thumbnail in media.thumbnails) {
+      if (thumbnail.url.isNotEmpty) {
+        return thumbnail.url;
+      }
+    }
+    for (final content in media.content) {
+      for (final thumbnail in content.thumbnails) {
+        if (thumbnail.url.isNotEmpty) {
+          return thumbnail.url;
+        }
+      }
+      final mimeType = (content.type ?? '').toLowerCase();
+      final medium = (content.medium ?? '').toLowerCase();
+      if (content.url.isNotEmpty &&
+          (mimeType.startsWith('image/') || medium == 'image')) {
+        return content.url;
+      }
+    }
+    return null;
   }
 
   String? _extractImageUrlFromHtml(String? html) {
