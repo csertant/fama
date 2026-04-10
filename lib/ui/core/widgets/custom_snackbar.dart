@@ -11,6 +11,7 @@ class CustomSnackBar {
     final theme = Theme.of(context);
     return SnackBar(
       duration: duration,
+      persist: false,
       content: Text(
         content,
         style: theme.textTheme.bodyMedium!.copyWith(
@@ -34,6 +35,7 @@ class CustomSnackBar {
     final theme = Theme.of(context);
     return SnackBar(
       duration: duration,
+      persist: false,
       content: Text(
         content,
         style: theme.textTheme.bodyMedium!.copyWith(
