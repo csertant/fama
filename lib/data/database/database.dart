@@ -20,13 +20,15 @@ class Profiles extends Table {
 class Sessions extends Table {
   IntColumn get id => integer().autoIncrement()();
 
-  IntColumn get profileId => integer().references(Profiles, #id)();
+  IntColumn get profileId =>
+      integer().references(Profiles, #id, onDelete: KeyAction.cascade)();
 }
 
 class Sources extends Table {
   IntColumn get id => integer().autoIncrement()();
 
-  IntColumn get profileId => integer().references(Profiles, #id)();
+  IntColumn get profileId =>
+      integer().references(Profiles, #id, onDelete: KeyAction.cascade)();
 
   TextColumn get url => text().unique()();
 
@@ -44,9 +46,11 @@ class Sources extends Table {
 class Articles extends Table {
   IntColumn get id => integer().autoIncrement()();
 
-  IntColumn get sourceId => integer().references(Sources, #id)();
+  IntColumn get sourceId =>
+      integer().references(Sources, #id, onDelete: KeyAction.cascade)();
   TextColumn get sourceName => text()();
-  IntColumn get profileId => integer().references(Profiles, #id)();
+  IntColumn get profileId =>
+      integer().references(Profiles, #id, onDelete: KeyAction.cascade)();
 
   // RSS unique identifier
   TextColumn get guid => text()();
@@ -108,7 +112,9 @@ class AppDatabase extends _$AppDatabase {
         // Ensure at least one profile exists.
         await customStatement(
           'INSERT INTO profiles (name, is_default, created_at, updated_at) '
-          "SELECT 'Default Profile', 1, cast(strftime('%s', 'now') as integer), cast(strftime('%s', 'now') as integer) "
+          "SELECT 'Default Profile', 1, "
+          "cast(strftime('%s', 'now') as integer), "
+          "cast(strftime('%s', 'now') as integer) "
           'WHERE NOT EXISTS (SELECT 1 FROM profiles)',
         );
 

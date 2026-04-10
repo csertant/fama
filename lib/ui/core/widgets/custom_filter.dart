@@ -34,8 +34,8 @@ class FilterDuration {
   ];
 }
 
-class CustomFilter<T> extends StatelessWidget {
-  const CustomFilter({
+class CustomFilterChips<T> extends StatelessWidget {
+  const CustomFilterChips({
     super.key,
     required this.label,
     required this.selected,

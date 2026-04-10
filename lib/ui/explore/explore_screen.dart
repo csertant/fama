@@ -155,7 +155,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           actionLabel: localizations.filtersActionLabel,
           onAction: widget.viewModel.clearFilters,
           childrenBuilder: (context) => [
-            CustomFilter(
+            CustomFilterChips(
               label: localizations.exploreFiltersLanguageLabel,
               selected: widget.viewModel.selectedLanguages,
               options: widget.viewModel.availableLanguages,
@@ -163,13 +163,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
               optionLabelBuilder: (option) =>
                   mapLanguageCodeToString(context, option),
             ),
-            CustomFilter(
+            CustomFilterChips(
               label: localizations.exploreFiltersCountryLabel,
               selected: widget.viewModel.selectedCountries,
               options: widget.viewModel.availableCountries,
               onOptionSelected: widget.viewModel.toggleCountryFilter,
             ),
-            CustomFilter(
+            CustomFilterChips(
               label: localizations.exploreFiltersCategoryLabel,
               selected: widget.viewModel.selectedCategories,
               options: widget.viewModel.availableCategories,
@@ -177,7 +177,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               optionLabelBuilder: (option) =>
                   mapCategoryToString(context, option),
             ),
-            CustomFilter(
+            CustomFilterChips(
               label: localizations.exploreFiltersGenreTypeLabel,
               selected: widget.viewModel.selectedGenres,
               options: widget.viewModel.availableGenres,

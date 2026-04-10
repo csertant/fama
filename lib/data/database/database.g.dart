@@ -432,7 +432,7 @@ class $SessionsTable extends Sessions with TableInfo<$SessionsTable, Session> {
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES profiles (id)',
+      'REFERENCES profiles (id) ON DELETE CASCADE',
     ),
   );
   @override
@@ -628,7 +628,7 @@ class $SourcesTable extends Sources with TableInfo<$SourcesTable, Source> {
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES profiles (id)',
+      'REFERENCES profiles (id) ON DELETE CASCADE',
     ),
   );
   static const VerificationMeta _urlMeta = const VerificationMeta('url');
@@ -1284,7 +1284,7 @@ class $ArticlesTable extends Articles with TableInfo<$ArticlesTable, Article> {
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES sources (id)',
+      'REFERENCES sources (id) ON DELETE CASCADE',
     ),
   );
   static const VerificationMeta _sourceNameMeta = const VerificationMeta(
@@ -1309,7 +1309,7 @@ class $ArticlesTable extends Articles with TableInfo<$ArticlesTable, Article> {
     type: DriftSqlType.int,
     requiredDuringInsert: true,
     defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES profiles (id)',
+      'REFERENCES profiles (id) ON DELETE CASCADE',
     ),
   );
   static const VerificationMeta _guidMeta = const VerificationMeta('guid');
@@ -2166,6 +2166,37 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     sources,
     articles,
   ];
+  @override
+  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'profiles',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('sessions', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'profiles',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('sources', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'sources',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('articles', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'profiles',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('articles', kind: UpdateKind.delete)],
+    ),
+  ]);
 }
 
 typedef $$ProfilesTableCreateCompanionBuilder =

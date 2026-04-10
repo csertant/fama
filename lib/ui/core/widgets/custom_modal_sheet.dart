@@ -9,6 +9,8 @@ Future<T?> showCustomModalSheet<T>({
   return showModalBottomSheet<T>(
     context: context,
     isScrollControlled: true,
+    showDragHandle: true,
+    useSafeArea: true,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(
         top: Radius.circular(AppDimensions.borderRadiusMedium),
@@ -47,30 +49,33 @@ class CustomModalSheet extends StatelessWidget {
         final children = childrenBuilder(context);
         return Padding(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
+            bottom:
+                MediaQuery.of(context).viewInsets.bottom +
+                AppDimensions.paddingSmall,
             left: AppDimensions.paddingMedium,
             right: AppDimensions.paddingMedium,
-            top: AppDimensions.paddingMedium,
           ),
-          child: SizedBox(
-            width: double.infinity,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              spacing: AppDimensions.paddingSmall,
-              children: [
-                Text(title, style: theme.textTheme.titleMedium),
-                if (description != null) ...[
-                  Text(description!, style: theme.textTheme.bodyMedium),
+          child: SingleChildScrollView(
+            child: SizedBox(
+              width: double.infinity,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: AppDimensions.paddingSmall,
+                children: [
+                  Text(title, style: theme.textTheme.titleMedium),
+                  if (description != null) ...[
+                    Text(description!, style: theme.textTheme.bodyMedium),
+                  ],
+                  ...children,
+                  FilledButton.tonal(
+                    onPressed: isLoading ? null : onAction,
+                    child: isLoading
+                        ? const CircularProgressIndicator()
+                        : Text(actionLabel, style: theme.textTheme.labelMedium),
+                  ),
                 ],
-                ...children,
-                FilledButton.tonal(
-                  onPressed: isLoading ? null : onAction,
-                  child: isLoading
-                      ? const CircularProgressIndicator()
-                      : Text(actionLabel, style: theme.textTheme.labelMedium),
-                ),
-              ],
+              ),
             ),
           ),
         );
