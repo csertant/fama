@@ -18,10 +18,16 @@ on:
         description: "Release version in CHANGELOG.md (example: 1.0.0)"
         required: true
         type: string
+      environment_name:
+        description: "GitHub Environment that stores release secrets"
+        required: false
+        default: release
+        type: string
 
 jobs:
   android-release:
     runs-on: ubuntu-latest
+    environment: ${{ github.event_name == 'workflow_dispatch' && inputs.environment_name || 'release' }}
     env:
       LANE: ${{ github.event_name == 'workflow_dispatch' && inputs.lane || 'beta' }}
 
@@ -172,6 +178,7 @@ jobs:
 
   ios-release:
     runs-on: macos-latest
+    environment: ${{ github.event_name == 'workflow_dispatch' && inputs.environment_name || 'release' }}
     env:
       LANE: ${{ github.event_name == 'workflow_dispatch' && inputs.lane || 'beta' }}
 
