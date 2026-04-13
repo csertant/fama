@@ -6,6 +6,7 @@ platform :android do
     upload_to_play_store(
       track: "internal",
       aab: ENV["AAB_PATH"] || "../build/app/outputs/bundle/release/app-release.aab",
+      json_key: "fastlane/play-store-service-account.json",
       skip_upload_metadata: true,
       skip_upload_changelogs: true,
       skip_upload_images: true,
@@ -19,6 +20,7 @@ platform :android do
     upload_to_play_store(
       track: "production",
       aab: ENV["AAB_PATH"] || "../build/app/outputs/bundle/release/app-release.aab",
+      json_key: "fastlane/play-store-service-account.json",
       skip_upload_metadata: true,
       skip_upload_changelogs: true,
       skip_upload_images: true,
