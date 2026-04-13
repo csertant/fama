@@ -91,6 +91,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: "3.3"
           bundler-cache: true
 
       - name: Install Dart dependencies
@@ -222,6 +223,7 @@ jobs:
         if: ${{ steps.check_ios_secrets.outputs.should_run == 'true' }}
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: "3.3"
           bundler-cache: true
 
       - name: Install Dart dependencies
