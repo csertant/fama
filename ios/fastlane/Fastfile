@@ -1,10 +1,6 @@
 default_platform(:ios)
 
 platform :ios do
-  private_lane :release_notes_from_env do
-    (ENV["RELEASE_NOTES"] || "").strip
-  end
-
   private_lane :app_store_connect_api_key_from_env do
     app_store_connect_api_key(
       key_id: ENV.fetch("APP_STORE_CONNECT_API_KEY_ID"),
@@ -17,11 +13,9 @@ platform :ios do
   desc "Upload iOS beta build to TestFlight"
   lane :beta do
     api_key = app_store_connect_api_key_from_env
-    release_notes = release_notes_from_env
     upload_to_testflight(
       api_key: api_key,
       ipa: ENV["IPA_PATH"] || "../build/ios/ipa/*.ipa",
-      changelog: release_notes.empty? ? nil : release_notes,
       skip_waiting_for_build_processing: true,
       distribute_external: false
     )
@@ -30,11 +24,9 @@ platform :ios do
   desc "Upload iOS production release to App Store"
   lane :production do
     api_key = app_store_connect_api_key_from_env
-    release_notes = release_notes_from_env
     upload_to_app_store(
       api_key: api_key,
       ipa: ENV["IPA_PATH"] || "../build/ios/ipa/*.ipa",
-      release_notes: release_notes.empty? ? nil : { "en-US" => release_notes },
       submit_for_review: false,
       automatic_release: false,
       skip_metadata: true,

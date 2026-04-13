@@ -14,10 +14,6 @@ on:
         options:
           - beta
           - production
-      version:
-        description: "Release version in CHANGELOG.md (example: 1.0.0)"
-        required: true
-        type: string
       environment_name:
         description: "GitHub Environment that stores release secrets"
         required: false
@@ -34,54 +30,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
-      - name: Generate release notes
-        id: android_release_notes
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          if [[ "${GITHUB_REF_TYPE:-}" == "tag" ]]; then
-            VERSION="${GITHUB_REF_NAME#v}"
-          else
-            VERSION="${{ inputs.version }}"
-          fi
-
-          if [[ -z "$VERSION" ]]; then
-            echo "Unable to determine release version"
-            exit 1
-          fi
-
-          CHANGELOG_FILE="CHANGELOG.md"
-          if [[ ! -f "$CHANGELOG_FILE" ]]; then
-            echo "Missing CHANGELOG.md"
-            exit 1
-          fi
-
-          NOTES_FILE="$RUNNER_TEMP/release-notes-android.txt"
-
-          START_LINE="$(grep -nF "## [$VERSION]" "$CHANGELOG_FILE" | head -n 1 | cut -d: -f1 || true)"
-          if [[ -z "$START_LINE" ]]; then
-            echo "No changelog entry found for version $VERSION in CHANGELOG.md"
-            exit 1
-          fi
-
-          tail -n "+$((START_LINE + 1))" "$CHANGELOG_FILE" \
-            | awk '/^## \[/{exit} {print}' \
-            | sed '/^[[:space:]]*$/d' > "$NOTES_FILE"
-
-          if [[ ! -s "$NOTES_FILE" ]]; then
-            echo "No changelog entry found for version $VERSION in CHANGELOG.md"
-            exit 1
-          fi
-
-          {
-            echo "RELEASE_NOTES<<EOF"
-            cat "$NOTES_FILE"
-            echo "EOF"
-          } >> "$GITHUB_ENV"
 
       - name: Set up Java
         uses: actions/setup-java@v5
@@ -171,7 +119,6 @@ jobs:
       - name: Upload Android release with Fastlane
         env:
           AAB_PATH: ../build/app/outputs/bundle/release/app-release.aab
-          RELEASE_NOTES: ${{ env.RELEASE_NOTES }}
         run: |
           cd android
           bundle exec fastlane "$LANE"
@@ -185,8 +132,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
 
       - name: Check iOS release secrets
         id: check_ios_secrets
@@ -210,53 +155,6 @@ jobs:
           else
             echo "should_run=true" >> "$GITHUB_OUTPUT"
           fi
-
-      - name: Generate release notes
-        if: ${{ steps.check_ios_secrets.outputs.should_run == 'true' }}
-        id: ios_release_notes
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          if [[ "${GITHUB_REF_TYPE:-}" == "tag" ]]; then
-            VERSION="${GITHUB_REF_NAME#v}"
-          else
-            VERSION="${{ inputs.version }}"
-          fi
-
-          if [[ -z "$VERSION" ]]; then
-            echo "Unable to determine release version"
-            exit 1
-          fi
-
-          CHANGELOG_FILE="CHANGELOG.md"
-          if [[ ! -f "$CHANGELOG_FILE" ]]; then
-            echo "Missing CHANGELOG.md"
-            exit 1
-          fi
-
-          NOTES_FILE="$RUNNER_TEMP/release-notes-ios.txt"
-
-          START_LINE="$(grep -nF "## [$VERSION]" "$CHANGELOG_FILE" | head -n 1 | cut -d: -f1 || true)"
-          if [[ -z "$START_LINE" ]]; then
-            echo "No changelog entry found for version $VERSION in CHANGELOG.md"
-            exit 1
-          fi
-
-          tail -n "+$((START_LINE + 1))" "$CHANGELOG_FILE" \
-            | awk '/^## \[/{exit} {print}' \
-            | sed '/^[[:space:]]*$/d' > "$NOTES_FILE"
-
-          if [[ ! -s "$NOTES_FILE" ]]; then
-            echo "No changelog entry found for version $VERSION in CHANGELOG.md"
-            exit 1
-          fi
-
-          {
-            echo "RELEASE_NOTES<<EOF"
-            cat "$NOTES_FILE"
-            echo "EOF"
-          } >> "$GITHUB_ENV"
 
       - name: Set up Flutter
         if: ${{ steps.check_ios_secrets.outputs.should_run == 'true' }}
@@ -312,7 +210,6 @@ jobs:
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
           APP_STORE_CONNECT_API_PRIVATE_KEY: ${{ secrets.APP_STORE_CONNECT_API_PRIVATE_KEY }}
           IPA_PATH: ../build/ios/ipa/*.ipa
-          RELEASE_NOTES: ${{ env.RELEASE_NOTES }}
         run: |
           cd ios
           bundle exec fastlane "$LANE"

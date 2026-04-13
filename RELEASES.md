@@ -7,7 +7,6 @@ This project supports automated releases with Fastlane and GitHub Actions.
 - Push a tag in the form: vX.Y.Z
 - Example: v1.2.0
 - The workflow also supports manual trigger from GitHub Actions.
-- Manual trigger requires a `version` input that must exist in `CHANGELOG.md`.
 
 ## Release lanes
 
@@ -57,14 +56,3 @@ Build and upload iOS beta:
 - flutter build ipa --release
 - cd ios
 - bundle exec fastlane beta
-
-## Notes
-
-- Keep Android and iOS signing material in GitHub Secrets only.
-- Keep track metadata/screenshots management outside this flow for now.
-- If you use semantic versioning, tag should match the app version policy.
-- Release notes are sourced only from `CHANGELOG.md`.
-- On tag builds, version is read from the tag (for example, `v1.0.0` -> `1.0.0`).
-- On manual builds, version is read from workflow input.
-- If the version section is missing in `CHANGELOG.md`, the workflow fails.
-- The workflow passes notes to Fastlane through the `RELEASE_NOTES` environment variable.
