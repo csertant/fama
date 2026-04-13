@@ -1,5 +1,11 @@
 # Secret
 keystore/
+android/key.properties
+android/release-keystore.jks
+android/fastlane/fama-fastlane-9704c6142956.json
+ios/fastlane/*.p8
+ios/*.mobileprovision
+*.p12
 
 # Generated
 lib/l10n/generated

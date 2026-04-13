@@ -1,0 +1,38 @@
+default_platform(:android)
+
+platform :android do
+  private_lane :release_notes_from_env do
+    notes = (ENV["RELEASE_NOTES"] || "").strip
+    return nil if notes.empty?
+
+    { "en-US" => notes }
+  end
+
+  desc "Upload Android beta to Google Play internal track"
+  lane :beta do
+    release_notes = release_notes_from_env
+    upload_to_play_store(
+      track: "internal",
+      aab: ENV["AAB_PATH"] || "../build/app/outputs/bundle/release/app-release.aab",
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      release_notes: release_notes,
+      release_status: "draft"
+    )
+  end
+
+  desc "Upload Android production release to Google Play production track"
+  lane :production do
+    release_notes = release_notes_from_env
+    upload_to_play_store(
+      track: "production",
+      aab: ENV["AAB_PATH"] || "../build/app/outputs/bundle/release/app-release.aab",
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      release_notes: release_notes,
+      release_status: "completed"
+    )
+  end
+end
