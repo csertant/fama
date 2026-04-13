@@ -56,12 +56,15 @@ jobs:
 
           NOTES_FILE="$RUNNER_TEMP/release-notes-android.txt"
 
-          awk -v version="$VERSION" '
-            BEGIN { in_section=0 }
-            $0 ~ "^## \\\\[" version "\\\\]" { in_section=1; next }
-            /^## / && in_section { exit }
-            in_section { print }
-          ' "$CHANGELOG_FILE" | sed '/^[[:space:]]*$/d' > "$NOTES_FILE"
+          START_LINE="$(grep -nF "## [$VERSION]" "$CHANGELOG_FILE" | head -n 1 | cut -d: -f1 || true)"
+          if [[ -z "$START_LINE" ]]; then
+            echo "No changelog entry found for version $VERSION in CHANGELOG.md"
+            exit 1
+          fi
+
+          tail -n "+$((START_LINE + 1))" "$CHANGELOG_FILE" \
+            | awk '/^## \[/{exit} {print}' \
+            | sed '/^[[:space:]]*$/d' > "$NOTES_FILE"
 
           if [[ ! -s "$NOTES_FILE" ]]; then
             echo "No changelog entry found for version $VERSION in CHANGELOG.md"
@@ -188,12 +191,15 @@ jobs:
 
           NOTES_FILE="$RUNNER_TEMP/release-notes-ios.txt"
 
-          awk -v version="$VERSION" '
-            BEGIN { in_section=0 }
-            $0 ~ "^## \\\\[" version "\\\\]" { in_section=1; next }
-            /^## / && in_section { exit }
-            in_section { print }
-          ' "$CHANGELOG_FILE" | sed '/^[[:space:]]*$/d' > "$NOTES_FILE"
+          START_LINE="$(grep -nF "## [$VERSION]" "$CHANGELOG_FILE" | head -n 1 | cut -d: -f1 || true)"
+          if [[ -z "$START_LINE" ]]; then
+            echo "No changelog entry found for version $VERSION in CHANGELOG.md"
+            exit 1
+          fi
+
+          tail -n "+$((START_LINE + 1))" "$CHANGELOG_FILE" \
+            | awk '/^## \[/{exit} {print}' \
+            | sed '/^[[:space:]]*$/d' > "$NOTES_FILE"
 
           if [[ ! -s "$NOTES_FILE" ]]; then
             echo "No changelog entry found for version $VERSION in CHANGELOG.md"
