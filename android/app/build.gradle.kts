@@ -42,6 +42,7 @@ android {
         create("release") {
             if (keyPropertiesFile.exists()) {
                 storeFile = file(keyProperties.getProperty("storeFile"))
+                keyProperties.getProperty("storeType")?.let { storeType = it }
                 storePassword = keyProperties.getProperty("storePassword")
                 keyAlias = keyProperties.getProperty("keyAlias")
                 keyPassword = keyProperties.getProperty("keyPassword")

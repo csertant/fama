@@ -97,6 +97,22 @@ jobs:
       - name: Install Dart dependencies
         run: flutter pub get
 
+      - name: Check Android release secrets
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          PLAY_STORE_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          set -euo pipefail
+          for key in ANDROID_KEYSTORE_BASE64 ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_ALIAS ANDROID_KEY_PASSWORD PLAY_STORE_SERVICE_ACCOUNT_JSON; do
+            if [ -z "${!key}" ]; then
+              echo "Missing required secret: $key"
+              exit 1
+            fi
+          done
+
       - name: Prepare Android signing
         env:
           ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
@@ -104,10 +120,31 @@ jobs:
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
+          set -euo pipefail
           mkdir -p android/app
-          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/release-keystore.jks
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/release-keystore.jks
+
+          KEYSTORE_PATH="android/app/release-keystore.jks"
+          STORE_TYPE=""
+          if keytool -list -storetype PKCS12 -keystore "$KEYSTORE_PATH" -storepass "$ANDROID_KEYSTORE_PASSWORD" >/dev/null 2>&1; then
+            STORE_TYPE="PKCS12"
+          elif keytool -list -storetype JKS -keystore "$KEYSTORE_PATH" -storepass "$ANDROID_KEYSTORE_PASSWORD" >/dev/null 2>&1; then
+            STORE_TYPE="JKS"
+          else
+            echo "Could not read keystore with provided password as PKCS12 or JKS"
+            exit 1
+          fi
+
+          if ! keytool -list -storetype "$STORE_TYPE" -keystore "$KEYSTORE_PATH" -storepass "$ANDROID_KEYSTORE_PASSWORD" -alias "$ANDROID_KEY_ALIAS" >/dev/null 2>&1; then
+            echo "Keystore alias not found: $ANDROID_KEY_ALIAS"
+            echo "Available aliases:"
+            keytool -list -storetype "$STORE_TYPE" -keystore "$KEYSTORE_PATH" -storepass "$ANDROID_KEYSTORE_PASSWORD" || true
+            exit 1
+          fi
+
           cat > android/key.properties <<EOF
           storeFile=release-keystore.jks
+          storeType=$STORE_TYPE
           storePassword=$ANDROID_KEYSTORE_PASSWORD
           keyAlias=$ANDROID_KEY_ALIAS
           keyPassword=$ANDROID_KEY_PASSWORD
