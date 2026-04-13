@@ -31,6 +31,8 @@ abstract class CustomIcons {
   static const String remove = '$_basePath/remove.svg';
   static const String modify = '$_basePath/modify.svg';
 
+  static const String sendMail = '$_basePath/send_mail.svg';
+
   static const String missingImage = '$_basePath/missing_image.svg';
   static const String error = '$_basePath/error.svg';
 }

@@ -8,6 +8,7 @@ import '../../l10n/generated/app_localizations.dart';
 import '../../l10n/utils.dart';
 import '../core/widgets/widgets.dart';
 import 'settings_viewmodel.dart';
+import 'widgets/settings_contacts.dart';
 import 'widgets/settings_profiles_group.dart';
 import 'widgets/settings_radio_group.dart';
 
@@ -127,6 +128,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       }
                     },
                   ),
+                  const SettingsContacts(),
                 ],
               ),
             );
