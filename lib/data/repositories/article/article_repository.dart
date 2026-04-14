@@ -30,5 +30,12 @@ abstract class ArticleRepository {
     required final Id articleId,
   });
 
+  Future<Result<void>> removeArticles({
+    required final Id profileId,
+    required final bool isRead,
+    required final bool isSaved,
+    required final DateTime before,
+  });
+
   Future<Result<void>> syncArticlesForProfile({required Id profileId});
 }

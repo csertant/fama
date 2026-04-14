@@ -56,7 +56,12 @@ abstract class LocalDataService {
 
   Future<Result<void>> markArticleAsUnsaved({required Id articleId});
 
-  Future<Result<void>> removeOldReadArticles({required DateTime before});
+  Future<Result<void>> removeArticles({
+    required Id profileId,
+    required bool isRead,
+    required bool isSaved,
+    required DateTime before,
+  });
 
   Stream<List<Article>> watchUnreadArticles({required final Id profileId});
 

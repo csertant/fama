@@ -300,11 +300,17 @@ class AppDatabase extends _$AppDatabase {
     );
   }
 
-  Future<void> deleteOldReadArticles({required DateTime before}) {
+  Future<void> deleteArticles({
+    required final Id profileId,
+    required final bool isRead,
+    required final bool isSaved,
+    required final DateTime before,
+  }) {
     return (delete(articles)..where(
           (a) =>
-              a.isRead.equals(true) &
-              a.isSaved.equals(false) &
+              a.profileId.equals(profileId) &
+              a.isRead.equals(isRead) &
+              a.isSaved.equals(isSaved) &
               a.publishedAt.isSmallerThanValue(before),
         ))
         .go();

@@ -80,6 +80,21 @@ class ArticleRepositoryLocal implements ArticleRepository {
   }
 
   @override
+  Future<Result<void>> removeArticles({
+    required final Id profileId,
+    required final bool isRead,
+    required final bool isSaved,
+    required final DateTime before,
+  }) {
+    return _localDataService.removeArticles(
+      profileId: profileId,
+      isRead: isRead,
+      isSaved: isSaved,
+      before: before,
+    );
+  }
+
+  @override
   Future<Result<void>> syncArticlesForProfile({required Id profileId}) async {
     final sourcesResult = await _localDataService.getSourcesForProfile(
       profileId: profileId,

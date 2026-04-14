@@ -3,6 +3,7 @@ export 'command_feedback.dart';
 export 'custom_app_bar.dart';
 export 'custom_badge.dart';
 export 'custom_card.dart';
+export 'custom_date_picker.dart';
 export 'custom_dismissible_action.dart';
 export 'custom_divider.dart';
 export 'custom_error_banner.dart';

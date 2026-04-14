@@ -128,7 +128,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       }
                     },
                   ),
-                  const SettingsContacts(),
+                  SettingsAction(
+                    title: localizations.settingsTrashTitle,
+                    subtitle: localizations.settingsTrashSubtitle,
+                    action: CustomIconButton.normal(
+                      icon: CustomIcons.trash,
+                      tooltip: localizations.settingsTrashEmptyLabel,
+                      onTap: _showRemoveArticlesModal,
+                    ),
+                  ),
+                  SettingsAction(
+                    title: localizations.settingsContactTitle,
+                    subtitle: localizations.settingsContactSubtitle,
+                    action: CustomIconButton.redirectExternal(
+                      icon: CustomIcons.sendMail,
+                      url: 'mailto:nosebitestudios@gmail.com',
+                      tooltip: localizations.settingsContactEmailLabel,
+                    ),
+                  ),
                 ],
               ),
             );
@@ -264,6 +281,68 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           : (value) => isDefaultController.value = value,
                     );
                   },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _showRemoveArticlesModal() async {
+    final isReadController = ValueNotifier<bool>(false);
+    final isSavedController = ValueNotifier<bool>(false);
+    final beforeController = ValueNotifier<DateTime?>(null);
+    final localizations = AppLocalizations.of(context)!;
+
+    await showCustomModalSheet<void>(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return CustomModalSheet(
+              listenable: widget.viewModel.removeArticles,
+              title: localizations.settingsTrashTitle,
+              actionLabel: localizations.settingsTrashEmptyLabel,
+              onAction: () async {
+                await widget.viewModel.removeArticles.execute(
+                  isReadController.value,
+                  isSavedController.value,
+                  beforeController.value,
+                );
+                if (widget.viewModel.removeArticles.completed &&
+                    context.mounted) {
+                  widget.viewModel.removeArticles.clearResult();
+                  Navigator.of(context).pop();
+                }
+              },
+              isLoading: widget.viewModel.removeArticles.running,
+              childrenBuilder: (context) => [
+                ValueListenableBuilder(
+                  valueListenable: isReadController,
+                  builder: (context, value, _) {
+                    return CustomSwitch(
+                      label: localizations.settingsTrashOptionRead,
+                      value: isReadController.value,
+                      onChanged: (value) => isReadController.value = value,
+                    );
+                  },
+                ),
+                ValueListenableBuilder(
+                  valueListenable: isSavedController,
+                  builder: (context, value, _) {
+                    return CustomSwitch(
+                      label: localizations.settingsTrashOptionSaved,
+                      value: isSavedController.value,
+                      onChanged: (value) => isSavedController.value = value,
+                    );
+                  },
+                ),
+                CustomDatePicker(
+                  label: localizations.settingsTrashOptionBefore,
+                  value: beforeController.value,
+                  onChanged: (date) => beforeController.value = date,
                 ),
               ],
             );

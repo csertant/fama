@@ -152,8 +152,20 @@ class LocalDataServiceProd implements LocalDataService {
   }
 
   @override
-  Future<Result<void>> removeOldReadArticles({required DateTime before}) {
-    return guardVoid(() => _database.deleteOldReadArticles(before: before));
+  Future<Result<void>> removeArticles({
+    required Id profileId,
+    required bool isRead,
+    required bool isSaved,
+    required DateTime before,
+  }) {
+    return guardVoid(
+      () => _database.deleteArticles(
+        profileId: profileId,
+        isRead: isRead,
+        isSaved: isSaved,
+        before: before,
+      ),
+    );
   }
 
   @override

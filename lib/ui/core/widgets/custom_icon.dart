@@ -28,8 +28,9 @@ abstract class CustomIcons {
   static const String share = '$_basePath/share.svg';
 
   static const String add = '$_basePath/add.svg';
-  static const String remove = '$_basePath/remove.svg';
   static const String modify = '$_basePath/modify.svg';
+  static const String remove = '$_basePath/remove.svg';
+  static const String trash = '$_basePath/trash.svg';
 
   static const String sendMail = '$_basePath/send_mail.svg';
 

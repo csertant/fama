@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../../data/database/database.dart';
 import '../../data/managers/session/session_manager.dart';
+import '../../data/repositories/article/article_repository.dart';
 import '../../data/repositories/profile/profile_repository.dart';
 import '../../data/repositories/settings/settings_repository.dart';
 import '../../data/services/shared_preferences_service/app_settings.dart';
@@ -15,11 +16,13 @@ import '../../utils/utils.dart';
 
 class SettingsViewModel extends ChangeNotifier {
   SettingsViewModel({
-    required SettingsRepository settingsRepository,
     required ProfileRepository profileRepository,
+    required ArticleRepository articleRepository,
+    required SettingsRepository settingsRepository,
     required SessionManager sessionManager,
-  }) : _settingsRepository = settingsRepository,
-       _profileRepository = profileRepository,
+  }) : _profileRepository = profileRepository,
+       _articleRepository = articleRepository,
+       _settingsRepository = settingsRepository,
        _sessionManager = sessionManager {
     load = Command0(_load);
     updateTheme = Command1(_updateTheme);
@@ -28,6 +31,7 @@ class SettingsViewModel extends ChangeNotifier {
     modifyProfile = Command1(_modifyProfile);
     removeProfile = Command1(_removeProfile);
     switchProfile = Command1(_switchProfile);
+    removeArticles = Command3(_removeArticles);
 
     _settingsRepository.addListener(notifyListeners);
     _sessionManager.addListener(notifyListeners);
@@ -42,6 +46,7 @@ class SettingsViewModel extends ChangeNotifier {
   }
 
   final ProfileRepository _profileRepository;
+  final ArticleRepository _articleRepository;
   final SettingsRepository _settingsRepository;
   final SessionManager _sessionManager;
   late final StreamSubscription<List<Profile>> _profilesSubscription;
@@ -55,6 +60,7 @@ class SettingsViewModel extends ChangeNotifier {
   late Command1<void, Profile> modifyProfile;
   late Command1<void, Profile> removeProfile;
   late Command1<void, Profile> switchProfile;
+  late Command3<void, bool, bool, DateTime?> removeArticles;
 
   AppSettings get appSettings => _settingsRepository.appSettings;
   ThemeMode get theme => appSettings.theme;
@@ -130,6 +136,23 @@ class SettingsViewModel extends ChangeNotifier {
         );
       }
       return removeResult;
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  Future<Result<void>> _removeArticles(
+    final bool isRead,
+    final bool isSaved,
+    final DateTime? before,
+  ) {
+    try {
+      return _articleRepository.removeArticles(
+        profileId: _sessionManager.profileId!,
+        isRead: isRead,
+        isSaved: isSaved,
+        before: before ?? AppDateTimeUtils.oneMonthAgo(),
+      );
     } finally {
       notifyListeners();
     }

@@ -91,9 +91,10 @@ GoRouter router() => GoRouter(
               path: Routes.settings,
               builder: (context, state) {
                 final viewModel = SettingsViewModel(
-                  sessionManager: context.read<SessionManager>(),
                   profileRepository: context.read<ProfileRepository>(),
+                  articleRepository: context.read<ArticleRepository>(),
                   settingsRepository: context.read<SettingsRepository>(),
+                  sessionManager: context.read<SessionManager>(),
                 );
                 return SettingsScreen(viewModel: viewModel);
               },

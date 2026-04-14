@@ -186,7 +186,12 @@ class LocalDataServiceDev implements LocalDataService {
   }
 
   @override
-  Future<Result<void>> removeOldReadArticles({required DateTime before}) async {
+  Future<Result<void>> removeArticles({
+    required Id profileId,
+    required bool isRead,
+    required bool isSaved,
+    required DateTime before,
+  }) async {
     return const Result.ok(null);
   }
 
