@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.0] - 2026-04-15
+
+### Added
+
+- Added immediate actions on empty states in the app, such as prompts to add sources or explore content when no items are available.
+- Free up space section now shows database size .
+
 ## [1.0.0-rc.3] - 2026-04-14
 
 ### Added
