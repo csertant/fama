@@ -30,7 +30,12 @@ class SettingsAction extends StatelessWidget {
               action,
             ],
           ),
-          Text(subtitle, style: theme.textTheme.bodyMedium),
+          Text(
+            subtitle,
+            style: theme.textTheme.bodyMedium,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
         ],
       ),
     );

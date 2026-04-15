@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../data/services/shared_preferences_service/app_settings.dart';
@@ -79,4 +81,13 @@ String mapGenreToString(final BuildContext context, final String genre) {
     default:
       return localizations.filtersCategoryOptionUnknown;
   }
+}
+
+String formatBytesAsFileSize(final int bytes) {
+  if (bytes <= 0) {
+    return '0 B';
+  }
+  const suffixes = ['B', 'KB', 'MB', 'GB'];
+  final i = (math.log(bytes) / math.log(1024)).floor();
+  return '${(bytes / math.pow(1024, i)).toStringAsFixed(2)} ${suffixes[i]}';
 }

@@ -82,7 +82,15 @@
     "settingsLanguageOptionEnglish": "angol",
     "settingsLanguageOptionUnknown": "ismeretlen",
     "settingsTrashTitle": "lomtalanítás",
-    "settingsTrashSubtitle": "törölj cikkeket, ha helyet szeretnél felszabadítani",
+    "settingsTrashSubtitle": "törölj cikkeket, ha helyet szeretnél felszabadítani. jelenleg foglalt: {currentSize}",
+    "@settingsTrashSubtitle": {
+        "placeholders": {
+            "currentSize": {
+                "type": "String",
+                "example": "150 MB"
+            }
+        }
+    },
     "settingsTrashOptionRead": "olvasott cikkek",
     "settingsTrashOptionSaved": "elmentett cikkek",
     "settingsTrashOptionBefore": "megadott dátum előtt",

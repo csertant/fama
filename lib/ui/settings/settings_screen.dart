@@ -130,7 +130,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   SettingsAction(
                     title: localizations.settingsTrashTitle,
-                    subtitle: localizations.settingsTrashSubtitle,
+                    subtitle: localizations.settingsTrashSubtitle(
+                      formatBytesAsFileSize(widget.viewModel.databaseSize),
+                    ),
                     action: CustomIconButton.normal(
                       icon: CustomIcons.trash,
                       tooltip: localizations.settingsTrashEmptyLabel,

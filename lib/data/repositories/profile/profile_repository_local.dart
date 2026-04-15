@@ -17,6 +17,11 @@ class ProfileRepositoryLocal implements ProfileRepository {
   );
 
   @override
+  Future<Result<int>> getDatabaseSize() {
+    return _localDataService.getDatabaseSize();
+  }
+
+  @override
   Future<Result<Profile>> getDefaultProfile() async {
     final result = await _localDataService.getDefaultProfile();
     switch (result) {

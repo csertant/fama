@@ -52,6 +52,7 @@ class SettingsViewModel extends ChangeNotifier {
   late final StreamSubscription<List<Profile>> _profilesSubscription;
 
   List<Profile> _profiles = [];
+  int _databaseSize = 0;
 
   late Command0<void> load;
   late Command1<void, ThemeMode> updateTheme;
@@ -71,9 +72,14 @@ class SettingsViewModel extends ChangeNotifier {
   List<Profile> get profiles => UnmodifiableListView(_profiles);
   List<Locale> get availableLocales => AppLocalizations.supportedLocales;
   List<ThemeMode> get availableThemes => ThemeMode.values;
+  int get databaseSize => _databaseSize;
 
   Future<Result<void>> _load() async {
     try {
+      final databaseSizeResult = await _profileRepository.getDatabaseSize();
+      if (databaseSizeResult is Ok<int>) {
+        _databaseSize = databaseSizeResult.value;
+      }
       return await _settingsRepository.load();
     } finally {
       notifyListeners();

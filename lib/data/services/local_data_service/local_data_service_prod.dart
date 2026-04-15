@@ -7,6 +7,11 @@ class LocalDataServiceProd implements LocalDataService {
 
   final AppDatabase _database;
 
+  @override
+  Future<Result<int>> getDatabaseSize() {
+    return guard(_database.getDatabaseSize);
+  }
+
   // ---- Session management ----
 
   @override

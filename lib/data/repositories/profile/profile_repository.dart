@@ -2,6 +2,8 @@ import '../../../utils/utils.dart';
 import '../../database/database.dart';
 
 abstract class ProfileRepository {
+  Future<Result<int>> getDatabaseSize();
+
   Future<Result<Profile>> getDefaultProfile();
 
   Stream<List<Profile>> watchProfiles();

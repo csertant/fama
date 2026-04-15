@@ -82,7 +82,15 @@
     "settingsLanguageOptionEnglish": "english",
     "settingsLanguageOptionUnknown": "unknown",
     "settingsTrashTitle": "trash",
-    "settingsTrashSubtitle": "delete articles to free up space",
+    "settingsTrashSubtitle": "delete articles to free up space. currently occupied: {currentSize}",
+    "@settingsTrashSubtitle": {
+        "placeholders": {
+            "currentSize": {
+                "type": "String",
+                "example": "150 MB"
+            }
+        }
+    },
     "settingsTrashOptionRead": "read articles",
     "settingsTrashOptionSaved": "saved articles",
     "settingsTrashOptionBefore": "before a specific date",

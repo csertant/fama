@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
+import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
 import '../../utils/types.dart';
@@ -91,7 +94,7 @@ class AppDatabase extends _$AppDatabase {
     return driftDatabase(
       name: 'fama',
       native: const DriftNativeOptions(
-        databaseDirectory: getApplicationSupportDirectory,
+        databaseDirectory: getApplicationDocumentsDirectory,
       ),
     );
   }
@@ -150,6 +153,17 @@ class AppDatabase extends _$AppDatabase {
   }
 
   // ---- Methods ----
+
+  Future<int> getDatabaseSize() async {
+    final databaseFolder = await getApplicationDocumentsDirectory();
+    final databaseFile = File(path.join(databaseFolder.path, 'fama.sqlite'));
+    if (await databaseFile.exists()) {
+      final bytes = await databaseFile.length();
+      return bytes;
+    }
+    return 0;
+  }
+
   // ---- Session management ----
 
   Future<Session?> getSession() {

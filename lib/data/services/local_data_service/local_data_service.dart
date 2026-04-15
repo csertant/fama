@@ -2,6 +2,8 @@ import '../../../utils/utils.dart';
 import '../../database/database.dart';
 
 abstract class LocalDataService {
+  Future<Result<int>> getDatabaseSize();
+
   Future<Result<Session>> getSession();
 
   Future<Result<void>> saveSession({required final SessionsCompanion session});

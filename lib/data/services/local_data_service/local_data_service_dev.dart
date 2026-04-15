@@ -49,6 +49,11 @@ final List<Article> exampleArticles = List.generate(
 
 class LocalDataServiceDev implements LocalDataService {
   @override
+  Future<Result<int>> getDatabaseSize() async {
+    return const Result.ok(1230000);
+  }
+
+  @override
   Future<Result<Session>> getSession() async {
     return const Result.ok(Session(id: 1, profileId: 1));
   }
