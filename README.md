@@ -3,6 +3,8 @@
 fama is a cross-platform news reader built with Flutter. It helps users discover RSS sources, build a personalized feed, save articles for later, and keep reading across devices and platforms.
 
 ![GitHub Release](https://img.shields.io/github/v/release/csertant/fama)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/csertant/fama/release.yaml?label=release)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/csertant/fama/test.yaml?label=test)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ## Project Scope
