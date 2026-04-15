@@ -5,9 +5,14 @@ import '../themes/dimensions.dart';
 import 'widgets.dart';
 
 class CustomErrorBanner extends StatelessWidget {
-  const CustomErrorBanner({super.key, required this.message});
+  const CustomErrorBanner({
+    super.key,
+    required this.message,
+    this.iconPath = CustomIcons.error,
+  });
 
   final String message;
+  final String iconPath;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +27,7 @@ class CustomErrorBanner extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         spacing: AppDimensions.borderRadiusMedium,
         children: [
-          const CustomIcon(iconPath: CustomIcons.noInternet),
+          CustomIcon(iconPath: iconPath),
           Text(
             message,
             textAlign: TextAlign.center,

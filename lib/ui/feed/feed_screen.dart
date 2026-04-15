@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../data/services/connectivity_service/connectivity_service.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../l10n/utils.dart';
+import '../../routing/routes.dart';
 import '../core/themes/colors.dart';
 import '../core/themes/dimensions.dart';
 import '../core/widgets/widgets.dart';
@@ -68,7 +69,10 @@ class _FeedScreenState extends State<FeedScreen> {
       body: Column(
         children: [
           if (connectivityService.isOffline)
-            CustomErrorBanner(message: localizations.noInternetConnectionTitle),
+            CustomErrorBanner(
+              message: localizations.noInternetConnectionTitle,
+              iconPath: CustomIcons.noInternet,
+            ),
           Expanded(
             child: ListenableBuilder(
               listenable: widget.viewModel.load,
@@ -97,13 +101,23 @@ class _FeedScreenState extends State<FeedScreen> {
                           itemCount: widget.viewModel.filteredArticles.length,
                           itemBuilder: _buildArticleCard,
                         )
-                      : Center(
-                          child: Text(
-                            widget.viewModel.articles.isEmpty
-                                ? localizations.feedEmptyLabel
-                                : localizations.filtersNoMatchesLabel,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
+                      : CustomPlaceholder(
+                          message: widget.viewModel.articles.isEmpty
+                              ? localizations.feedEmptyLabel
+                              : localizations.filtersNoMatchesLabel,
+                          action: widget.viewModel.articles.isEmpty
+                              ? CustomIconButton.redirectInApp(
+                                  context: context,
+                                  icon: CustomIcons.add,
+                                  route: Routes.explore,
+                                  tooltip:
+                                      localizations.exploreAddCustomSourceTitle,
+                                )
+                              : CustomIconButton.normal(
+                                  icon: CustomIcons.remove,
+                                  onTap: widget.viewModel.clearFilters,
+                                  tooltip: localizations.filtersActionLabel,
+                                ),
                         );
                 },
               ),

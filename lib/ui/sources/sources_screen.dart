@@ -59,7 +59,10 @@ class _SourcesScreenState extends State<SourcesScreen> {
       body: Column(
         children: [
           if (connectivityService.isOffline)
-            CustomErrorBanner(message: localizations.noInternetConnectionTitle),
+            CustomErrorBanner(
+              message: localizations.noInternetConnectionTitle,
+              iconPath: CustomIcons.noInternet,
+            ),
           Expanded(
             child: ListenableBuilder(
               listenable: widget.viewModel.load,
@@ -89,10 +92,13 @@ class _SourcesScreenState extends State<SourcesScreen> {
                           separatorBuilder: (context, index) =>
                               const CustomDivider(),
                         )
-                      : Center(
-                          child: Text(
-                            localizations.sourcesEmptyLabel,
-                            style: Theme.of(context).textTheme.bodyMedium,
+                      : CustomPlaceholder(
+                          message: localizations.sourcesEmptyLabel,
+                          action: CustomIconButton.redirectInApp(
+                            context: context,
+                            icon: CustomIcons.add,
+                            route: Routes.explore,
+                            tooltip: localizations.navigationLabelExplore,
                           ),
                         );
                 },

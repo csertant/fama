@@ -59,7 +59,10 @@ class _SavedScreenState extends State<SavedScreen> {
       body: Column(
         children: [
           if (connectivityService.isOffline)
-            CustomErrorBanner(message: localizations.noInternetConnectionTitle),
+            CustomErrorBanner(
+              message: localizations.noInternetConnectionTitle,
+              iconPath: CustomIcons.noInternet,
+            ),
           Expanded(
             child: ListenableBuilder(
               listenable: widget.viewModel.load,
@@ -88,13 +91,17 @@ class _SavedScreenState extends State<SavedScreen> {
                               widget.viewModel.filteredSavedArticles.length,
                           itemBuilder: _buildArticleCard,
                         )
-                      : Center(
-                          child: Text(
-                            widget.viewModel.savedArticles.isEmpty
-                                ? localizations.savedEmptyLabel
-                                : localizations.filtersNoMatchesLabel,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
+                      : CustomPlaceholder(
+                          message: widget.viewModel.savedArticles.isEmpty
+                              ? localizations.savedEmptyLabel
+                              : localizations.filtersNoMatchesLabel,
+                          action: widget.viewModel.savedArticles.isNotEmpty
+                              ? CustomIconButton.normal(
+                                  icon: CustomIcons.remove,
+                                  onTap: widget.viewModel.clearFilters,
+                                  tooltip: localizations.filtersActionLabel,
+                                )
+                              : null,
                         );
                 },
               ),

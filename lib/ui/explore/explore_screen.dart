@@ -66,7 +66,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
       body: Column(
         children: [
           if (connectivityService.isOffline)
-            CustomErrorBanner(message: localizations.noInternetConnectionTitle),
+            CustomErrorBanner(
+              message: localizations.noInternetConnectionTitle,
+              iconPath: CustomIcons.noInternet,
+            ),
           Expanded(
             child: ListenableBuilder(
               listenable: widget.viewModel.load,
@@ -115,13 +118,25 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           separatorBuilder: (context, index) =>
                               const CustomDivider(),
                         )
-                      : Center(
-                          child: Text(
-                            widget.viewModel.sourceRecommendations.isEmpty
-                                ? localizations.exploreEmptyLabel
-                                : localizations.filtersNoMatchesLabel,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
+                      : CustomPlaceholder(
+                          message:
+                              widget.viewModel.sourceRecommendations.isEmpty
+                              ? localizations.exploreEmptyLabel
+                              : localizations.filtersNoMatchesLabel,
+                          action: widget.viewModel.sourceRecommendations.isEmpty
+                              ? CustomIconButton.normal(
+                                  icon: CustomIcons.add,
+                                  onTap: () =>
+                                      _showSubscribeToCustomSourceModal(
+                                        context,
+                                      ),
+                                  tooltip: localizations.navigationLabelExplore,
+                                )
+                              : CustomIconButton.normal(
+                                  icon: CustomIcons.remove,
+                                  onTap: widget.viewModel.clearFilters,
+                                  tooltip: localizations.filtersActionLabel,
+                                ),
                         );
                 },
               ),
