@@ -1,6 +1,8 @@
-# fama
+<p align="center">
+	<img src="assets/images/logo.svg" alt="fáma logo" width="320" />
+</p>
 
-fama is a cross-platform news reader built with Flutter. It helps users discover RSS sources, build a personalized feed, save articles for later, and keep reading across devices and platforms.
+fáma is a cross-platform news reader built with Flutter. It helps users discover RSS sources, build a personalized feed, save articles for later, and keep reading across devices and platforms.
 
 ![GitHub Release](https://img.shields.io/github/v/release/csertant/fama)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/csertant/fama/release.yaml?label=release)
@@ -79,16 +81,17 @@ flutter run --target lib/main.dart
 flutter run --target lib/main_dev.dart
 ```
 
-## Issues and Contact
+## Contribution Opportunities
 
-If you find a bug, want to request a feature, or have a question:
+Want to contribute? The easiest way is to open an issue using one of the templates:
 
-1. Open the repository Issues tab.
-2. Create a new issue with:
-	- A clear title
-	- Steps to reproduce (for bugs)
-	- Expected vs. actual behavior
-	- Device/platform details (for example: Android, iOS, Web)
+- Report a bug: [Bug report template](https://github.com/csertant/fama/issues/new?template=bug_report.yml)
+- Suggest an improvement: [Feature request template](https://github.com/csertant/fama/issues/new?template=feature_request.yml)
+- Browse all options: [Open issue templates](https://github.com/csertant/fama/issues/new/choose)
+
+Before opening a new issue, please search existing issues to avoid duplicates.
+
+## Contact
 
 For direct contact, email:
 

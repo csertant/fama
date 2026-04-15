@@ -1,0 +1,88 @@
+name: Feature request
+description: Suggest an idea to improve fama.
+title: "feat: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for sharing your idea.
+        Clear, concrete requests are easier to evaluate and implement.
+
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: Short title for the request.
+      placeholder: Add offline reading mode for saved articles.
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What user problem does this solve?
+      placeholder: I often lose connectivity while commuting and cannot continue reading.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_solution
+    attributes:
+      label: Proposed solution
+      description: Describe your preferred approach.
+      placeholder: Cache article content for saved items and show an offline indicator.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other solutions or workarounds you have tried.
+
+  - type: dropdown
+    id: impact_area
+    attributes:
+      label: Impact area
+      description: Which area is most related?
+      multiple: true
+      options:
+        - Feed and reading
+        - Source discovery
+        - Saved articles
+        - Profiles and settings
+        - Performance
+        - Localization
+        - Accessibility
+        - Developer experience
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this for your workflow?
+      options:
+        - Nice to have
+        - Important
+        - Critical
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Mockups, links, references, or examples from similar apps.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues and did not find a duplicate.
+          required: true
+        - label: This request describes a single, focused improvement.
+          required: true
