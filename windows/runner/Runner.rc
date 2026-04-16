@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "fama" "\0"
+            VALUE "CompanyName", "nosebite studios" "\0"
             VALUE "FileDescription", "fama" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "fama" "\0"
+            VALUE "InternalName", "fáma" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2026 tamas.csertan. All rights reserved." "\0"
             VALUE "OriginalFilename", "fama.exe" "\0"
-            VALUE "ProductName", "fama" "\0"
+            VALUE "ProductName", "fáma" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
