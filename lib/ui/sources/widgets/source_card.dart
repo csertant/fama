@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../data/database/database.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/datetime.dart';
+import '../../core/themes/dimensions.dart';
 import '../../core/widgets/widgets.dart';
 
 class SourceCard extends StatelessWidget {
@@ -19,30 +20,48 @@ class SourceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
+    final imageOrPlaceholder = CustomCachedNetworkImage(
+      imageUrl: source.iconUrl ?? '',
+      placeholderIconPath: CustomIcons.sources,
+    );
     final descriptionOrPlaceholder =
         source.description != null && source.description!.isNotEmpty
         ? source.description!
         : localizations.sourceCardNoDescriptionLabel;
-
-    return CustomCard(
-      headline: source.url,
-      actions: [
-        CustomIconButton.normal(
-          onTap: onRemoveSource,
-          icon: CustomIcons.remove,
-          tooltip: localizations.sourceCardLabelRemove,
-        ),
-      ],
-      title: source.name,
-      titleUrl: source.siteUrl,
-      description: descriptionOrPlaceholder,
-      metadata: [
-        localizations.sourceCardLastSyncTitle,
-        if (source.lastSyncedAt != null)
-          AppDateFormat.dateTime.format(source.lastSyncedAt!)
-        else
-          localizations.sourceCardNotSyncedYetLabel,
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(AppDimensions.paddingMedium),
+      child: Row(
+        spacing: AppDimensions.paddingMedium,
+        children: [
+          SizedBox(
+            width: AppDimensions.sourceImageSize,
+            child: imageOrPlaceholder,
+          ),
+          Expanded(
+            child: CustomCard(
+              padding: EdgeInsets.zero,
+              headline: source.url,
+              actions: [
+                CustomIconButton.normal(
+                  onTap: onRemoveSource,
+                  icon: CustomIcons.remove,
+                  tooltip: localizations.sourceCardLabelRemove,
+                ),
+              ],
+              title: source.name,
+              titleUrl: source.siteUrl,
+              description: descriptionOrPlaceholder,
+              metadata: [
+                localizations.sourceCardLastSyncTitle,
+                if (source.lastSyncedAt != null)
+                  AppDateFormat.dateTime.format(source.lastSyncedAt!)
+                else
+                  localizations.sourceCardNotSyncedYetLabel,
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -25,7 +25,7 @@ class CustomErrorBanner extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        spacing: AppDimensions.borderRadiusMedium,
+        spacing: AppDimensions.paddingMedium,
         children: [
           CustomIcon(iconPath: iconPath),
           Text(

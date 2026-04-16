@@ -176,8 +176,6 @@ class ExploreViewModel extends ChangeNotifier {
         );
       }
       return await _sourceRepository.saveSource(profileId: profileId, url: url);
-    } on Exception catch (e) {
-      return Result.error(AppException.fromError(e));
     } finally {
       notifyListeners();
     }

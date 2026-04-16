@@ -114,8 +114,10 @@ class _SavedScreenState extends State<SavedScreen> {
 
   Widget _buildArticleCard(BuildContext context, int index) {
     final article = widget.viewModel.filteredSavedArticles[index];
-    return ArticleCard.headingImage(
+    final layout = AppDimensions.of(context).articleCardLayout;
+    return ArticleCard(
       article: article,
+      layout: layout,
       onConfirmDismissArticle: (direction) async {
         switch (direction) {
           case DismissDirection.startToEnd:

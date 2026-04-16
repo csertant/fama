@@ -2,6 +2,7 @@ export 'article_card.dart';
 export 'command_feedback.dart';
 export 'custom_app_bar.dart';
 export 'custom_badge.dart';
+export 'custom_cached_network_image.dart';
 export 'custom_card.dart';
 export 'custom_date_picker.dart';
 export 'custom_dismissible_action.dart';

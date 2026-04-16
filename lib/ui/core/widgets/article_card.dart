@@ -1,4 +1,3 @@
-import 'package:cached_network_image_ce/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../data/database/database.dart';
@@ -10,29 +9,14 @@ import 'widgets.dart';
 enum ArticleCardLayout { leadingImage, headingImage, normal }
 
 class ArticleCard extends StatelessWidget {
-  const ArticleCard.leadingImage({
+  const ArticleCard({
     super.key,
     required this.article,
+    required this.layout,
     required this.onConfirmDismissArticle,
     required this.dismissibleActionLeft,
     required this.dismissibleActionRight,
-  }) : layout = ArticleCardLayout.leadingImage;
-
-  const ArticleCard.headingImage({
-    super.key,
-    required this.article,
-    required this.onConfirmDismissArticle,
-    required this.dismissibleActionLeft,
-    required this.dismissibleActionRight,
-  }) : layout = ArticleCardLayout.headingImage;
-
-  const ArticleCard.normal({
-    super.key,
-    required this.article,
-    required this.onConfirmDismissArticle,
-    required this.dismissibleActionLeft,
-    required this.dismissibleActionRight,
-  }) : layout = ArticleCardLayout.normal;
+  });
 
   final Article article;
   final ArticleCardLayout layout;
@@ -49,58 +33,61 @@ class ArticleCard extends StatelessWidget {
       confirmDismiss: onConfirmDismissArticle,
       background: dismissibleActionLeft,
       secondaryBackground: dismissibleActionRight,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(AppDimensions.paddingMedium),
-          child: _buildCard(context, layout),
-        ),
+      child: Padding(
+        padding: const EdgeInsets.all(AppDimensions.paddingMedium),
+        child: _buildCard(context, layout),
       ),
     );
   }
 
   Widget _buildCard(BuildContext context, ArticleCardLayout layout) {
-    const placeholder = CustomIcon(
-      iconPath: CustomIcons.missingImage,
-      size: AppDimensions.iconSizeMedium,
+    final imageOrPlaceholder = CustomCachedNetworkImage(
+      imageUrl: article.imageUrl ?? '',
+      placeholderIconPath: CustomIcons.missingImage,
     );
-    final imageOrPlaceholder = article.imageUrl != null
-        ? CachedNetworkImage(
-            imageUrl: article.imageUrl!,
-            fit: BoxFit.cover,
-            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                Center(
-                  child: CircularProgressIndicator(
-                    value: downloadProgress.progress,
-                  ),
-                ),
-            errorBuilder: (context, url, error) => placeholder,
-          )
-        : placeholder;
     switch (layout) {
       case ArticleCardLayout.leadingImage:
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: AppDimensions.leadingImageWidth,
-              child: imageOrPlaceholder,
-            ),
-            const SizedBox(width: AppDimensions.paddingMedium),
-            Expanded(child: _buildTextContent(context)),
-          ],
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final screenWidth = MediaQuery.sizeOf(context).width;
+            final availableWidth = constraints.maxWidth.isFinite
+                ? constraints.maxWidth
+                : screenWidth;
+            final imageWidth =
+                (availableWidth * AppDimensions.leadingImageWidthRatio).clamp(
+                  AppDimensions.leadingImageMinWidth,
+                  AppDimensions.leadingImageMaxWidth,
+                );
+            return Row(
+              spacing: AppDimensions.paddingMedium,
+              children: [
+                SizedBox(width: imageWidth, child: imageOrPlaceholder),
+                Expanded(child: _buildTextContent(context)),
+              ],
+            );
+          },
         );
       case ArticleCardLayout.headingImage:
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: double.infinity,
-              height: AppDimensions.headingImageHeight,
-              child: imageOrPlaceholder,
-            ),
-            const SizedBox(height: AppDimensions.paddingSmall),
-            _buildTextContent(context),
-          ],
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final screenWidth = MediaQuery.sizeOf(context).width;
+            final imageWidth = constraints.maxWidth.isFinite
+                ? constraints.maxWidth
+                : screenWidth;
+            final imageHeight =
+                imageWidth / AppDimensions.headingImageAspectRatio;
+            return Column(
+              spacing: AppDimensions.paddingSmall,
+              children: [
+                SizedBox(
+                  width: imageWidth,
+                  height: imageHeight,
+                  child: imageOrPlaceholder,
+                ),
+                _buildTextContent(context),
+              ],
+            );
+          },
         );
       case ArticleCardLayout.normal:
         return _buildTextContent(context);

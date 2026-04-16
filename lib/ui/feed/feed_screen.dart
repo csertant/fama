@@ -49,10 +49,7 @@ class _FeedScreenState extends State<FeedScreen> {
     final connectivityService = context.watch<ConnectivityService>();
     return Scaffold(
       appBar: CustomAppBar(
-        leading: const CustomIcon(
-          iconPath: CustomIcons.appIcon,
-          size: AppDimensions.iconSizeMedium,
-        ),
+        leading: const CustomIcon(iconPath: CustomIcons.appIcon),
         actions: [
           CustomIconButton.normal(
             icon: CustomIcons.refresh,
@@ -130,8 +127,10 @@ class _FeedScreenState extends State<FeedScreen> {
 
   Widget _buildArticleCard(BuildContext context, int index) {
     final article = widget.viewModel.filteredArticles[index];
-    return ArticleCard.headingImage(
+    final layout = AppDimensions.of(context).articleCardLayout;
+    return ArticleCard(
       article: article,
+      layout: layout,
       onConfirmDismissArticle: (direction) async {
         switch (direction) {
           case DismissDirection.startToEnd:

@@ -47,8 +47,6 @@ class BootstrapViewModel extends ChangeNotifier {
         case Error<Profile>(error: final error):
           return Result.error(error);
       }
-    } on Exception catch (e) {
-      return Result.error(AppException.fromError(e));
     } finally {
       notifyListeners();
     }
