@@ -7,7 +7,7 @@ fáma is a cross-platform news reader built with Flutter. It helps users discove
 ![GitHub Release](https://img.shields.io/github/v/release/csertant/fama)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/csertant/fama/release-android.yaml?label=release-android)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/csertant/fama/release-ios.yaml?label=release-ios)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/csertant/fama/release-macos-appstore.yaml?label=release-macos)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/csertant/fama/release-macos.yaml?label=release-macos)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/csertant/fama/test.yaml?label=test)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 

@@ -23,7 +23,8 @@ on:
 jobs:
   android-release:
     runs-on: ubuntu-latest
-    environment: ${{ github.event_name == 'workflow_dispatch' && inputs.environment_name || 'release' }}
+    environment: ${{ github.event_name == 'workflow_dispatch' &&
+      inputs.environment_name || 'release' }}
     env:
       LANE: ${{ github.event_name == 'workflow_dispatch' && inputs.lane || 'beta' }}
 

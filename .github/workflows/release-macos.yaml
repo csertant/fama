@@ -1,4 +1,4 @@
-name: release-macos-appstore
+name: release-macos
 
 on:
   push:
@@ -6,6 +6,14 @@ on:
       - "v*.*.*"
   workflow_dispatch:
     inputs:
+      lane:
+        description: "Release lane"
+        required: true
+        type: choice
+        default: beta
+        options:
+          - beta
+          - production
       environment_name:
         description: "GitHub Environment that stores release secrets"
         required: false
@@ -13,9 +21,12 @@ on:
         type: string
 
 jobs:
-  macos-appstore-release:
+  macos-release:
     runs-on: macos-latest
-    environment: ${{ github.event_name == 'workflow_dispatch' && inputs.environment_name || 'release' }}
+    environment: ${{ github.event_name == 'workflow_dispatch' &&
+      inputs.environment_name || 'release' }}
+    env:
+      LANE: ${{ github.event_name == 'workflow_dispatch' && inputs.lane || 'beta' }}
 
     steps:
       - name: Checkout
@@ -101,7 +112,7 @@ jobs:
             -exportPath "$EXPORT_PATH" \
             -exportOptionsPlist "$EXPORT_PLIST_PATH"
 
-      - name: Upload macOS App Store release with Fastlane
+      - name: Upload macOS release with Fastlane
         env:
           APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
@@ -109,4 +120,4 @@ jobs:
           MACOS_PKG_PATH: ../build/macos/export/*.pkg
         run: |
           cd macos
-          bundle exec fastlane app_store
+          bundle exec fastlane "$LANE"

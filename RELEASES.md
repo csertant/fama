@@ -6,7 +6,7 @@ Workflows:
 
 - release-android.yaml
 - release-ios.yaml
-- release-macos-appstore.yaml
+- release-macos.yaml
 
 ## Triggering releases
 
@@ -19,10 +19,10 @@ Workflows:
 - beta
   - Android: uploads to Play internal track as draft.
   - iOS: uploads to TestFlight.
+  - macOS: uploads to TestFlight.
 - production
   - Android: uploads to Play production track.
   - iOS: uploads to App Store Connect (not auto-submitted).
-- app_store
   - macOS: uploads a signed .pkg to App Store Connect (not auto-submitted).
 
 ## Required GitHub secrets
@@ -44,7 +44,7 @@ Workflows:
 - IOS_P12_PASSWORD
 - IOS_PROVISIONING_PROFILE_BASE64
 
-### macOS App Store
+### macOS
 
 - APP_STORE_CONNECT_API_KEY_ID
 - APP_STORE_CONNECT_ISSUER_ID
@@ -75,10 +75,10 @@ Build and upload iOS beta:
 - cd ios
 - bundle exec fastlane beta
 
-Build, export, and upload macOS App Store release:
+Build, export, and upload macOS production release:
 
 - flutter build macos --release
 - xcodebuild -workspace macos/Runner.xcworkspace -scheme Runner -configuration Release -archivePath build/macos/archive/Runner.xcarchive archive
 - xcodebuild -exportArchive -archivePath build/macos/archive/Runner.xcarchive -exportPath build/macos/export -exportOptionsPlist <path-to-export-options-plist>
 - cd macos
-- bundle exec fastlane app_store
+- bundle exec fastlane production
