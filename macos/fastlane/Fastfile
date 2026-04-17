@@ -1,0 +1,25 @@
+default_platform(:mac)
+
+platform :mac do
+  private_lane :app_store_connect_api_key_from_env do
+    app_store_connect_api_key(
+      key_id: ENV.fetch("APP_STORE_CONNECT_API_KEY_ID"),
+      issuer_id: ENV.fetch("APP_STORE_CONNECT_ISSUER_ID"),
+      key_content: ENV.fetch("APP_STORE_CONNECT_API_PRIVATE_KEY"),
+      is_key_content_base64: false
+    )
+  end
+
+  desc "Upload macOS production release to App Store Connect"
+  lane :app_store do
+    api_key = app_store_connect_api_key_from_env
+    upload_to_app_store(
+      api_key: api_key,
+      pkg: ENV["MACOS_PKG_PATH"] || "../build/macos/export/*.pkg",
+      submit_for_review: false,
+      automatic_release: false,
+      skip_metadata: true,
+      skip_screenshots: true
+    )
+  end
+end

@@ -2,11 +2,17 @@
 
 This project supports automated releases with Fastlane and GitHub Actions.
 
+Workflows:
+
+- release-android.yaml
+- release-ios.yaml
+- release-macos-appstore.yaml
+
 ## Triggering releases
 
 - Push a tag in the form: vX.Y.Z
 - Example: v1.2.0
-- The workflow also supports manual trigger from GitHub Actions.
+- All release workflows also support manual trigger from GitHub Actions.
 
 ## Release lanes
 
@@ -16,6 +22,8 @@ This project supports automated releases with Fastlane and GitHub Actions.
 - production
   - Android: uploads to Play production track.
   - iOS: uploads to App Store Connect (not auto-submitted).
+- app_store
+  - macOS: uploads a signed .pkg to App Store Connect (not auto-submitted).
 
 ## Required GitHub secrets
 
@@ -36,7 +44,17 @@ This project supports automated releases with Fastlane and GitHub Actions.
 - IOS_P12_PASSWORD
 - IOS_PROVISIONING_PROFILE_BASE64
 
-If iOS secrets are not set, the iOS job is skipped.
+### macOS App Store
+
+- APP_STORE_CONNECT_API_KEY_ID
+- APP_STORE_CONNECT_ISSUER_ID
+- APP_STORE_CONNECT_API_PRIVATE_KEY
+- MACOS_P12_BASE64
+- MACOS_P12_PASSWORD
+- MACOS_PROVISIONING_PROFILE_BASE64
+- MACOS_EXPORT_OPTIONS_PLIST_BASE64
+
+For manual runs, optionally set `environment_name` to use a different GitHub Environment than `release`.
 
 ## Local dry run
 
@@ -56,3 +74,11 @@ Build and upload iOS beta:
 - flutter build ipa --release
 - cd ios
 - bundle exec fastlane beta
+
+Build, export, and upload macOS App Store release:
+
+- flutter build macos --release
+- xcodebuild -workspace macos/Runner.xcworkspace -scheme Runner -configuration Release -archivePath build/macos/archive/Runner.xcarchive archive
+- xcodebuild -exportArchive -archivePath build/macos/archive/Runner.xcarchive -exportPath build/macos/export -exportOptionsPlist <path-to-export-options-plist>
+- cd macos
+- bundle exec fastlane app_store
