@@ -107,10 +107,6 @@ jobs:
           fi
           cp "$PROFILE_PATH" "$HOME/Library/MobileDevice/Provisioning Profiles/$PROFILE_UUID.mobileprovision"
 
-          # Inject the profile name and UUID into manual signing settings
-          PROFILE_NAME=$(/usr/libexec/PlistBuddy -c 'Print :Name' "$PROFILE_PLIST_PATH" 2>/dev/null || true)
-          sed -i '' "s|CODE_SIGN_STYLE = Manual;|CODE_SIGN_STYLE = Manual; PROVISIONING_PROFILE_SPECIFIER = \"$PROFILE_NAME\"; PROVISIONING_PROFILE = \"$PROFILE_UUID\";|g" ios/Runner.xcodeproj/project.pbxproj
-
       - name: Build iOS archive
         run: flutter build ipa --release
 
