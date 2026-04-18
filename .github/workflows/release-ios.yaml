@@ -81,15 +81,30 @@ jobs:
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
           security list-keychains -d user -s "$KEYCHAIN_PATH"
 
-          echo "$IOS_P12_BASE64" | base64 --decode > "$RUNNER_TEMP/cert.p12"
+          printf '%s' "$IOS_P12_BASE64" | base64 --decode > "$RUNNER_TEMP/cert.p12"
           security import "$RUNNER_TEMP/cert.p12" -P "$IOS_P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
           security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
 
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           PROFILE_PATH="$RUNNER_TEMP/profile.mobileprovision"
-          echo "$IOS_PROVISIONING_PROFILE_BASE64" | base64 --decode > "$PROFILE_PATH"
+          PROFILE_PLIST_PATH="$RUNNER_TEMP/profile.plist"
+          printf '%s' "$IOS_PROVISIONING_PROFILE_BASE64" | base64 --decode > "$PROFILE_PATH"
 
-          PROFILE_UUID=$(security cms -D -i "$PROFILE_PATH" | /usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin)
+          if [ ! -s "$PROFILE_PATH" ]; then
+            echo "Decoded provisioning profile is empty. Verify IOS_PROVISIONING_PROFILE_BASE64 is the base64 of a .mobileprovision file."
+            exit 1
+          fi
+
+          if ! security cms -D -i "$PROFILE_PATH" > "$PROFILE_PLIST_PATH"; then
+            echo "Failed to parse provisioning profile. Ensure IOS_PROVISIONING_PROFILE_BASE64 is a valid base64-encoded .mobileprovision file."
+            exit 1
+          fi
+
+          PROFILE_UUID=$(/usr/libexec/PlistBuddy -c 'Print :UUID' "$PROFILE_PLIST_PATH" 2>/dev/null || true)
+          if [ -z "$PROFILE_UUID" ]; then
+            echo "Provisioning profile UUID is missing. Verify the profile is valid and not expired/revoked."
+            exit 1
+          fi
           cp "$PROFILE_PATH" "$HOME/Library/MobileDevice/Provisioning Profiles/$PROFILE_UUID.mobileprovision"
 
       - name: Build iOS archive
