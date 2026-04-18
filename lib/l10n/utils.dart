@@ -78,8 +78,10 @@ String mapGenreToString(final BuildContext context, final String genre) {
       return localizations.filtersGenreOptionGeneral;
     case 'longform':
       return localizations.filtersGenreOptionLongform;
+    case 'investigative':
+      return localizations.filtersGenreOptionInvestigative;
     default:
-      return localizations.filtersCategoryOptionUnknown;
+      return localizations.filtersGenreOptionUnknown;
   }
 }
 
