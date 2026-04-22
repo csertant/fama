@@ -6,6 +6,10 @@ part 'app_settings.g.dart';
 class AppLanguage {
   static const String hungarian = 'hu';
   static const String english = 'en';
+  static const String french = 'fr';
+  static const String german = 'de';
+  static const String spanish = 'es';
+  static const String italian = 'it';
 }
 
 @JsonSerializable()

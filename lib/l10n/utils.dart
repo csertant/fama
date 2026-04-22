@@ -28,6 +28,14 @@ String mapLanguageCodeToString(
       return localizations.settingsLanguageOptionHungarian;
     case AppLanguage.english:
       return localizations.settingsLanguageOptionEnglish;
+    case AppLanguage.french:
+      return localizations.settingsLanguageOptionFrench;
+    case AppLanguage.german:
+      return localizations.settingsLanguageOptionGerman;
+    case AppLanguage.spanish:
+      return localizations.settingsLanguageOptionSpanish;
+    case AppLanguage.italian:
+      return localizations.settingsLanguageOptionItalian;
     default:
       return localizations.settingsLanguageOptionUnknown;
   }
@@ -80,6 +88,14 @@ String mapGenreToString(final BuildContext context, final String genre) {
       return localizations.filtersGenreOptionLongform;
     case 'investigative':
       return localizations.filtersGenreOptionInvestigative;
+    case 'opinion':
+      return localizations.filtersGenreOptionOpinion;
+    case 'comic':
+      return localizations.filtersGenreOptionComic;
+    case 'podcast':
+      return localizations.filtersGenreOptionPodcast;
+    case 'video':
+      return localizations.filtersGenreOptionVideo;
     default:
       return localizations.filtersGenreOptionUnknown;
   }
