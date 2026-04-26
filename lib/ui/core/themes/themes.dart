@@ -92,7 +92,10 @@ abstract final class AppTheme {
     labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
   );
 
-  static const AppBarTheme _appBarTheme = AppBarTheme(elevation: 0);
+  static const AppBarTheme _appBarTheme = AppBarTheme(
+    elevation: 0,
+    scrolledUnderElevation: 0,
+  );
 
   static const _noElevationButtonStyle = ButtonStyle(
     elevation: WidgetStatePropertyAll<double>(0),

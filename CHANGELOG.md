@@ -4,10 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## [1.x.y] - 2026-xx-yy
 
+### Added
+
+- Support more categories and genres for source recommendations.
+
 ### Fixed
 
 - Fixes for source recommendation categories.
 - Small adjustments for translations.
+- Fixed appbar elevation on scroll for better visual consistency across platforms.
 
 ## [1.1.0] - 2026-04-18
 
