@@ -77,19 +77,21 @@ class RssService {
 
   ParsedFeed _mapToParsedFeed(UniversalFeed feed) {
     return ParsedFeed(
-      title: feed.title ?? 'Unknown Source',
+      title: _cleanFeedText(feed.title) ?? 'Unknown Source',
       siteUrl: _pickSiteUrl(feed),
       imageUrl: feed.image?.url ?? feed.icon?.url,
       description: _cleanFeedText(feed.description),
-      copyright: feed.copyright,
+      copyright: _cleanFeedText(feed.copyright),
       articles: feed.items.map((item) {
         return ParsedArticle(
           guid: item.guid ?? _pickItemUrl(item),
           url: _pickItemUrl(item),
-          title: item.title ?? 'Unknown Article',
+          title: _cleanFeedText(item.title) ?? 'Unknown Article',
           summary: _cleanFeedText(item.description),
           content: _pickItemContent(item),
-          author: item.authors.map((a) => a.name).toList().join(', '),
+          author: _cleanFeedText(
+            item.authors.map((a) => a.name).toList().join(', '),
+          ),
           imageUrl: _pickItemImageUrl(item),
           publishedAt: _parsePublishedAt(item.published ?? item.updated),
         );
@@ -243,7 +245,23 @@ class RssService {
         .replaceAll('&lt;', '<')
         .replaceAll('&gt;', '>')
         .replaceAll('&quot;', '"')
-        .replaceAll('&apos;', "'");
+        .replaceAll('&qout;', '"') // Common typo in some feeds
+        .replaceAll('&apos;', "'")
+        .replaceAll('&#39;', "'")
+        .replaceAll('&mdash;', '—')
+        .replaceAll('&ndash;', '–')
+        .replaceAll('&ldquo;', '“')
+        .replaceAll('&rdquo;', '”')
+        .replaceAll('&lsquo;', '‘')
+        .replaceAll('&rsquo;', '’')
+        .replaceAll('&sbquo;', '‚')
+        .replaceAll('&bdquo;', '„')
+        .replaceAll('&laquo;', '«')
+        .replaceAll('&raquo;', '»')
+        .replaceAll('&hellip;', '…')
+        .replaceAll('&copy;', '©')
+        .replaceAll('&reg;', '®')
+        .replaceAll('&trade;', '™');
     decoded = decoded.replaceAllMapped(RegExp(r'&#(\d+);'), (match) {
       final codePoint = int.tryParse(match.group(1)!);
       if (codePoint == null) {
