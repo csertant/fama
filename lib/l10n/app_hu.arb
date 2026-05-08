@@ -99,6 +99,8 @@
     "settingsTrashOptionSaved": "elmentett cikkek",
     "settingsTrashOptionBefore": "megadott dátum előtt",
     "settingsTrashEmptyLabel": "törlés",
+    "settingsTrashEmptied": "cikkek törölve",
+    "errorWhileEmptyingTrash": "hiba történt a lomtalanítás során",
     "settingsContactTitle": "kapcsolat",
     "settingsContactSubtitle": "ha hibát találsz vagy javaslatod van, írj nekünk",
     "settingsContactEmailLabel": "email küldése",

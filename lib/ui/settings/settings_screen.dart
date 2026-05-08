@@ -28,6 +28,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     widget.viewModel.createProfile.addListener(_onCreateProfileResult);
     widget.viewModel.modifyProfile.addListener(_onModifyProfileResult);
     widget.viewModel.removeProfile.addListener(_onRemoveProfileResult);
+    widget.viewModel.removeArticles.addListener(_onRemoveArticlesResult);
   }
 
   @override
@@ -39,6 +40,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     widget.viewModel.modifyProfile.addListener(_onModifyProfileResult);
     oldWidget.viewModel.removeProfile.removeListener(_onRemoveProfileResult);
     widget.viewModel.removeProfile.addListener(_onRemoveProfileResult);
+    oldWidget.viewModel.removeArticles.removeListener(_onRemoveArticlesResult);
+    widget.viewModel.removeArticles.addListener(_onRemoveArticlesResult);
   }
 
   @override
@@ -46,6 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     widget.viewModel.createProfile.removeListener(_onCreateProfileResult);
     widget.viewModel.modifyProfile.removeListener(_onModifyProfileResult);
     widget.viewModel.removeProfile.removeListener(_onRemoveProfileResult);
+    widget.viewModel.removeArticles.removeListener(_onRemoveArticlesResult);
     super.dispose();
   }
 
@@ -188,7 +192,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 );
                 if (widget.viewModel.createProfile.completed &&
                     context.mounted) {
-                  widget.viewModel.createProfile.clearResult();
                   Navigator.of(context).pop();
                 }
               },
@@ -257,7 +260,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 );
                 if (widget.viewModel.modifyProfile.completed &&
                     context.mounted) {
-                  widget.viewModel.modifyProfile.clearResult();
                   Navigator.of(context).pop();
                 }
               },
@@ -315,7 +317,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 );
                 if (widget.viewModel.removeArticles.completed &&
                     context.mounted) {
-                  widget.viewModel.removeArticles.clearResult();
                   Navigator.of(context).pop();
                 }
               },
@@ -381,6 +382,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
       action: widget.viewModel.removeProfile,
       successMessage: localizations.settingsProfileRemoved,
       errorMessage: localizations.errorWhileRemovingProfile,
+    );
+  }
+
+  void _onRemoveArticlesResult() {
+    final localizations = AppLocalizations.of(context)!;
+    showFeedbackOnResult(
+      context: context,
+      action: widget.viewModel.removeArticles,
+      successMessage: localizations.settingsTrashEmptied,
+      errorMessage: localizations.errorWhileEmptyingTrash,
     );
   }
 }
