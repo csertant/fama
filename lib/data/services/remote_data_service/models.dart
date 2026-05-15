@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import '../../../domain/url_resolver/url_resolver.dart.dart';
 import '../../../utils/url.dart';
 
 part 'models.g.dart';
@@ -40,9 +41,9 @@ class SourceRecommendation {
 
   final String name;
   final String? description;
-  @JsonKey(fromJson: normalizeUrl)
+  @JsonKey(fromJson: UrlResolver.cleanUrl)
   final String url;
-  @JsonKey(fromJson: normalizeUrl)
+  @JsonKey(fromJson: UrlResolver.cleanUrl)
   final String siteUrl;
   final String language;
   final String country;

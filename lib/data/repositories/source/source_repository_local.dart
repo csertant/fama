@@ -56,13 +56,12 @@ class SourceRepositoryLocal implements SourceRepository {
     required final Id profileId,
     required final String url,
   }) async {
-    final normalizedUrl = normalizeUrl(url);
-    final parsedFeedResult = await _rssService.fetchFeed(url: normalizedUrl);
+    final parsedFeedResult = await _rssService.fetchFeed(url: url);
     if (parsedFeedResult is Ok<ParsedFeed>) {
       final parsedFeed = parsedFeedResult.value;
       final newSource = SourcesCompanion.insert(
         profileId: profileId,
-        url: normalizedUrl,
+        url: url,
         name: parsedFeed.title,
         description: Value(parsedFeed.description),
         siteUrl: Value(parsedFeed.siteUrl),

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../core/widgets/widgets.dart';
 
-class SourceByCustomUrlCard extends StatelessWidget {
-  const SourceByCustomUrlCard({
+class SourceSubscribeCard extends StatelessWidget {
+  const SourceSubscribeCard({
     super.key,
     required this.title,
     required this.onSubscribe,

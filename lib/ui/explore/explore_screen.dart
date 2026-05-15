@@ -7,8 +7,8 @@ import '../../l10n/utils.dart';
 import '../core/themes/dimensions.dart';
 import '../core/widgets/widgets.dart';
 import 'explore_viewmodel.dart';
-import 'widgets/source_by_custom_url_card.dart';
 import 'widgets/source_recommendation_card.dart';
+import 'widgets/source_subscribe_card.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key, required this.viewModel});
@@ -103,7 +103,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: AppDimensions.paddingMedium,
                                 ),
-                                child: SourceByCustomUrlCard(
+                                child: SourceSubscribeCard(
                                   title:
                                       localizations.exploreAddCustomSourceTitle,
                                   onSubscribe: () =>
