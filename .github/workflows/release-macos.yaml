@@ -1,9 +1,9 @@
 name: release-macos
 
 on:
-  push:
-    tags:
-      - "v*.*.*"
+  # push:
+  #  tags:
+  #    - "v*.*.*"
   workflow_dispatch:
     inputs:
       lane:
