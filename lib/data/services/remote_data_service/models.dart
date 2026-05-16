@@ -1,7 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import '../../../domain/url_resolver/url_resolver.dart.dart';
-import '../../../utils/url.dart';
 
 part 'models.g.dart';
 

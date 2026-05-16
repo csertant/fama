@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2026-05-16
+
+### Added
+
+- More robust sanitizer for processing feed data.
+- Snackbar feedback for trash actions.
+- Auto transform URLs for supported sources into feed URLs when subscribing.
+
+### Miscellaneous
+- Migrate to Swift Package Manager for iOS and macOS dependencies for better integration and maintenance.
+
 ## [1.2.0] - 2026-04-26
 
 ### Added
@@ -10,9 +21,9 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- Fixes for source recommendation categories.
+- Support for source recommendation categories.
 - Small adjustments for translations.
-- Fixed appbar elevation on scroll for better visual consistency across platforms.
+- Appbar elevation on scroll for better visual consistency across platforms.
 
 ## [1.1.0] - 2026-04-18
 
@@ -29,21 +40,21 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
-- Added immediate actions on empty states in the app, such as prompts to add sources or explore content when no items are available.
+- Immediate actions on empty states in the app, such as prompts to add sources or explore content when no items are available.
 - Free up space section now shows database size.
 
 ## [1.0.0-rc.3] - 2026-04-14
 
 ### Added
 
-- Added a contact section to the settings page with email address for user feedback and contributions.
-- Added the ability to remove old articles from the app to free up storage space.
+- A contact section to the settings page with email address for user feedback and contributions.
+- Remove old articles from the app to free up storage space.
 
 ## [1.0.0-rc.2] - 2026-04-13
 
 ### Fixed
 
-- Fix AndroidManifest.xml to include INTERNET permission for network access.
+- AndroidManifest.xml now includes INTERNET permission for network access.
 
 ## [1.0.0-rc.1] - 2026-04-10
 

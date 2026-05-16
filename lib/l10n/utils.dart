@@ -108,6 +108,8 @@ String mapPlatformToHintTextString(
 ) {
   final localizations = AppLocalizations.of(context)!;
   switch (platform) {
+    case Platform.bluesky:
+      return localizations.exploreAddBlueskyHintText;
     case Platform.github:
       return localizations.exploreAddGithubHintText;
     case Platform.mastodon:
@@ -116,6 +118,10 @@ String mapPlatformToHintTextString(
       return localizations.exploreAddMediumHintText;
     case Platform.reddit:
       return localizations.exploreAddRedditHintText;
+    case Platform.stackoverflow:
+      return localizations.exploreAddStackOverflowHintText;
+    case Platform.substack:
+      return localizations.exploreAddSubstackHintText;
     case Platform.tumblr:
       return localizations.exploreAddTumblrHintText;
     case Platform.other:

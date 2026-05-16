@@ -33,7 +33,7 @@ The project focuses on delivering a clean, reliable, and customizable RSS readin
 
 - Explore recommended sources
 - Filter source recommendations by language, country, category, and genre
-- Add custom sources by URL
+- Add custom sources by URL for many popular platforms
 - Remove subscribed sources anytime
 
 ### Saved reading
@@ -59,8 +59,8 @@ The project focuses on delivering a clean, reliable, and customizable RSS readin
 - Android
 - iOS
 - macOS
-- Windows
-- Linux
+- Windows (planned)
+- Linux (planned)
 
 ## Getting Started
 

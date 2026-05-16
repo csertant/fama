@@ -3,10 +3,13 @@ import 'url_strategies.dart';
 
 class UrlResolver {
   static final List<UrlStrategy> supportedStrategies = [
+    BlueSkyUrlStrategy(),
     GithubUrlStrategy(),
     MastodonUrlStrategy(),
     MediumUrlStrategy(),
     RedditUrlStrategy(),
+    StackOverflowUrlStrategy(),
+    SubstackUrlStrategy(),
     TumblrUrlStrategy(),
     OtherUrlStrategy(),
   ];
