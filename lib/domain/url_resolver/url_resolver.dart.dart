@@ -22,10 +22,7 @@ class UrlResolver {
   }
 
   static String cleanUrl(String url) {
-    var trimmedUrl = url.trim();
-    if (trimmedUrl.endsWith('/')) {
-      trimmedUrl = trimmedUrl.substring(0, trimmedUrl.length - 1);
-    }
+    final trimmedUrl = url.trim().replaceAll(RegExp(r'\/+$'), '');
     final parsedUrl = Uri.tryParse(trimmedUrl);
     if (parsedUrl == null) {
       throw ValidationException('Invalid URL format: $url');

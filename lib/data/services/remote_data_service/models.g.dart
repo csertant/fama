@@ -29,8 +29,8 @@ SourceRecommendation _$SourceRecommendationFromJson(
 ) => SourceRecommendation(
   name: json['name'] as String,
   description: json['description'] as String?,
-  url: normalizeUrl(json['url'] as String),
-  siteUrl: normalizeUrl(json['site_url'] as String),
+  url: UrlResolver.cleanUrl(json['url'] as String),
+  siteUrl: UrlResolver.cleanUrl(json['site_url'] as String),
   language: json['language'] as String,
   country: json['country'] as String,
   category: json['category'] as String,

@@ -7,6 +7,7 @@ import '../../l10n/utils.dart';
 import '../core/themes/dimensions.dart';
 import '../core/widgets/widgets.dart';
 import 'explore_viewmodel.dart';
+import 'widgets/source_platform_chooser.dart';
 import 'widgets/source_recommendation_card.dart';
 import 'widgets/source_subscribe_card.dart';
 
@@ -214,6 +215,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
     final urlController = TextEditingController();
     final localizations = AppLocalizations.of(context)!;
     String? errorText;
+    var hintText = localizations.exploreAddCustomSourceSubtitle;
 
     await showCustomModalSheet<void>(
       context: context,
@@ -251,9 +253,19 @@ class _ExploreScreenState extends State<ExploreScreen> {
               },
               isLoading: widget.viewModel.subscribeToSource.running,
               childrenBuilder: (context) => [
+                SourcePlatformChooser(
+                  onTap: (platform) {
+                    setState(
+                      () => hintText = mapPlatformToHintTextString(
+                        context,
+                        platform,
+                      ),
+                    );
+                  },
+                ),
                 CustomTextField(
                   controller: urlController,
-                  hintText: localizations.exploreAddCustomSourceSubtitle,
+                  hintText: hintText,
                   errorText: errorText,
                 ),
               ],

@@ -7,6 +7,7 @@ import '../data/repositories/profile/profile_repository.dart';
 import '../data/repositories/settings/settings_repository.dart';
 import '../data/repositories/source/source_repository.dart';
 import '../data/services/connectivity_service/connectivity_service.dart';
+import '../domain/use_cases/feed_url_from_platform_url_use_case.dart';
 import '../ui/core/widgets/custom_screen.dart';
 import '../ui/explore/explore_screen.dart';
 import '../ui/explore/explore_viewmodel.dart';
@@ -60,6 +61,8 @@ GoRouter router() => GoRouter(
                   path: Routes.exploreSegment,
                   builder: (context, state) {
                     final viewModel = ExploreViewModel(
+                      feedUrlFromPlatformUrlUseCase:
+                          FeedUrlFromPlatformUrlUseCase(),
                       sessionManager: context.read<SessionManager>(),
                       sourceRepository: context.read<SourceRepository>(),
                       connectivityService: context.read<ConnectivityService>(),

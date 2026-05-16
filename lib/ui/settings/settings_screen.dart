@@ -327,7 +327,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   builder: (context, value, _) {
                     return CustomSwitch(
                       label: localizations.settingsTrashOptionRead,
-                      value: isReadController.value,
+                      value: value,
                       onChanged: (value) => isReadController.value = value,
                     );
                   },
@@ -337,7 +337,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   builder: (context, value, _) {
                     return CustomSwitch(
                       label: localizations.settingsTrashOptionSaved,
-                      value: isSavedController.value,
+                      value: value,
                       onChanged: (value) => isSavedController.value = value,
                     );
                   },

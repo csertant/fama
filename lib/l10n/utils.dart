@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../data/services/shared_preferences_service/app_settings.dart';
+import '../domain/url_resolver/url_strategies.dart';
 import '../ui/core/widgets/custom_filter.dart';
 import 'generated/app_localizations.dart';
 
@@ -98,6 +99,27 @@ String mapGenreToString(final BuildContext context, final String genre) {
       return localizations.filtersGenreOptionVideo;
     default:
       return localizations.filtersGenreOptionUnknown;
+  }
+}
+
+String mapPlatformToHintTextString(
+  final BuildContext context,
+  final Platform platform,
+) {
+  final localizations = AppLocalizations.of(context)!;
+  switch (platform) {
+    case Platform.github:
+      return localizations.exploreAddGithubHintText;
+    case Platform.mastodon:
+      return localizations.exploreAddMastodonHintText;
+    case Platform.medium:
+      return localizations.exploreAddMediumHintText;
+    case Platform.reddit:
+      return localizations.exploreAddRedditHintText;
+    case Platform.tumblr:
+      return localizations.exploreAddTumblrHintText;
+    case Platform.other:
+      return localizations.exploreAddCustomSourceSubtitle;
   }
 }
 

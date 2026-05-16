@@ -8,14 +8,17 @@ import '../../data/managers/session/session_manager.dart';
 import '../../data/repositories/source/source_repository.dart';
 import '../../data/services/connectivity_service/connectivity_service.dart';
 import '../../data/services/remote_data_service/models.dart';
+import '../../domain/use_cases/feed_url_from_platform_url_use_case.dart';
 import '../../utils/utils.dart';
 
 class ExploreViewModel extends ChangeNotifier {
   ExploreViewModel({
+    required FeedUrlFromPlatformUrlUseCase feedUrlFromPlatformUrlUseCase,
     required SourceRepository sourceRepository,
     required SessionManager sessionManager,
     required ConnectivityService connectivityService,
-  }) : _sourceRepository = sourceRepository,
+  }) : _feedUrlFromPlatformUrlUseCase = feedUrlFromPlatformUrlUseCase,
+       _sourceRepository = sourceRepository,
        _sessionManager = sessionManager,
        _connectivityService = connectivityService,
        _lastConnectionStatus = connectivityService.connectionStatus {
@@ -31,6 +34,7 @@ class ExploreViewModel extends ChangeNotifier {
     unawaited(load.execute());
   }
 
+  final FeedUrlFromPlatformUrlUseCase _feedUrlFromPlatformUrlUseCase;
   final SessionManager _sessionManager;
   final SourceRepository _sourceRepository;
   StreamSubscription<List<Source>>? _sourcesSubscription;
@@ -175,7 +179,15 @@ class ExploreViewModel extends ChangeNotifier {
           DataNotFoundException('No active profile session found'),
         );
       }
-      return await _sourceRepository.saveSource(profileId: profileId, url: url);
+      final urlResult = await _feedUrlFromPlatformUrlUseCase.execute(url);
+      if (urlResult is Error<String>) {
+        return Result.error(urlResult.error);
+      }
+      final feedUrl = (urlResult as Ok<String>).value;
+      return await _sourceRepository.saveSource(
+        profileId: profileId,
+        url: feedUrl,
+      );
     } finally {
       notifyListeners();
     }

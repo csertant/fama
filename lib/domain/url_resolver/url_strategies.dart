@@ -167,7 +167,7 @@ class TumblrUrlStrategy implements UrlStrategy {
 
 class OtherUrlStrategy implements UrlStrategy {
   @override
-  String get iconPath => 'assets/icons/rss.svg';
+  String get iconPath => 'assets/icons/sources.svg';
   @override
   String get platformName => 'Other';
   @override
