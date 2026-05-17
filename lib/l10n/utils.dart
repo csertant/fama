@@ -116,6 +116,8 @@ String mapPlatformToHintTextString(
       return localizations.exploreAddMastodonHintText;
     case Platform.medium:
       return localizations.exploreAddMediumHintText;
+    case Platform.pinterest:
+      return localizations.exploreAddPinterestHintText;
     case Platform.reddit:
       return localizations.exploreAddRedditHintText;
     case Platform.stackoverflow:

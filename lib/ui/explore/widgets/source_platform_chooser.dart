@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../domain/url_resolver/url_resolver.dart.dart';
 import '../../../domain/url_resolver/url_strategies.dart';
+import '../../core/themes/dimensions.dart';
 import '../../core/widgets/widgets.dart';
 
 class SourcePlatformChooser extends StatefulWidget {
@@ -16,7 +17,9 @@ class SourcePlatformChooser extends StatefulWidget {
 class _SourcePlatformChooserState extends State<SourcePlatformChooser> {
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Wrap(
+      spacing: AppDimensions.paddingSmall,
+      runSpacing: AppDimensions.paddingSmall,
       children: UrlResolver.supportedStrategies.map((strategy) {
         return CustomIconButton.normal(
           onTap: () => widget.onTap(strategy.platform),

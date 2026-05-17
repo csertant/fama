@@ -7,6 +7,7 @@ class UrlResolver {
     GithubUrlStrategy(),
     MastodonUrlStrategy(),
     MediumUrlStrategy(),
+    PinterestUrlStrategy(),
     RedditUrlStrategy(),
     StackOverflowUrlStrategy(),
     SubstackUrlStrategy(),

@@ -50,6 +50,7 @@
     "exploreAddGithubHintText": "https://github.com/felhasznalo vagy /felhasznalo/repo",
     "exploreAddMastodonHintText": "https://mastodon.social/@felhasznalo vagy /tags/tagnev",
     "exploreAddMediumHintText": "https://medium.com/@felhasznalo vagy felhasznalo.medium.com vagy /magazin",
+    "exploreAddPinterestHintText": "https://pinterest.com/felhasznalo",
     "exploreAddRedditHintText": "https://reddit.com/r/subreddit vagy /user/felhasznalo vagy /u/felhasznalo",
     "exploreAddStackOverflowHintText": "https://stackoverflow.com/questions/tagged/tagnev",
     "exploreAddSubstackHintText": "https://felhasznalo.substack.com",

@@ -3,6 +3,7 @@ enum Platform {
   github,
   mastodon,
   medium,
+  pinterest,
   reddit,
   stackoverflow,
   substack,
@@ -145,6 +146,33 @@ class MediumUrlStrategy implements UrlStrategy {
       return 'https://medium.com/feed/$target';
     }
     return url;
+  }
+}
+
+class PinterestUrlStrategy implements UrlStrategy {
+  final RegExp pattern = RegExp(
+    r'^https?:\/\/(www\.)?pinterest\.(com|hu)\/([a-zA-Z0-9_-]+)\/?$',
+    caseSensitive: false,
+  );
+
+  @override
+  String get iconPath => 'assets/icons/platforms/pinterest.svg';
+  @override
+  String get platformName => 'Pinterest';
+  @override
+  Platform get platform => Platform.pinterest;
+
+  @override
+  bool canHandle(String url) {
+    return pattern.hasMatch(url);
+  }
+
+  @override
+  String transform(String url) {
+    if (url.endsWith('feed.rss')) {
+      return url;
+    }
+    return '$url/feed.rss';
   }
 }
 

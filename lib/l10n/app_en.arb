@@ -50,6 +50,7 @@
     "exploreAddGithubHintText": "https://github.com/username or /username/repo",
     "exploreAddMastodonHintText": "https://mastodon.social/@username or /tags/tagname",
     "exploreAddMediumHintText": "https://medium.com/@username or username.medium.com or /publication",
+    "exploreAddPinterestHintText": "https://pinterest.com/username",
     "exploreAddRedditHintText": "https://reddit.com/r/subreddit or /user/username or /u/username",
     "exploreAddStackOverflowHintText": "https://stackoverflow.com/questions/tagged/tagname",
     "exploreAddSubstackHintText": "https://username.substack.com",

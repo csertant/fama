@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.1] - 2026-05-17
+
+### Added
+
+- Pinterest support.
+
+### Fixed
+- Platform options now wrap into multiple lines on smaller screens to prevent overflow issues.
+
 ## [1.3.0] - 2026-05-16
 
 ### Added
@@ -11,6 +20,7 @@ All notable changes to this project will be documented in this file.
 - Auto transform URLs for supported sources into feed URLs when subscribing.
 
 ### Miscellaneous
+
 - Migrate to Swift Package Manager for iOS and macOS dependencies for better integration and maintenance.
 
 ## [1.2.0] - 2026-04-26
