@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.2] - 2026-06-17
+
+### Miscellaneous
+
+- Migrate android build toolchain to use built in Kotlin via AGP 9.
+
 ## [1.3.1] - 2026-05-17
 
 ### Added
