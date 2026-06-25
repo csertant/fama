@@ -9,7 +9,7 @@ environment:
   sdk: ^3.10.0
 
 dependencies:
-  cached_network_image_ce: ^4.8.0
+  cached_network_image_ce: ^4.9.0
   connectivity_plus: ^7.1.1
   cupertino_icons: ^1.0.9
   drift: ^2.34.0
