@@ -73,6 +73,7 @@ class SettingsViewModel extends ChangeNotifier {
   List<Locale> get availableLocales => AppLocalizations.supportedLocales;
   List<ThemeMode> get availableThemes => ThemeMode.values;
   int get databaseSize => _databaseSize;
+  String get versionString => _settingsRepository.versionString;
 
   Future<Result<void>> _load() async {
     try {

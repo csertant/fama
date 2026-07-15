@@ -113,6 +113,16 @@
     "errorWhileEmptyingTrash": "error occurred while emptying trash",
     "settingsContactSubtitle": "if you find any issues or have suggestions, please contact us",
     "settingsContactEmailLabel": "send email",
+    "settingsMetadataVersionLabel": "version: {version}",
+    "@settingsMetadataVersionLabel": {
+        "placeholders": {
+            "version": {
+                "type": "String",
+                "example": "1.0.0+1"
+            }
+        }
+    },
+    "settingsMetadataLegalNotice": "© 2026 nosebite studios. all rights reserved.",
     "buttonLabelOk": "ok",
     "filtersTitle": "filters",
     "filtersActionLabel": "clear filters",

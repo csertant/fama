@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../utils/utils.dart';
 import '../../services/shared_preferences_service/app_settings.dart';
@@ -25,8 +26,14 @@ class SettingsRepositoryLocal extends SettingsRepository {
   @override
   AppSettings get appSettings => _appSettings;
 
+  String _versionString = '';
+
+  @override
+  String get versionString => _versionString;
+
   @override
   Future<Result<void>> load() async {
+    _versionString = await _getVersionString();
     final appSettingsResult = await _getAppSettingsOrDefault();
     switch (appSettingsResult) {
       case Ok<AppSettings>():
@@ -91,5 +98,10 @@ class SettingsRepositoryLocal extends SettingsRepository {
         }
         return Result.error(error);
     }
+  }
+
+  Future<String> _getVersionString() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    return '${packageInfo.version}+${packageInfo.buildNumber}';
   }
 }

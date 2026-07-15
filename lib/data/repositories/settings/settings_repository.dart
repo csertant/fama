@@ -6,6 +6,8 @@ import '../../services/shared_preferences_service/app_settings.dart';
 abstract class SettingsRepository extends ChangeNotifier {
   AppSettings get appSettings;
 
+  String get versionString;
+
   Future<Result<void>> load();
 
   Future<Result<void>> updateLanguage({required final String languageCode});

@@ -113,6 +113,16 @@
     "settingsContactTitle": "kapcsolat",
     "settingsContactSubtitle": "ha hibát találsz vagy javaslatod van, írj nekünk",
     "settingsContactEmailLabel": "email küldése",
+    "settingsMetadataVersionLabel": "verzió: {version}",
+    "@settingsMetadataVersionLabel": {
+        "placeholders": {
+            "version": {
+                "type": "String",
+                "example": "1.0.0+1"
+            }
+        }
+    },
+    "settingsMetadataLegalNotice": "© 2026 nosebite studios. minden jog fenntartva.",
     "buttonLabelOk": "ok",
     "filtersTitle": "szűrők",
     "filtersActionLabel": "szűrők törlése",

@@ -9,6 +9,7 @@ import '../../l10n/utils.dart';
 import '../core/widgets/widgets.dart';
 import 'settings_viewmodel.dart';
 import 'widgets/settings_contacts.dart';
+import 'widgets/settings_metadata.dart';
 import 'widgets/settings_profiles_group.dart';
 import 'widgets/settings_radio_group.dart';
 
@@ -151,6 +152,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       url: 'mailto:nosebitestudios@gmail.com',
                       tooltip: localizations.settingsContactEmailLabel,
                     ),
+                  ),
+                  SettingsMetadata(
+                    versionString: widget.viewModel.versionString,
                   ),
                 ],
               ),

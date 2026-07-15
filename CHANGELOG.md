@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.3]
+
+### Added
+
+- Display legal notice and version information in settings metadata section.
+
 ## [1.3.2] - 2026-06-17
 
 ### Miscellaneous
@@ -15,6 +21,7 @@ All notable changes to this project will be documented in this file.
 - Pinterest support.
 
 ### Fixed
+
 - Platform options now wrap into multiple lines on smaller screens to prevent overflow issues.
 
 ## [1.3.0] - 2026-05-16
