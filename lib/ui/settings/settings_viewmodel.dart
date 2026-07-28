@@ -158,7 +158,7 @@ class SettingsViewModel extends ChangeNotifier {
         profileId: _sessionManager.profileId!,
         isRead: isRead,
         isSaved: isSaved,
-        before: before ?? AppDateTimeUtils.oneMonthAgo(),
+        before: before ?? AppDateUtils.oneMonthAgo(),
       );
     } finally {
       notifyListeners();

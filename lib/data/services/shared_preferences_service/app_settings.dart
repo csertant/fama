@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import '../../../utils/utils.dart';
+
 part 'app_settings.g.dart';
 
 class AppLanguage {
@@ -16,7 +18,7 @@ class AppLanguage {
 class AppSettings {
   AppSettings({required this.languageCode, required this.theme});
 
-  factory AppSettings.fromJson(final Map<String, dynamic> json) =>
+  factory AppSettings.fromJson(final JsonMap json) =>
       _$AppSettingsFromJson(json);
 
   @JsonKey(defaultValue: AppLanguage.hungarian)
@@ -32,5 +34,5 @@ class AppSettings {
     );
   }
 
-  Map<String, dynamic> toJson() => _$AppSettingsToJson(this);
+  JsonMap toJson() => _$AppSettingsToJson(this);
 }

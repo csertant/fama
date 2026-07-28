@@ -1,12 +1,12 @@
 import 'package:intl/intl.dart';
 
-abstract class AppDateFormat {
+abstract final class AppDateFormat {
   static final DateFormat dateOnly = DateFormat('y. MM. dd.');
   static final DateFormat dateTime = DateFormat('y. MM. dd. HH:mm');
   static final DateFormat full = DateFormat('y. MM. dd. HH:mm:ss');
 }
 
-class AppDateTimeUtils {
+abstract final class AppDateUtils {
   static DateTime oneMonthAgo() {
     final now = DateTime.now();
     return DateTime(

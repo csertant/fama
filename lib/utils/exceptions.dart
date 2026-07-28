@@ -13,7 +13,7 @@ class AppException implements Exception {
     } else if (error is StateError) {
       return DataStorageException('Row cardinality violated', cause: error);
     } else if (error is FormatException || error is InvalidDataException) {
-      return DataStorageException('Data format is invalid', cause: error);
+      return DataStorageException('Data format invalid', cause: error);
     } else if (error is DriftWrappedException) {
       return DataStorageException('Database operation failed', cause: error);
     } else if (error is TimeoutException) {

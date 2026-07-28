@@ -24,7 +24,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
   @override
   void initState() {
     super.initState();
-    value = widget.value ?? AppDateTimeUtils.oneMonthAgo();
+    value = widget.value ?? AppDateUtils.oneMonthAgo();
   }
 
   @override
@@ -39,8 +39,8 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
               showDatePicker(
                 context: context,
                 initialDate: value,
-                firstDate: AppDateTimeUtils.firstPossibleDate(),
-                lastDate: AppDateTimeUtils.lastPossibleDate(),
+                firstDate: AppDateUtils.firstPossibleDate(),
+                lastDate: AppDateUtils.lastPossibleDate(),
               ).then((date) {
                 widget.onChanged(date);
                 setState(() {

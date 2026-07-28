@@ -2,63 +2,53 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../themes/dimensions.dart';
-import 'custom_badge.dart';
 
 abstract class CustomIcons {
-  static const String _basePath = 'assets/icons';
+  static const _basePath = 'assets/icons';
 
-  static const String appIcon = '$_basePath/icon.svg';
+  static const appIcon = '$_basePath/icon.svg';
 
-  static const String feed = '$_basePath/feed.svg';
-  static const String sources = '$_basePath/sources.svg';
-  static const String saved = '$_basePath/saved.svg';
-  static const String settings = '$_basePath/settings.svg';
+  static const feed = '$_basePath/feed.svg';
+  static const sources = '$_basePath/sources.svg';
+  static const saved = '$_basePath/saved.svg';
+  static const settings = '$_basePath/settings.svg';
 
-  static const String refresh = '$_basePath/refresh.svg';
-  static const String noInternet = '$_basePath/no_internet.svg';
+  static const refresh = '$_basePath/refresh.svg';
+  static const noInternet = '$_basePath/no_internet.svg';
 
-  static const String read = '$_basePath/read.svg';
-  static const String unread = '$_basePath/unread.svg';
+  static const read = '$_basePath/read.svg';
+  static const unread = '$_basePath/unread.svg';
 
-  static const String check = '$_basePath/check.svg';
-  static const String checked = '$_basePath/checked.svg';
+  static const check = '$_basePath/check.svg';
+  static const checked = '$_basePath/checked.svg';
 
-  static const String search = '$_basePath/search.svg';
-  static const String filter = '$_basePath/filter.svg';
-  static const String share = '$_basePath/share.svg';
+  static const search = '$_basePath/search.svg';
+  static const filter = '$_basePath/filter.svg';
+  static const share = '$_basePath/share.svg';
 
-  static const String add = '$_basePath/add.svg';
-  static const String modify = '$_basePath/modify.svg';
-  static const String remove = '$_basePath/remove.svg';
-  static const String trash = '$_basePath/trash.svg';
+  static const add = '$_basePath/add.svg';
+  static const modify = '$_basePath/modify.svg';
+  static const remove = '$_basePath/remove.svg';
+  static const trash = '$_basePath/trash.svg';
 
-  static const String sendMail = '$_basePath/send_mail.svg';
+  static const sendMail = '$_basePath/send_mail.svg';
 
-  static const String missingImage = '$_basePath/missing_image.svg';
-  static const String error = '$_basePath/error.svg';
+  static const missingImage = '$_basePath/missing_image.svg';
+  static const error = '$_basePath/error.svg';
 }
 
 class CustomIcon extends StatelessWidget {
-  const CustomIcon({
-    super.key,
-    required this.iconPath,
-    this.size,
-    this.color,
-    this.showBadge = false,
-    this.badgeLabel,
-  });
+  const CustomIcon({super.key, required this.iconPath, this.size, this.color});
 
   final String iconPath;
   final double? size;
   final Color? color;
-  final bool showBadge;
-  final String? badgeLabel;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final size = this.size ?? AppDimensions.of(context).iconSizeDefault;
-    final icon = SvgPicture.asset(
+    return SvgPicture.asset(
       iconPath,
       width: size,
       height: size,
@@ -67,6 +57,5 @@ class CustomIcon extends StatelessWidget {
         BlendMode.srcIn,
       ),
     );
-    return CustomBadge(show: showBadge, label: badgeLabel, child: icon);
   }
 }

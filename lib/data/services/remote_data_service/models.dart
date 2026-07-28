@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import '../../../domain/url_resolver/url_resolver.dart.dart';
+import '../../../utils/utils.dart';
 
 part 'models.g.dart';
 
@@ -12,14 +13,14 @@ class SourceRecommendations {
     required this.sources,
   });
 
-  factory SourceRecommendations.fromJson(final Map<String, dynamic> json) =>
+  factory SourceRecommendations.fromJson(final JsonMap json) =>
       _$SourceRecommendationsFromJson(json);
 
   final int version;
   final DateTime updatedAt;
   final List<SourceRecommendation> sources;
 
-  Map<String, dynamic> toJson() => _$SourceRecommendationsToJson(this);
+  JsonMap toJson() => _$SourceRecommendationsToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake)
@@ -35,7 +36,7 @@ class SourceRecommendation {
     required this.genre,
   });
 
-  factory SourceRecommendation.fromJson(final Map<String, dynamic> json) =>
+  factory SourceRecommendation.fromJson(final JsonMap json) =>
       _$SourceRecommendationFromJson(json);
 
   final String name;
@@ -49,5 +50,5 @@ class SourceRecommendation {
   final String category;
   final String genre;
 
-  Map<String, dynamic> toJson() => _$SourceRecommendationToJson(this);
+  JsonMap toJson() => _$SourceRecommendationToJson(this);
 }

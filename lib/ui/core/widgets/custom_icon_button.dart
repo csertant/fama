@@ -15,8 +15,6 @@ class CustomIconButton extends StatelessWidget {
     this.tooltip,
     this.enabled = true,
     this.size = AppDimensions.iconSizeMedium,
-    this.showBadge = false,
-    this.badgeLabel,
   }) : type = CustomIconButtonType.normal;
 
   CustomIconButton.redirectInApp({
@@ -27,8 +25,6 @@ class CustomIconButton extends StatelessWidget {
     this.tooltip,
     this.enabled = true,
     this.size = AppDimensions.iconSizeMedium,
-    this.showBadge = false,
-    this.badgeLabel,
   }) : type = CustomIconButtonType.redirectInApp,
        onTap = (() => context.go(route));
 
@@ -39,8 +35,6 @@ class CustomIconButton extends StatelessWidget {
     this.tooltip,
     this.enabled = true,
     this.size = AppDimensions.iconSizeMedium,
-    this.showBadge = false,
-    this.badgeLabel,
   }) : type = CustomIconButtonType.redirectExternal,
        onTap = (() => safeLaunchUrl(url: Uri.parse(url)));
 
@@ -50,19 +44,12 @@ class CustomIconButton extends StatelessWidget {
   final String? tooltip;
   final bool enabled;
   final CustomIconButtonType type;
-  final bool showBadge;
-  final String? badgeLabel;
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: enabled ? onTap : null,
-      icon: CustomIcon(
-        iconPath: icon,
-        size: size,
-        showBadge: showBadge,
-        badgeLabel: badgeLabel,
-      ),
+      icon: CustomIcon(iconPath: icon, size: size),
       tooltip: tooltip,
     );
   }
