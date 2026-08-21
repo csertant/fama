@@ -41,7 +41,7 @@ class BootstrapViewModel extends ChangeNotifier {
               return const Result.ok(null);
             }
           }
-          return _sessionManager.initializeSession(
+          return await _sessionManager.initializeSession(
             profileId: defaultProfile.id,
           );
         case Error<Profile>(error: final error):

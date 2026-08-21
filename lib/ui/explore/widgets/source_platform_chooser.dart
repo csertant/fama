@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../domain/url_resolver/url_resolver.dart.dart';
 import '../../../domain/url_resolver/url_strategies.dart';

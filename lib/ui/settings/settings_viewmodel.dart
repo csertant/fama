@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:drift/drift.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../data/database/database.dart';
 import '../../data/managers/session/session_manager.dart';
@@ -138,7 +138,7 @@ class SettingsViewModel extends ChangeNotifier {
       if (removeResult is Ok<void> &&
           isActiveProfile &&
           remainingProfiles.isNotEmpty) {
-        return _sessionManager.initializeSession(
+        return await _sessionManager.initializeSession(
           profileId: remainingProfiles.first.id,
         );
       }

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:drift/drift.dart' show Value;
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../data/database/database.dart';
 import '../../l10n/generated/app_localizations.dart';

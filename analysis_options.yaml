@@ -12,6 +12,13 @@ analyzer:
     - lib/l10n/app_hu.arb
     - lib/l10n/app_en.arb
     - .dart_tool/**
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
 linter:
   rules:
     - always_declare_return_types
