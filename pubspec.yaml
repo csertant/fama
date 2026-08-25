@@ -3,7 +3,7 @@ description: "fáma for all platforms in flutter"
 
 publish_to: "none"
 
-version: 1.3.2+10
+version: 1.3.3+11
 
 environment:
   sdk: ^3.10.0
