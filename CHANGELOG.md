@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file.
 
 - Display legal notice and version information in settings metadata section.
 
+### Miscellaneous
+
+- Migrate codebase to use decoupled material design components for better maintainability and future-proofing.
+
 ## [1.3.2] - 2026-06-17
 
 ### Miscellaneous
