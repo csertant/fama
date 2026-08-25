@@ -8,6 +8,11 @@ All notable changes to this project will be documented in this file.
 
 - Display legal notice and version information in settings metadata section.
 
+### Fixed
+
+- Do not refresh feed data automatically when connecting back to the internet as it can be disruptive to the user experience.
+- Make the custom source subscription modal available more easily by sticking it to the top of the explore screen, allowing users to add custom sources without scrolling through recommendations.
+
 ### Miscellaneous
 
 - Migrate codebase to use decoupled material design components for better maintainability and future-proofing.

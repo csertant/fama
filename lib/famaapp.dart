@@ -38,7 +38,10 @@ class _FamaAppState extends State<FamaApp> {
         return MaterialApp(
           onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
           debugShowCheckedModeBanner: false,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            ...GlobalMaterialLocalizations.delegates,
+          ],
           supportedLocales: AppLocalizations.supportedLocales,
           locale: Locale(appSettings.languageCode),
           theme: AppTheme.lightTheme,
@@ -50,7 +53,10 @@ class _FamaAppState extends State<FamaApp> {
         return MaterialApp.router(
           onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
           debugShowCheckedModeBanner: false,
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            ...GlobalMaterialLocalizations.delegates,
+          ],
           supportedLocales: AppLocalizations.supportedLocales,
           locale: Locale(appSettings.languageCode),
           theme: AppTheme.lightTheme,

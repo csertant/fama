@@ -117,6 +117,9 @@ class ExploreViewModel extends ChangeNotifier {
   }
 
   bool get showSubscribed => _showSubscribed;
+  bool isSubscribedToSource(SourceRecommendation recommendation) {
+    return _subscribedSources.any((s) => s.url == recommendation.url);
+  }
 
   Future<Result<void>> _load() async {
     try {

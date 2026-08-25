@@ -6,7 +6,6 @@ import 'package:material_ui/material_ui.dart';
 import '../../data/database/database.dart';
 import '../../data/managers/session/session_manager.dart';
 import '../../data/repositories/article/article_repository.dart';
-import '../../data/services/connectivity_service/connectivity_service.dart';
 import '../../utils/utils.dart';
 import '../core/mixins/article_filter_mixin.dart';
 import '../core/widgets/widgets.dart';
@@ -15,17 +14,13 @@ class FeedViewModel extends ChangeNotifier with ArticleFilterMixin {
   FeedViewModel({
     required ArticleRepository articleRepository,
     required SessionManager sessionManager,
-    required ConnectivityService connectivityService,
   }) : _sessionManager = sessionManager,
-       _articleRepository = articleRepository,
-       _connectivityService = connectivityService,
-       _lastConnectionStatus = connectivityService.connectionStatus {
+       _articleRepository = articleRepository {
     load = Command0(_load);
     markAsSaved = Command1(_markAsSaved);
     markAsRead = Command1(_markAsRead);
 
     _sessionManager.addListener(_onSessionChanged);
-    _connectivityService.addListener(_onConnectivityChanged);
     _articlesSubscription = _articleRepository
         .watchArticles(profileId: _sessionManager.profileId!)
         .listen(_onArticlesChanged);
@@ -36,8 +31,6 @@ class FeedViewModel extends ChangeNotifier with ArticleFilterMixin {
   final SessionManager _sessionManager;
   final ArticleRepository _articleRepository;
   StreamSubscription<List<Article>>? _articlesSubscription;
-  final ConnectivityService _connectivityService;
-  ConnectionStatus _lastConnectionStatus;
 
   List<Article> _articles = [];
   @override
@@ -93,15 +86,6 @@ class FeedViewModel extends ChangeNotifier with ArticleFilterMixin {
     _articles = articles;
     invalidateFilterData();
     notifyListeners();
-  }
-
-  void _onConnectivityChanged() {
-    final currentStatus = _connectivityService.connectionStatus;
-    if (_lastConnectionStatus == ConnectionStatus.offline &&
-        currentStatus == ConnectionStatus.online) {
-      unawaited(load.execute());
-    }
-    _lastConnectionStatus = currentStatus;
   }
 
   Future<Result<void>> _markAsSaved(Article article) async {
@@ -166,7 +150,6 @@ class FeedViewModel extends ChangeNotifier with ArticleFilterMixin {
   @override
   Future<void> dispose() async {
     _sessionManager.removeListener(_onSessionChanged);
-    _connectivityService.removeListener(_onConnectivityChanged);
     await _articlesSubscription?.cancel();
     super.dispose();
   }

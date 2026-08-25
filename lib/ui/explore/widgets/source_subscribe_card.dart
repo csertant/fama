@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
+import '../../core/themes/dimensions.dart';
 import '../../core/widgets/widgets.dart';
 
 class SourceSubscribeCard extends StatelessWidget {
@@ -16,16 +17,19 @@ class SourceSubscribeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = AppLocalizations.of(context)!;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(title, style: Theme.of(context).textTheme.titleMedium),
-        CustomIconButton.normal(
-          icon: CustomIcons.add,
-          tooltip: localizations.exploreAddCustomSourceActionLabel,
-          onTap: onSubscribe,
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(AppDimensions.paddingMedium),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(title, style: Theme.of(context).textTheme.titleMedium),
+          CustomIconButton.normal(
+            icon: CustomIcons.add,
+            tooltip: localizations.exploreAddCustomSourceActionLabel,
+            onTap: onSubscribe,
+          ),
+        ],
+      ),
     );
   }
 }

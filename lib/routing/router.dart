@@ -38,7 +38,6 @@ GoRouter router() => GoRouter(
                 final viewModel = FeedViewModel(
                   sessionManager: context.read<SessionManager>(),
                   articleRepository: context.read<ArticleRepository>(),
-                  connectivityService: context.read<ConnectivityService>(),
                 );
                 return FeedScreen(viewModel: viewModel);
               },

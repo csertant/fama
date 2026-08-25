@@ -90,55 +90,39 @@ class _ExploreScreenState extends State<ExploreScreen> {
               child: ListenableBuilder(
                 listenable: widget.viewModel,
                 builder: (context, child) {
-                  return widget.viewModel.filteredRecommendations.isNotEmpty
-                      ? ListView.separated(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: AppDimensions.paddingMedium,
+                  return Column(
+                    children: [
+                      SourceSubscribeCard(
+                        title: localizations.exploreAddCustomSourceTitle,
+                        onSubscribe: () =>
+                            _showSubscribeToCustomSourceModal(context),
+                      ),
+                      const CustomDivider(),
+                      if (widget.viewModel.filteredRecommendations.isNotEmpty)
+                        Expanded(
+                          child: ListView.separated(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: AppDimensions.paddingMedium,
+                            ),
+                            itemCount:
+                                widget.viewModel.filteredRecommendations.length,
+                            itemBuilder: _buildRecommendationCard,
+                            separatorBuilder: (_, _) => const CustomDivider(),
                           ),
-                          itemCount:
-                              widget.viewModel.filteredRecommendations.length +
-                              1,
-                          itemBuilder: (context, index) {
-                            if (index == 0) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: AppDimensions.paddingMedium,
-                                ),
-                                child: SourceSubscribeCard(
-                                  title:
-                                      localizations.exploreAddCustomSourceTitle,
-                                  onSubscribe: () =>
-                                      _showSubscribeToCustomSourceModal(
-                                        context,
-                                      ),
-                                ),
-                              );
-                            }
-                            return _buildRecommendationCard(context, index - 1);
-                          },
-                          separatorBuilder: (context, index) =>
-                              const CustomDivider(),
-                        )
-                      : CustomPlaceholder(
-                          message:
-                              widget.viewModel.sourceRecommendations.isEmpty
-                              ? localizations.exploreEmptyLabel
-                              : localizations.filtersNoMatchesLabel,
-                          action: widget.viewModel.sourceRecommendations.isEmpty
-                              ? CustomIconButton.normal(
-                                  icon: CustomIcons.add,
-                                  onTap: () =>
-                                      _showSubscribeToCustomSourceModal(
-                                        context,
-                                      ),
-                                  tooltip: localizations.navigationLabelExplore,
-                                )
-                              : CustomIconButton.normal(
-                                  icon: CustomIcons.remove,
-                                  onTap: widget.viewModel.clearFilters,
-                                  tooltip: localizations.filtersActionLabel,
-                                ),
-                        );
+                        ),
+                      if (widget.viewModel.filteredRecommendations.isEmpty)
+                        Expanded(
+                          child: CustomPlaceholder(
+                            message: localizations.filtersNoMatchesLabel,
+                            action: CustomIconButton.normal(
+                              icon: CustomIcons.remove,
+                              onTap: widget.viewModel.clearFilters,
+                              tooltip: localizations.filtersActionLabel,
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
                 },
               ),
             ),
@@ -152,9 +136,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
     final recommendation = widget.viewModel.filteredRecommendations[index];
     return SourceRecommendationCard(
       recommendation: recommendation,
-      subscribed: widget.viewModel.subscribedSources.any(
-        (s) => s.url == recommendation.url,
-      ),
+      subscribed: widget.viewModel.isSubscribedToSource(recommendation),
       onSubscribe: () =>
           widget.viewModel.subscribeToSource.execute(recommendation.url),
     );
