@@ -33,28 +33,40 @@ abstract class CustomIcons {
 
   static const sendMail = '$_basePath/send_mail.svg';
 
+  static const arrowDown = '$_basePath/arrow_down.svg';
+
   static const missingImage = '$_basePath/missing_image.svg';
   static const error = '$_basePath/error.svg';
 }
 
 class CustomIcon extends StatelessWidget {
-  const CustomIcon({super.key, required this.iconPath, this.size, this.color});
+  const CustomIcon({
+    super.key,
+    required this.iconPath,
+    this.size,
+    this.color,
+    this.padding,
+  });
 
   final String iconPath;
   final double? size;
   final Color? color;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final size = this.size ?? AppDimensions.of(context).iconSizeDefault;
-    return SvgPicture.asset(
-      iconPath,
-      width: size,
-      height: size,
-      colorFilter: ColorFilter.mode(
-        color ?? theme.colorScheme.outline,
-        BlendMode.srcIn,
+    return Padding(
+      padding: padding ?? EdgeInsets.zero,
+      child: SvgPicture.asset(
+        iconPath,
+        width: size,
+        height: size,
+        colorFilter: ColorFilter.mode(
+          color ?? theme.colorScheme.outline,
+          BlendMode.srcIn,
+        ),
       ),
     );
   }

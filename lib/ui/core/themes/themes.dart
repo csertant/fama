@@ -132,6 +132,11 @@ abstract final class AppTheme {
   );
 
   static ThemeData lightTheme = ThemeData(
+    badgeTheme: BadgeThemeData(
+      backgroundColor: AppColors.lightColorScheme.onPrimary,
+      textStyle: _textTheme.labelSmall,
+      padding: const EdgeInsets.all(AppDimensions.paddingExtraSmall),
+    ),
     brightness: Brightness.light,
     colorScheme: AppColors.lightColorScheme,
     textTheme: _textTheme,
@@ -162,6 +167,11 @@ abstract final class AppTheme {
   );
 
   static ThemeData darkTheme = ThemeData(
+    badgeTheme: BadgeThemeData(
+      backgroundColor: AppColors.darkColorScheme.onPrimary,
+      textStyle: _textTheme.labelSmall,
+      padding: const EdgeInsets.all(AppDimensions.paddingExtraSmall),
+    ),
     brightness: Brightness.dark,
     colorScheme: AppColors.darkColorScheme,
     textTheme: _textTheme,

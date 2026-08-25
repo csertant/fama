@@ -163,17 +163,17 @@ class _SavedScreenState extends State<SavedScreen> {
           actionLabel: localizations.filtersActionLabel,
           onAction: widget.viewModel.clearFilters,
           childrenBuilder: (context) => [
+            CustomFilterDropdown(
+              label: localizations.feedFiltersAuthorsLabel,
+              selected: widget.viewModel.selectedAuthors,
+              options: widget.viewModel.availableAuthors,
+              onOptionSelected: widget.viewModel.toggleAuthorFilter,
+            ),
             CustomFilterChips(
               label: localizations.feedFiltersSourcesLabel,
               selected: widget.viewModel.selectedSources,
               options: widget.viewModel.availableSources,
               onOptionSelected: widget.viewModel.toggleSourceFilter,
-            ),
-            CustomFilterChips(
-              label: localizations.feedFiltersAuthorsLabel,
-              selected: widget.viewModel.selectedAuthors,
-              options: widget.viewModel.availableAuthors,
-              onOptionSelected: widget.viewModel.toggleAuthorFilter,
             ),
             CustomFilterChips(
               label: localizations.feedFiltersDurationLabel,

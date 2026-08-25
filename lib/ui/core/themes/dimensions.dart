@@ -42,6 +42,8 @@ abstract final class AppDimensions {
 
   static const sourceImageSize = 64.0;
 
+  static const dropdownOptionsMaxHeight = 200.0;
+
   double get paddingScreenHorizontal;
   double get paddingScreenVertical;
 

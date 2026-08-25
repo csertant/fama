@@ -9,6 +9,7 @@ export 'custom_divider.dart';
 export 'custom_error_banner.dart';
 export 'custom_error_indicator.dart';
 export 'custom_filter.dart';
+export 'custom_filter_dropdown.dart';
 export 'custom_icon.dart';
 export 'custom_icon_button.dart';
 export 'custom_modal_sheet.dart';

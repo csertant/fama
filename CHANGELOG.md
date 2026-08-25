@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.3.3]
+## [1.3.3] - 2026-08-25
 
 ### Added
 
@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 
 - Do not refresh feed data automatically when connecting back to the internet as it can be disruptive to the user experience.
 - Make the custom source subscription modal available more easily by sticking it to the top of the explore screen, allowing users to add custom sources without scrolling through recommendations.
+- Refactored author filter to be simpler and more user-friendly.
 
 ### Miscellaneous
 
