@@ -7,8 +7,7 @@ import '../../services/local_data_service/local_data_service.dart';
 import 'session_manager.dart';
 
 class SessionManagerProd extends ChangeNotifier implements SessionManager {
-  SessionManagerProd({required final LocalDataService localDataService})
-    : _localDataService = localDataService;
+  SessionManagerProd({required this._localDataService});
 
   final LocalDataService _localDataService;
 
@@ -33,9 +32,7 @@ class SessionManagerProd extends ChangeNotifier implements SessionManager {
   }
 
   @override
-  Future<Result<void>> initializeSession({
-    required final ProfileId profileId,
-  }) async {
+  Future<Result<void>> initializeSession({required ProfileId profileId}) async {
     final session = SessionsCompanion.insert(
       id: const Value(1),
       profileId: profileId,

@@ -7,7 +7,7 @@ import '../domain/url_resolver/url_strategies.dart';
 import '../ui/core/widgets/custom_filter.dart';
 import 'generated/app_localizations.dart';
 
-String mapThemeModeToString(final BuildContext context, final ThemeMode theme) {
+String mapThemeModeToString(BuildContext context, ThemeMode theme) {
   final localizations = AppLocalizations.of(context)!;
   switch (theme) {
     case ThemeMode.light:
@@ -19,10 +19,7 @@ String mapThemeModeToString(final BuildContext context, final ThemeMode theme) {
   }
 }
 
-String mapLanguageCodeToString(
-  final BuildContext context,
-  final String languageCode,
-) {
+String mapLanguageCodeToString(BuildContext context, String languageCode) {
   final localizations = AppLocalizations.of(context)!;
   switch (languageCode) {
     case AppLanguage.hungarian:
@@ -42,10 +39,7 @@ String mapLanguageCodeToString(
   }
 }
 
-String mapDurationToString(
-  final BuildContext context,
-  final Duration duration,
-) {
+String mapDurationToString(BuildContext context, Duration duration) {
   final localizations = AppLocalizations.of(context)!;
   if (duration.inHours == FilterDuration.hour.inHours) {
     return localizations.filtersDurationOptionHour;
@@ -64,7 +58,7 @@ String mapDurationToString(
   }
 }
 
-String mapCategoryToString(final BuildContext context, final String category) {
+String mapCategoryToString(BuildContext context, String category) {
   final localizations = AppLocalizations.of(context)!;
   switch (category) {
     case 'general':
@@ -80,7 +74,7 @@ String mapCategoryToString(final BuildContext context, final String category) {
   }
 }
 
-String mapGenreToString(final BuildContext context, final String genre) {
+String mapGenreToString(BuildContext context, String genre) {
   final localizations = AppLocalizations.of(context)!;
   switch (genre) {
     case 'general':
@@ -102,10 +96,7 @@ String mapGenreToString(final BuildContext context, final String genre) {
   }
 }
 
-String mapPlatformToHintTextString(
-  final BuildContext context,
-  final Platform platform,
-) {
+String mapPlatformToHintTextString(BuildContext context, Platform platform) {
   final localizations = AppLocalizations.of(context)!;
   switch (platform) {
     case Platform.bluesky:
@@ -131,7 +122,7 @@ String mapPlatformToHintTextString(
   }
 }
 
-String formatBytesAsFileSize(final int bytes) {
+String formatBytesAsFileSize(int bytes) {
   if (bytes <= 0) {
     return '0 B';
   }

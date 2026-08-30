@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+
 import '../../../utils/utils.dart';
 
 abstract class SessionManager extends ChangeNotifier {
@@ -7,7 +8,7 @@ abstract class SessionManager extends ChangeNotifier {
 
   Future<Result<void>> loadSavedSession();
 
-  Future<Result<void>> initializeSession({required final ProfileId profileId});
+  Future<Result<void>> initializeSession({required ProfileId profileId});
 
   Future<Result<void>> endSession();
 }

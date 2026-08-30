@@ -11,30 +11,30 @@ abstract class ArticleRepository {
   Stream<List<Article>> watchArticles({required Id profileId});
 
   Future<Result<void>> markAsRead({
-    required final Id profileId,
-    required final Id articleId,
+    required Id profileId,
+    required Id articleId,
   });
 
   Future<Result<void>> markAsUnread({
-    required final Id profileId,
-    required final Id articleId,
+    required Id profileId,
+    required Id articleId,
   });
 
   Future<Result<void>> markAsSaved({
-    required final Id profileId,
-    required final Id articleId,
+    required Id profileId,
+    required Id articleId,
   });
 
   Future<Result<void>> markAsUnsaved({
-    required final Id profileId,
-    required final Id articleId,
+    required Id profileId,
+    required Id articleId,
   });
 
   Future<Result<void>> removeArticles({
-    required final Id profileId,
-    required final bool isRead,
-    required final bool isSaved,
-    required final DateTime before,
+    required Id profileId,
+    required bool isRead,
+    required bool isSaved,
+    required DateTime before,
   });
 
   Future<Result<void>> syncArticlesForProfile({required Id profileId});

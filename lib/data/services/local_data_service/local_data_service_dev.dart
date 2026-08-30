@@ -59,9 +59,7 @@ class LocalDataServiceDev implements LocalDataService {
   }
 
   @override
-  Future<Result<void>> saveSession({
-    required final SessionsCompanion session,
-  }) async {
+  Future<Result<void>> saveSession({required SessionsCompanion session}) async {
     return const Result.ok(null);
   }
 
@@ -81,9 +79,7 @@ class LocalDataServiceDev implements LocalDataService {
   }
 
   @override
-  Future<Result<void>> saveProfile({
-    required final ProfilesCompanion profile,
-  }) async {
+  Future<Result<void>> saveProfile({required ProfilesCompanion profile}) async {
     return const Result.ok(null);
   }
 
@@ -99,7 +95,7 @@ class LocalDataServiceDev implements LocalDataService {
 
   @override
   Future<Result<List<Source>>> getSourcesForProfile({
-    required final Id profileId,
+    required Id profileId,
   }) async {
     return Result.ok([exampleSource.copyWith(profileId: profileId)]);
   }
@@ -126,13 +122,13 @@ class LocalDataServiceDev implements LocalDataService {
   }
 
   @override
-  Stream<List<Source>> watchSourcesForProfile({required final Id profileId}) {
+  Stream<List<Source>> watchSourcesForProfile({required Id profileId}) {
     return Stream.value([exampleSource.copyWith(profileId: profileId)]);
   }
 
   @override
   Future<Result<List<Article>>> getUnreadArticles({
-    required final Id profileId,
+    required Id profileId,
   }) async {
     return Result.ok(
       exampleArticles
@@ -143,7 +139,7 @@ class LocalDataServiceDev implements LocalDataService {
 
   @override
   Future<Result<List<Article>>> getSavedArticles({
-    required final Id profileId,
+    required Id profileId,
   }) async {
     return Result.ok(
       exampleArticles
@@ -153,9 +149,7 @@ class LocalDataServiceDev implements LocalDataService {
   }
 
   @override
-  Future<Result<List<Article>>> getArticles({
-    required final Id profileId,
-  }) async {
+  Future<Result<List<Article>>> getArticles({required Id profileId}) async {
     return Result.ok(
       exampleArticles
           .where((article) => article.profileId == profileId)
@@ -201,7 +195,7 @@ class LocalDataServiceDev implements LocalDataService {
   }
 
   @override
-  Stream<List<Article>> watchUnreadArticles({required final Id profileId}) {
+  Stream<List<Article>> watchUnreadArticles({required Id profileId}) {
     return Stream.value(
       exampleArticles
           .where((article) => !article.isRead && article.profileId == profileId)
@@ -210,7 +204,7 @@ class LocalDataServiceDev implements LocalDataService {
   }
 
   @override
-  Stream<List<Article>> watchSavedArticles({required final Id profileId}) {
+  Stream<List<Article>> watchSavedArticles({required Id profileId}) {
     return Stream.value(
       exampleArticles
           .where((article) => article.isSaved && article.profileId == profileId)
@@ -219,7 +213,7 @@ class LocalDataServiceDev implements LocalDataService {
   }
 
   @override
-  Stream<List<Article>> watchArticles({required final Id profileId}) {
+  Stream<List<Article>> watchArticles({required Id profileId}) {
     return Stream.value(
       exampleArticles
           .where((article) => article.profileId == profileId)

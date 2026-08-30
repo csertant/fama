@@ -5,19 +5,14 @@ import '../../services/remote_data_service/models.dart';
 abstract class SourceRepository {
   Future<Result<List<SourceRecommendation>>> getSourceRecommendations();
 
-  Future<Result<List<Source>>> getSourcesForProfile({
-    required final Id profileId,
-  });
+  Future<Result<List<Source>>> getSourcesForProfile({required Id profileId});
 
-  Stream<List<Source>> watchSourcesForProfile({required final Id profileId});
+  Stream<List<Source>> watchSourcesForProfile({required Id profileId});
 
-  Future<Result<void>> saveSource({
-    required final Id profileId,
-    required final String url,
-  });
+  Future<Result<void>> saveSource({required Id profileId, required String url});
 
   Future<Result<void>> removeSource({
-    required final Id profileId,
-    required final Id sourceId,
+    required Id profileId,
+    required Id sourceId,
   });
 }

@@ -10,12 +10,10 @@ import '../../utils/utils.dart';
 
 class BootstrapViewModel extends ChangeNotifier {
   BootstrapViewModel({
-    required SettingsRepository settingsRepository,
-    required ProfileRepository profileRepository,
-    required SessionManager sessionManager,
-  }) : _settingsRepository = settingsRepository,
-       _profileRepository = profileRepository,
-       _sessionManager = sessionManager {
+    required this._settingsRepository,
+    required this._profileRepository,
+    required this._sessionManager,
+  }) {
     load = Command0(_load);
     unawaited(load.execute());
   }

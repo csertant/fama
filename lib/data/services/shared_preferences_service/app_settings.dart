@@ -18,8 +18,7 @@ class AppLanguage {
 class AppSettings {
   AppSettings({required this.languageCode, required this.theme});
 
-  factory AppSettings.fromJson(final JsonMap json) =>
-      _$AppSettingsFromJson(json);
+  factory AppSettings.fromJson(JsonMap json) => _$AppSettingsFromJson(json);
 
   @JsonKey(defaultValue: AppLanguage.hungarian)
   final String languageCode;
@@ -27,7 +26,7 @@ class AppSettings {
   @JsonKey(defaultValue: ThemeMode.system)
   final ThemeMode theme;
 
-  AppSettings copyWith({final String? languageCode, final ThemeMode? theme}) {
+  AppSettings copyWith({String? languageCode, ThemeMode? theme}) {
     return AppSettings(
       languageCode: languageCode ?? this.languageCode,
       theme: theme ?? this.theme,

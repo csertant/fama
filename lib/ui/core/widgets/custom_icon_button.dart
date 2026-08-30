@@ -20,7 +20,7 @@ class CustomIconButton extends StatelessWidget {
   CustomIconButton.redirectInApp({
     super.key,
     required this.icon,
-    required final String route,
+    required String route,
     required BuildContext context,
     this.tooltip,
     this.enabled = true,
@@ -31,7 +31,7 @@ class CustomIconButton extends StatelessWidget {
   CustomIconButton.redirectExternal({
     super.key,
     required this.icon,
-    required final String url,
+    required String url,
     this.tooltip,
     this.enabled = true,
     this.size = AppDimensions.iconSizeMedium,

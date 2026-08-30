@@ -10,10 +10,9 @@ import '../../utils/utils.dart';
 
 class SourcesViewModel extends ChangeNotifier {
   SourcesViewModel({
-    required SourceRepository sourceRepository,
-    required SessionManager sessionManager,
-  }) : _sourceRepository = sourceRepository,
-       _sessionManager = sessionManager {
+    required this._sourceRepository,
+    required this._sessionManager,
+  }) {
     load = Command0(_load);
     removeSource = Command1(_removeSource);
 

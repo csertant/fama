@@ -11,10 +11,9 @@ import '../core/mixins/article_filter_mixin.dart';
 
 class SavedViewModel extends ChangeNotifier with ArticleFilterMixin {
   SavedViewModel({
-    required ArticleRepository articleRepository,
-    required SessionManager sessionManager,
-  }) : _articleRepository = articleRepository,
-       _sessionManager = sessionManager {
+    required this._articleRepository,
+    required this._sessionManager,
+  }) {
     load = Command0(_load);
     markAsUnsaved = Command1(_markAsUnsaved);
     markAsRead = Command1(_markAsRead);

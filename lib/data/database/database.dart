@@ -204,7 +204,7 @@ class AppDatabase extends _$AppDatabase {
 
   // ---- Source management ----
 
-  Future<List<Source>> getSourcesForProfile({required final Id profileId}) {
+  Future<List<Source>> getSourcesForProfile({required Id profileId}) {
     return (select(sources)..where((s) => s.profileId.equals(profileId))).get();
   }
 
@@ -236,7 +236,7 @@ class AppDatabase extends _$AppDatabase {
         .go();
   }
 
-  Stream<List<Source>> watchSourcesForProfile({required final Id profileId}) {
+  Stream<List<Source>> watchSourcesForProfile({required Id profileId}) {
     return (select(
       sources,
     )..where((s) => s.profileId.equals(profileId))).watch();
@@ -244,11 +244,10 @@ class AppDatabase extends _$AppDatabase {
 
   // ---- Article management ----
 
-  Future<List<Article>> getUnreadArticles({required final Id profileId}) {
+  Future<List<Article>> getUnreadArticles({required Id profileId}) {
     final query =
-        select(
-            articles,
-          ).join([innerJoin(sources, sources.id.equalsExp(articles.sourceId))])
+        select(articles)
+            .join([innerJoin(sources, sources.id.equalsExp(articles.sourceId))])
           ..where(
             articles.isRead.equals(false) & sources.profileId.equals(profileId),
           )
@@ -258,11 +257,10 @@ class AppDatabase extends _$AppDatabase {
     });
   }
 
-  Future<List<Article>> getSavedArticles({required final Id profileId}) {
+  Future<List<Article>> getSavedArticles({required Id profileId}) {
     final query =
-        select(
-            articles,
-          ).join([innerJoin(sources, sources.id.equalsExp(articles.sourceId))])
+        select(articles)
+            .join([innerJoin(sources, sources.id.equalsExp(articles.sourceId))])
           ..where(
             articles.isSaved.equals(true) & sources.profileId.equals(profileId),
           )
@@ -272,11 +270,10 @@ class AppDatabase extends _$AppDatabase {
     });
   }
 
-  Future<List<Article>> getArticles({required final Id profileId}) {
+  Future<List<Article>> getArticles({required Id profileId}) {
     final query =
-        select(
-            articles,
-          ).join([innerJoin(sources, sources.id.equalsExp(articles.sourceId))])
+        select(articles)
+            .join([innerJoin(sources, sources.id.equalsExp(articles.sourceId))])
           ..where(sources.profileId.equals(profileId))
           ..orderBy([OrderingTerm.desc(articles.publishedAt)]);
     return query.get().then((rows) {
@@ -287,7 +284,7 @@ class AppDatabase extends _$AppDatabase {
   Future<void> insertOrUpdateArticles({
     required List<ArticlesCompanion> articles,
   }) {
-    return batch((final batch) {
+    return batch((batch) {
       for (final article in articles) {
         batch.insert(
           this.articles,
@@ -315,10 +312,10 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<void> deleteArticles({
-    required final Id profileId,
-    required final bool isRead,
-    required final bool isSaved,
-    required final DateTime before,
+    required Id profileId,
+    required bool isRead,
+    required bool isSaved,
+    required DateTime before,
   }) {
     return (delete(articles)..where(
           (a) =>
@@ -330,11 +327,10 @@ class AppDatabase extends _$AppDatabase {
         .go();
   }
 
-  Stream<List<Article>> watchUnreadArticles({required final Id profileId}) {
+  Stream<List<Article>> watchUnreadArticles({required Id profileId}) {
     final query =
-        select(
-            articles,
-          ).join([innerJoin(sources, sources.id.equalsExp(articles.sourceId))])
+        select(articles)
+            .join([innerJoin(sources, sources.id.equalsExp(articles.sourceId))])
           ..where(
             articles.isRead.equals(false) & sources.profileId.equals(profileId),
           )
@@ -344,11 +340,10 @@ class AppDatabase extends _$AppDatabase {
     });
   }
 
-  Stream<List<Article>> watchSavedArticles({required final Id profileId}) {
+  Stream<List<Article>> watchSavedArticles({required Id profileId}) {
     final query =
-        select(
-            articles,
-          ).join([innerJoin(sources, sources.id.equalsExp(articles.sourceId))])
+        select(articles)
+            .join([innerJoin(sources, sources.id.equalsExp(articles.sourceId))])
           ..where(
             articles.isSaved.equals(true) & sources.profileId.equals(profileId),
           )
@@ -358,11 +353,10 @@ class AppDatabase extends _$AppDatabase {
     });
   }
 
-  Stream<List<Article>> watchArticles({required final Id profileId}) {
+  Stream<List<Article>> watchArticles({required Id profileId}) {
     final query =
-        select(
-            articles,
-          ).join([innerJoin(sources, sources.id.equalsExp(articles.sourceId))])
+        select(articles)
+            .join([innerJoin(sources, sources.id.equalsExp(articles.sourceId))])
           ..where(sources.profileId.equals(profileId))
           ..orderBy([OrderingTerm.desc(articles.publishedAt)]);
     return query.watch().map((rows) {

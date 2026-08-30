@@ -22,65 +22,56 @@ import '../data/services/rss_service/rss_service.dart';
 import '../data/services/shared_preferences_service/shared_preferences_service.dart';
 
 List<SingleChildWidget> _sharedProviders = [
-  ChangeNotifierProvider(create: (final context) => ConnectivityService()),
+  ChangeNotifierProvider(create: (context) => ConnectivityService()),
   Provider(
-    create: (final context) => RemoteDataService(
+    create: (context) => RemoteDataService(
       connectivityService: context.read<ConnectivityService>(),
     ),
   ),
   Provider(
-    create: (final context) =>
+    create: (context) =>
         RssService(connectivityService: context.read<ConnectivityService>()),
   ),
-  Provider(create: (final context) => SharedPreferencesService()),
+  Provider(create: (context) => SharedPreferencesService()),
   Provider(
-    create: (final context) =>
-        ArticleRepositoryLocal(
-              rssService: context.read<RssService>(),
-              localDataService: context.read<LocalDataService>(),
-            )
-            as ArticleRepository,
+    create: (context) => ArticleRepositoryLocal(
+      rssService: context.read<RssService>(),
+      localDataService: context.read<LocalDataService>(),
+    ) as ArticleRepository,
   ),
   Provider(
-    create: (final context) =>
-        ProfileRepositoryLocal(
-              localDataService: context.read<LocalDataService>(),
-            )
-            as ProfileRepository,
+    create: (context) => ProfileRepositoryLocal(
+      localDataService: context.read<LocalDataService>(),
+    ) as ProfileRepository,
   ),
   Provider(
-    create: (final context) =>
-        SourceRepositoryLocal(
-              localDataService: context.read<LocalDataService>(),
-              remoteDataService: context.read<RemoteDataService>(),
-              rssService: context.read<RssService>(),
-            )
-            as SourceRepository,
+    create: (context) => SourceRepositoryLocal(
+      localDataService: context.read<LocalDataService>(),
+      remoteDataService: context.read<RemoteDataService>(),
+      rssService: context.read<RssService>(),
+    ) as SourceRepository,
   ),
   ChangeNotifierProvider(
-    create: (final context) =>
-        SettingsRepositoryLocal(
-              sharedPreferencesService: context
-                  .read<SharedPreferencesService>(),
-            )
-            as SettingsRepository,
+    create: (context) => SettingsRepositoryLocal(
+      sharedPreferencesService: context.read<SharedPreferencesService>(),
+    ) as SettingsRepository,
   ),
 ];
 
 List<SingleChildWidget> get stagingProviders {
   return [
     Provider<AppDatabase>(
-      create: (final context) => AppDatabase(),
-      dispose: (final context, final database) => database.close(),
+      create: (context) => AppDatabase(),
+      dispose: (context, database) => database.close(),
     ),
     Provider(
-      create: (final context) =>
+      create: (context) =>
           LocalDataServiceProd(database: context.read<AppDatabase>())
               as LocalDataService,
     ),
     ..._sharedProviders,
     ChangeNotifierProvider(
-      create: (final context) =>
+      create: (context) =>
           SessionManagerProd(localDataService: context.read<LocalDataService>())
               as SessionManager,
     ),
@@ -89,12 +80,10 @@ List<SingleChildWidget> get stagingProviders {
 
 List<SingleChildWidget> get developmentProviders {
   return [
-    Provider(
-      create: (final context) => LocalDataServiceDev() as LocalDataService,
-    ),
+    Provider(create: (context) => LocalDataServiceDev() as LocalDataService),
     ..._sharedProviders,
     ChangeNotifierProvider(
-      create: (final context) => SessionManagerDev() as SessionManager,
+      create: (context) => SessionManagerDev() as SessionManager,
     ),
   ];
 }

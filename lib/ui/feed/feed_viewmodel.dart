@@ -12,10 +12,9 @@ import '../core/widgets/widgets.dart';
 
 class FeedViewModel extends ChangeNotifier with ArticleFilterMixin {
   FeedViewModel({
-    required ArticleRepository articleRepository,
-    required SessionManager sessionManager,
-  }) : _sessionManager = sessionManager,
-       _articleRepository = articleRepository {
+    required this._articleRepository,
+    required this._sessionManager,
+  }) {
     load = Command0(_load);
     markAsSaved = Command1(_markAsSaved);
     markAsRead = Command1(_markAsRead);

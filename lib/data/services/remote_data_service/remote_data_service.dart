@@ -9,11 +9,10 @@ import 'models.dart';
 
 class RemoteDataService {
   RemoteDataService({
-    required ConnectivityService connectivityService,
+    required this._connectivityService,
     http.Client? client,
     RemoteDataServiceConfig? config,
-  }) : _connectivityService = connectivityService,
-       _client = client ?? http.Client(),
+  }) : _client = client ?? http.Client(),
        _config = config ?? RemoteDataServiceConfig.defaults;
 
   final ConnectivityService _connectivityService;

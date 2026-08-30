@@ -6,7 +6,7 @@ abstract class LocalDataService {
 
   Future<Result<Session>> getSession();
 
-  Future<Result<void>> saveSession({required final SessionsCompanion session});
+  Future<Result<void>> saveSession({required SessionsCompanion session});
 
   Future<Result<void>> removeSession();
 
@@ -14,15 +14,13 @@ abstract class LocalDataService {
 
   Future<Result<Profile>> getDefaultProfile();
 
-  Future<Result<void>> saveProfile({required final ProfilesCompanion profile});
+  Future<Result<void>> saveProfile({required ProfilesCompanion profile});
 
   Future<Result<void>> removeProfile({required Id profileId});
 
   Stream<List<Profile>> watchProfiles();
 
-  Future<Result<List<Source>>> getSourcesForProfile({
-    required final Id profileId,
-  });
+  Future<Result<List<Source>>> getSourcesForProfile({required Id profileId});
 
   Future<Result<void>> saveSource({required SourcesCompanion source});
 
@@ -36,15 +34,13 @@ abstract class LocalDataService {
     required Id sourceId,
   });
 
-  Stream<List<Source>> watchSourcesForProfile({required final Id profileId});
+  Stream<List<Source>> watchSourcesForProfile({required Id profileId});
 
-  Future<Result<List<Article>>> getUnreadArticles({
-    required final Id profileId,
-  });
+  Future<Result<List<Article>>> getUnreadArticles({required Id profileId});
 
-  Future<Result<List<Article>>> getSavedArticles({required final Id profileId});
+  Future<Result<List<Article>>> getSavedArticles({required Id profileId});
 
-  Future<Result<List<Article>>> getArticles({required final Id profileId});
+  Future<Result<List<Article>>> getArticles({required Id profileId});
 
   Future<Result<void>> saveArticles({
     required List<ArticlesCompanion> articles,
@@ -65,9 +61,9 @@ abstract class LocalDataService {
     required DateTime before,
   });
 
-  Stream<List<Article>> watchUnreadArticles({required final Id profileId});
+  Stream<List<Article>> watchUnreadArticles({required Id profileId});
 
-  Stream<List<Article>> watchSavedArticles({required final Id profileId});
+  Stream<List<Article>> watchSavedArticles({required Id profileId});
 
-  Stream<List<Article>> watchArticles({required final Id profileId});
+  Stream<List<Article>> watchArticles({required Id profileId});
 }

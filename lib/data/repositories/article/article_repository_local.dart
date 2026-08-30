@@ -9,10 +9,9 @@ import 'article_repository.dart';
 
 class ArticleRepositoryLocal implements ArticleRepository {
   ArticleRepositoryLocal({
-    required final RssService rssService,
-    required final LocalDataService localDataService,
-  }) : _rssService = rssService,
-       _localDataService = localDataService;
+    required this._rssService,
+    required this._localDataService,
+  });
 
   final LocalDataService _localDataService;
   final RssService _rssService;
@@ -49,42 +48,42 @@ class ArticleRepositoryLocal implements ArticleRepository {
 
   @override
   Future<Result<void>> markAsRead({
-    required final Id profileId,
-    required final Id articleId,
+    required Id profileId,
+    required Id articleId,
   }) {
     return _localDataService.markArticleAsRead(articleId: articleId);
   }
 
   @override
   Future<Result<void>> markAsUnread({
-    required final Id profileId,
-    required final Id articleId,
+    required Id profileId,
+    required Id articleId,
   }) {
     return _localDataService.markArticleAsUnread(articleId: articleId);
   }
 
   @override
   Future<Result<void>> markAsSaved({
-    required final Id profileId,
-    required final Id articleId,
+    required Id profileId,
+    required Id articleId,
   }) {
     return _localDataService.markArticleAsSaved(articleId: articleId);
   }
 
   @override
   Future<Result<void>> markAsUnsaved({
-    required final Id profileId,
-    required final Id articleId,
+    required Id profileId,
+    required Id articleId,
   }) {
     return _localDataService.markArticleAsUnsaved(articleId: articleId);
   }
 
   @override
   Future<Result<void>> removeArticles({
-    required final Id profileId,
-    required final bool isRead,
-    required final bool isSaved,
-    required final DateTime before,
+    required Id profileId,
+    required bool isRead,
+    required bool isSaved,
+    required DateTime before,
   }) {
     return _localDataService.removeArticles(
       profileId: profileId,

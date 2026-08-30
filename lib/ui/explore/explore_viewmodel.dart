@@ -13,14 +13,11 @@ import '../../utils/utils.dart';
 
 class ExploreViewModel extends ChangeNotifier {
   ExploreViewModel({
-    required FeedUrlFromPlatformUrlUseCase feedUrlFromPlatformUrlUseCase,
-    required SourceRepository sourceRepository,
-    required SessionManager sessionManager,
+    required this._feedUrlFromPlatformUrlUseCase,
+    required this._sourceRepository,
+    required this._sessionManager,
     required ConnectivityService connectivityService,
-  }) : _feedUrlFromPlatformUrlUseCase = feedUrlFromPlatformUrlUseCase,
-       _sourceRepository = sourceRepository,
-       _sessionManager = sessionManager,
-       _connectivityService = connectivityService,
+  }) : _connectivityService = connectivityService,
        _lastConnectionStatus = connectivityService.connectionStatus {
     load = Command0(_load);
     subscribeToSource = Command1(_subscribeToSource);

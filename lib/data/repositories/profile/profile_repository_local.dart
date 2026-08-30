@@ -6,8 +6,7 @@ import '../../services/local_data_service/local_data_service.dart';
 import 'profile_repository.dart';
 
 class ProfileRepositoryLocal implements ProfileRepository {
-  ProfileRepositoryLocal({required final LocalDataService localDataService})
-    : _localDataService = localDataService;
+  ProfileRepositoryLocal({required this._localDataService});
 
   final LocalDataService _localDataService;
 

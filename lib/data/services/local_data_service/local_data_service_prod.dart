@@ -3,7 +3,7 @@ import '../../database/database.dart';
 import 'local_data_service.dart';
 
 class LocalDataServiceProd implements LocalDataService {
-  LocalDataServiceProd({required AppDatabase database}) : _database = database;
+  LocalDataServiceProd({required this._database});
 
   final AppDatabase _database;
 
@@ -20,7 +20,7 @@ class LocalDataServiceProd implements LocalDataService {
   }
 
   @override
-  Future<Result<void>> saveSession({required final SessionsCompanion session}) {
+  Future<Result<void>> saveSession({required SessionsCompanion session}) {
     return guardVoid(() => _database.insertOrUpdateSession(session: session));
   }
 
@@ -42,7 +42,7 @@ class LocalDataServiceProd implements LocalDataService {
   }
 
   @override
-  Future<Result<void>> saveProfile({required final ProfilesCompanion profile}) {
+  Future<Result<void>> saveProfile({required ProfilesCompanion profile}) {
     return guardVoid(() => _database.insertOrUpdateProfile(profile: profile));
   }
 
@@ -59,9 +59,7 @@ class LocalDataServiceProd implements LocalDataService {
   // ---- Source management ----
 
   @override
-  Future<Result<List<Source>>> getSourcesForProfile({
-    required final Id profileId,
-  }) {
+  Future<Result<List<Source>>> getSourcesForProfile({required Id profileId}) {
     return guard(() => _database.getSourcesForProfile(profileId: profileId));
   }
 
@@ -94,28 +92,24 @@ class LocalDataServiceProd implements LocalDataService {
   }
 
   @override
-  Stream<List<Source>> watchSourcesForProfile({required final Id profileId}) {
+  Stream<List<Source>> watchSourcesForProfile({required Id profileId}) {
     return _database.watchSourcesForProfile(profileId: profileId);
   }
 
   // ---- Article management ----
 
   @override
-  Future<Result<List<Article>>> getUnreadArticles({
-    required final Id profileId,
-  }) {
+  Future<Result<List<Article>>> getUnreadArticles({required Id profileId}) {
     return guard(() => _database.getUnreadArticles(profileId: profileId));
   }
 
   @override
-  Future<Result<List<Article>>> getSavedArticles({
-    required final Id profileId,
-  }) {
+  Future<Result<List<Article>>> getSavedArticles({required Id profileId}) {
     return guard(() => _database.getSavedArticles(profileId: profileId));
   }
 
   @override
-  Future<Result<List<Article>>> getArticles({required final Id profileId}) {
+  Future<Result<List<Article>>> getArticles({required Id profileId}) {
     return guard(() => _database.getArticles(profileId: profileId));
   }
 
@@ -174,17 +168,17 @@ class LocalDataServiceProd implements LocalDataService {
   }
 
   @override
-  Stream<List<Article>> watchUnreadArticles({required final Id profileId}) {
+  Stream<List<Article>> watchUnreadArticles({required Id profileId}) {
     return _database.watchUnreadArticles(profileId: profileId);
   }
 
   @override
-  Stream<List<Article>> watchSavedArticles({required final Id profileId}) {
+  Stream<List<Article>> watchSavedArticles({required Id profileId}) {
     return _database.watchSavedArticles(profileId: profileId);
   }
 
   @override
-  Stream<List<Article>> watchArticles({required final Id profileId}) {
+  Stream<List<Article>> watchArticles({required Id profileId}) {
     return _database.watchArticles(profileId: profileId);
   }
 }

@@ -10,11 +10,10 @@ import 'models.dart';
 
 class RssService {
   RssService({
-    required ConnectivityService connectivityService,
+    required this._connectivityService,
     http.Client? client,
     RssServiceConfig? config,
-  }) : _connectivityService = connectivityService,
-       _client = client ?? http.Client(),
+  }) : _client = client ?? http.Client(),
        _config = config ?? RssServiceConfig.defaults;
 
   final ConnectivityService _connectivityService;

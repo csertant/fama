@@ -31,7 +31,7 @@ class _FamaAppState extends State<FamaApp> {
   }
 
   @override
-  Widget build(final BuildContext context) {
+  Widget build(BuildContext context) {
     final appSettings = context.watch<SettingsRepository>().appSettings;
     switch (widget.type) {
       case FamaAppType.bootstrap:

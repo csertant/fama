@@ -9,9 +9,7 @@ import '../../services/shared_preferences_service/shared_preferences_service.dar
 import 'settings_repository.dart';
 
 class SettingsRepositoryLocal extends SettingsRepository {
-  SettingsRepositoryLocal({
-    required final SharedPreferencesService sharedPreferencesService,
-  }) : _sharedPreferencesService = sharedPreferencesService {
+  SettingsRepositoryLocal({required this._sharedPreferencesService}) {
     unawaited(load());
   }
 
@@ -46,9 +44,7 @@ class SettingsRepositoryLocal extends SettingsRepository {
   }
 
   @override
-  Future<Result<void>> updateLanguage({
-    required final String languageCode,
-  }) async {
+  Future<Result<void>> updateLanguage({required String languageCode}) async {
     final loadResult = await load();
     switch (loadResult) {
       case Ok<void>():
@@ -69,7 +65,7 @@ class SettingsRepositoryLocal extends SettingsRepository {
   }
 
   @override
-  Future<Result<void>> updateTheme({required final ThemeMode theme}) async {
+  Future<Result<void>> updateTheme({required ThemeMode theme}) async {
     final loadResult = await load();
     switch (loadResult) {
       case Ok<void>():

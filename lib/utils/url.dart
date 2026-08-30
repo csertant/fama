@@ -3,7 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'result.dart';
 
-Future<Result<void>> safeLaunchUrl({required final Uri url}) async {
+Future<Result<void>> safeLaunchUrl({required Uri url}) async {
   if (await canLaunchUrl(url)) {
     await launchUrl(url);
     return const Result.ok(null);
@@ -12,7 +12,7 @@ Future<Result<void>> safeLaunchUrl({required final Uri url}) async {
   }
 }
 
-Future<Result<void>> safeShareUrl({required final Uri url}) async {
+Future<Result<void>> safeShareUrl({required Uri url}) async {
   try {
     await SharePlus.instance.share(ShareParams(uri: url));
     return const Result.ok(null);

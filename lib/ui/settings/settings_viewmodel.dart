@@ -16,14 +16,11 @@ import '../../utils/utils.dart';
 
 class SettingsViewModel extends ChangeNotifier {
   SettingsViewModel({
-    required ProfileRepository profileRepository,
-    required ArticleRepository articleRepository,
-    required SettingsRepository settingsRepository,
-    required SessionManager sessionManager,
-  }) : _profileRepository = profileRepository,
-       _articleRepository = articleRepository,
-       _settingsRepository = settingsRepository,
-       _sessionManager = sessionManager {
+    required this._profileRepository,
+    required this._articleRepository,
+    required this._settingsRepository,
+    required this._sessionManager,
+  }) {
     load = Command0(_load);
     updateTheme = Command1(_updateTheme);
     updateLanguage = Command1(_updateLanguage);
@@ -87,18 +84,15 @@ class SettingsViewModel extends ChangeNotifier {
     }
   }
 
-  Future<Result<void>> _updateTheme(final ThemeMode theme) {
+  Future<Result<void>> _updateTheme(ThemeMode theme) {
     return _settingsRepository.updateTheme(theme: theme);
   }
 
-  Future<Result<void>> _updateLanguage(final String languageCode) {
+  Future<Result<void>> _updateLanguage(String languageCode) {
     return _settingsRepository.updateLanguage(languageCode: languageCode);
   }
 
-  Future<Result<void>> _createProfile(
-    final String name,
-    final String? description,
-  ) {
+  Future<Result<void>> _createProfile(String name, String? description) {
     try {
       return _profileRepository.saveProfile(
         name: name.trim(),
@@ -109,11 +103,11 @@ class SettingsViewModel extends ChangeNotifier {
     }
   }
 
-  Future<Result<void>> _switchProfile(final Profile profile) {
+  Future<Result<void>> _switchProfile(Profile profile) {
     return _sessionManager.initializeSession(profileId: profile.id);
   }
 
-  Future<Result<void>> _modifyProfile(final Profile profile) {
+  Future<Result<void>> _modifyProfile(Profile profile) {
     try {
       return _profileRepository.modifyProfile(
         profile: profile.copyWith(
@@ -126,7 +120,7 @@ class SettingsViewModel extends ChangeNotifier {
     }
   }
 
-  Future<Result<void>> _removeProfile(final Profile profile) async {
+  Future<Result<void>> _removeProfile(Profile profile) async {
     try {
       final isActiveProfile = activeProfile.id == profile.id;
       final remainingProfiles = _profiles
@@ -149,9 +143,9 @@ class SettingsViewModel extends ChangeNotifier {
   }
 
   Future<Result<void>> _removeArticles(
-    final bool isRead,
-    final bool isSaved,
-    final DateTime? before,
+    bool isRead,
+    bool isSaved,
+    DateTime? before,
   ) {
     try {
       return _articleRepository.removeArticles(

@@ -13,7 +13,7 @@ class SourceRecommendations {
     required this.sources,
   });
 
-  factory SourceRecommendations.fromJson(final JsonMap json) =>
+  factory SourceRecommendations.fromJson(JsonMap json) =>
       _$SourceRecommendationsFromJson(json);
 
   final int version;
@@ -36,7 +36,7 @@ class SourceRecommendation {
     required this.genre,
   });
 
-  factory SourceRecommendation.fromJson(final JsonMap json) =>
+  factory SourceRecommendation.fromJson(JsonMap json) =>
       _$SourceRecommendationFromJson(json);
 
   final String name;

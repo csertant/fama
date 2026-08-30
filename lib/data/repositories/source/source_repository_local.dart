@@ -11,12 +11,10 @@ import 'source_repository.dart';
 
 class SourceRepositoryLocal implements SourceRepository {
   SourceRepositoryLocal({
-    required final LocalDataService localDataService,
-    required final RemoteDataService remoteDataService,
-    required final RssService rssService,
-  }) : _localDataService = localDataService,
-       _remoteDataService = remoteDataService,
-       _rssService = rssService;
+    required this._localDataService,
+    required this._remoteDataService,
+    required this._rssService,
+  });
 
   final LocalDataService _localDataService;
   final RemoteDataService _remoteDataService;
@@ -40,21 +38,19 @@ class SourceRepositoryLocal implements SourceRepository {
   }
 
   @override
-  Future<Result<List<Source>>> getSourcesForProfile({
-    required final Id profileId,
-  }) {
+  Future<Result<List<Source>>> getSourcesForProfile({required Id profileId}) {
     return _localDataService.getSourcesForProfile(profileId: profileId);
   }
 
   @override
-  Stream<List<Source>> watchSourcesForProfile({required final Id profileId}) {
+  Stream<List<Source>> watchSourcesForProfile({required Id profileId}) {
     return _localDataService.watchSourcesForProfile(profileId: profileId);
   }
 
   @override
   Future<Result<void>> saveSource({
-    required final Id profileId,
-    required final String url,
+    required Id profileId,
+    required String url,
   }) async {
     final parsedFeedResult = await _rssService.fetchFeed(url: url);
     if (parsedFeedResult is Ok<ParsedFeed>) {
@@ -76,8 +72,8 @@ class SourceRepositoryLocal implements SourceRepository {
 
   @override
   Future<Result<void>> removeSource({
-    required final Id profileId,
-    required final Id sourceId,
+    required Id profileId,
+    required Id sourceId,
   }) {
     return _localDataService.removeSource(
       profileId: profileId,

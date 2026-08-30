@@ -23,9 +23,7 @@ class SessionManagerDev extends ChangeNotifier implements SessionManager {
   }
 
   @override
-  Future<Result<void>> initializeSession({
-    required final ProfileId profileId,
-  }) async {
+  Future<Result<void>> initializeSession({required ProfileId profileId}) async {
     _profileId = profileId;
     notifyListeners();
     return const Result.ok(null);
