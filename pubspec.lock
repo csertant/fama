@@ -1038,10 +1038,10 @@ packages:
     dependency: "direct main"
     description:
       name: universal_feed
-      sha256: "5c5f4470ffd05a0601ffc11b071943ec8dd74360670b3207886d51c800f18e0e"
+      sha256: "4043f68019cdb6d0a7508b78d35ba6e0c7fb456f01a972cb420b3050abab434d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.0"
+    version: "0.8.0"
   universal_io:
     dependency: transitive
     description:
