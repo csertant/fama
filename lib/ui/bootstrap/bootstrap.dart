@@ -1,3 +1,4 @@
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
@@ -40,27 +41,19 @@ class _BootstrapState extends State<Bootstrap> {
     return ListenableBuilder(
       listenable: _bootstrapViewModel.load,
       builder: (context, child) {
-        if (_bootstrapViewModel.load.running ||
-            !_bootstrapViewModel.load.completed) {
-          return FamaApp.bootstrap(
-            home: Builder(
-              builder: (context) {
-                final localizations = AppLocalizations.of(context)!;
-                if (_bootstrapViewModel.load.running) {
-                  return const Scaffold(
-                    body: Center(child: CircularProgressIndicator()),
-                  );
-                }
-                return ErrorIndicator(
-                  title: localizations.bootstrapLoadErrorTitle,
-                  label: localizations.bootstrapLoadErrorLabel,
-                  onPressed: _bootstrapViewModel.load.execute,
-                );
-              },
-            ),
+        if (_bootstrapViewModel.load.running) {
+          return const SizedBox.shrink();
+        } else if (_bootstrapViewModel.load.error) {
+          final localizations = AppLocalizations.of(context)!;
+          return ErrorIndicator(
+            title: localizations.bootstrapLoadErrorTitle,
+            label: localizations.bootstrapLoadErrorLabel,
+            onPressed: _bootstrapViewModel.load.execute,
           );
+        } else {
+          FlutterNativeSplash.remove();
+          return const FamaApp();
         }
-        return const FamaApp.main();
       },
     );
   }

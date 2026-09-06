@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0]
+
+### Fixed
+
+- Refactored the app bootstrap process to be more simple and robust.
+
 ## [1.3.3] - 2026-08-25
 
 ### Added

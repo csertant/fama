@@ -7,15 +7,8 @@ import 'l10n/generated/app_localizations.dart';
 import 'routing/router.dart';
 import 'ui/core/themes/themes.dart';
 
-enum FamaAppType { main, bootstrap }
-
 class FamaApp extends StatefulWidget {
-  const FamaApp.main({super.key}) : type = FamaAppType.main, home = null;
-  const FamaApp.bootstrap({super.key, required this.home})
-    : type = FamaAppType.bootstrap;
-
-  final FamaAppType type;
-  final Widget? home;
+  const FamaApp({super.key});
 
   @override
   State<FamaApp> createState() => _FamaAppState();
@@ -33,37 +26,19 @@ class _FamaAppState extends State<FamaApp> {
   @override
   Widget build(BuildContext context) {
     final appSettings = context.watch<SettingsRepository>().appSettings;
-    switch (widget.type) {
-      case FamaAppType.bootstrap:
-        return MaterialApp(
-          onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
-          debugShowCheckedModeBanner: false,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            ...GlobalMaterialLocalizations.delegates,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: Locale(appSettings.languageCode),
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: appSettings.theme,
-          home: widget.home,
-        );
-      case FamaAppType.main:
-        return MaterialApp.router(
-          onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
-          debugShowCheckedModeBanner: false,
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            ...GlobalMaterialLocalizations.delegates,
-          ],
-          supportedLocales: AppLocalizations.supportedLocales,
-          locale: Locale(appSettings.languageCode),
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: appSettings.theme,
-          routerConfig: _router,
-        );
-    }
+    return MaterialApp.router(
+      onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+      debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        ...GlobalMaterialLocalizations.delegates,
+      ],
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: Locale(appSettings.languageCode),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: appSettings.theme,
+      routerConfig: _router,
+    );
   }
 }
