@@ -2202,24 +2202,22 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   ]);
 }
 
-typedef $$ProfilesTableCreateCompanionBuilder =
-    ProfilesCompanion Function({
-      Value<int> id,
-      required String name,
-      Value<String?> description,
-      Value<bool> isDefault,
-      Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
-    });
-typedef $$ProfilesTableUpdateCompanionBuilder =
-    ProfilesCompanion Function({
-      Value<int> id,
-      Value<String> name,
-      Value<String?> description,
-      Value<bool> isDefault,
-      Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
-    });
+typedef $$ProfilesTableCreateCompanionBuilder = ProfilesCompanion Function({
+  Value<int> id,
+  required String name,
+  Value<String?> description,
+  Value<bool> isDefault,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+});
+typedef $$ProfilesTableUpdateCompanionBuilder = ProfilesCompanion Function({
+  Value<int> id,
+  Value<String> name,
+  Value<String?> description,
+  Value<bool> isDefault,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+});
 
 final class $$ProfilesTableReferences
     extends BaseReferences<_$AppDatabase, $ProfilesTable, Profile> {
@@ -2718,10 +2716,14 @@ typedef $$ProfilesTableProcessedTableManager =
         bool articlesRefs,
       })
     >;
-typedef $$SessionsTableCreateCompanionBuilder =
-    SessionsCompanion Function({Value<int> id, required int profileId});
-typedef $$SessionsTableUpdateCompanionBuilder =
-    SessionsCompanion Function({Value<int> id, Value<int> profileId});
+typedef $$SessionsTableCreateCompanionBuilder = SessionsCompanion Function({
+  Value<int> id,
+  required int profileId,
+});
+typedef $$SessionsTableUpdateCompanionBuilder = SessionsCompanion Function({
+  Value<int> id,
+  Value<int> profileId,
+});
 
 final class $$SessionsTableReferences
     extends BaseReferences<_$AppDatabase, $SessionsTable, Session> {
@@ -2883,16 +2885,14 @@ class $$SessionsTableTableManager
               $$SessionsTableOrderingComposer($db: db, $table: table),
           createComputedFieldComposer: () =>
               $$SessionsTableAnnotationComposer($db: db, $table: table),
-          updateCompanionCallback:
-              ({
-                Value<int> id = const Value.absent(),
-                Value<int> profileId = const Value.absent(),
-              }) => SessionsCompanion(id: id, profileId: profileId),
-          createCompanionCallback:
-              ({
-                Value<int> id = const Value.absent(),
-                required int profileId,
-              }) => SessionsCompanion.insert(id: id, profileId: profileId),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<int> profileId = const Value.absent(),
+          }) => SessionsCompanion(id: id, profileId: profileId),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required int profileId,
+          }) => SessionsCompanion.insert(id: id, profileId: profileId),
           withReferenceMapper: (p0) => p0
               .map(
                 (e) => (
@@ -2922,17 +2922,15 @@ class $$SessionsTableTableManager
                     >
                   >(state) {
                     if (profileId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.profileId,
-                                referencedTable: $$SessionsTableReferences
-                                    ._profileIdTable(db),
-                                referencedColumn: $$SessionsTableReferences
-                                    ._profileIdTable(db)
-                                    .id,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.profileId,
+                        referencedTable: $$SessionsTableReferences
+                            ._profileIdTable(db),
+                        referencedColumn: $$SessionsTableReferences
+                            ._profileIdTable(db)
+                            .id,
+                      ) as T;
                     }
 
                     return state;
@@ -2960,34 +2958,32 @@ typedef $$SessionsTableProcessedTableManager =
       Session,
       PrefetchHooks Function({bool profileId})
     >;
-typedef $$SourcesTableCreateCompanionBuilder =
-    SourcesCompanion Function({
-      Value<int> id,
-      required int profileId,
-      required String url,
-      required String name,
-      Value<String?> description,
-      Value<String?> siteUrl,
-      Value<String?> category,
-      Value<String?> iconUrl,
-      Value<DateTime?> lastSyncedAt,
-      Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
-    });
-typedef $$SourcesTableUpdateCompanionBuilder =
-    SourcesCompanion Function({
-      Value<int> id,
-      Value<int> profileId,
-      Value<String> url,
-      Value<String> name,
-      Value<String?> description,
-      Value<String?> siteUrl,
-      Value<String?> category,
-      Value<String?> iconUrl,
-      Value<DateTime?> lastSyncedAt,
-      Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
-    });
+typedef $$SourcesTableCreateCompanionBuilder = SourcesCompanion Function({
+  Value<int> id,
+  required int profileId,
+  required String url,
+  required String name,
+  Value<String?> description,
+  Value<String?> siteUrl,
+  Value<String?> category,
+  Value<String?> iconUrl,
+  Value<DateTime?> lastSyncedAt,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+});
+typedef $$SourcesTableUpdateCompanionBuilder = SourcesCompanion Function({
+  Value<int> id,
+  Value<int> profileId,
+  Value<String> url,
+  Value<String> name,
+  Value<String?> description,
+  Value<String?> siteUrl,
+  Value<String?> category,
+  Value<String?> iconUrl,
+  Value<DateTime?> lastSyncedAt,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+});
 
 final class $$SourcesTableReferences
     extends BaseReferences<_$AppDatabase, $SourcesTable, Source> {
@@ -3420,17 +3416,15 @@ class $$SourcesTableTableManager
                     >
                   >(state) {
                     if (profileId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.profileId,
-                                referencedTable: $$SourcesTableReferences
-                                    ._profileIdTable(db),
-                                referencedColumn: $$SourcesTableReferences
-                                    ._profileIdTable(db)
-                                    .id,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.profileId,
+                        referencedTable: $$SourcesTableReferences
+                            ._profileIdTable(db),
+                        referencedColumn: $$SourcesTableReferences
+                            ._profileIdTable(db)
+                            .id,
+                      ) as T;
                     }
 
                     return state;
@@ -3470,44 +3464,42 @@ typedef $$SourcesTableProcessedTableManager =
       Source,
       PrefetchHooks Function({bool profileId, bool articlesRefs})
     >;
-typedef $$ArticlesTableCreateCompanionBuilder =
-    ArticlesCompanion Function({
-      Value<int> id,
-      required int sourceId,
-      required String sourceName,
-      required int profileId,
-      required String guid,
-      required String url,
-      required String title,
-      Value<String?> content,
-      Value<String?> summary,
-      Value<String?> author,
-      Value<String?> imageUrl,
-      Value<bool> isRead,
-      Value<bool> isSaved,
-      required DateTime publishedAt,
-      Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
-    });
-typedef $$ArticlesTableUpdateCompanionBuilder =
-    ArticlesCompanion Function({
-      Value<int> id,
-      Value<int> sourceId,
-      Value<String> sourceName,
-      Value<int> profileId,
-      Value<String> guid,
-      Value<String> url,
-      Value<String> title,
-      Value<String?> content,
-      Value<String?> summary,
-      Value<String?> author,
-      Value<String?> imageUrl,
-      Value<bool> isRead,
-      Value<bool> isSaved,
-      Value<DateTime> publishedAt,
-      Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
-    });
+typedef $$ArticlesTableCreateCompanionBuilder = ArticlesCompanion Function({
+  Value<int> id,
+  required int sourceId,
+  required String sourceName,
+  required int profileId,
+  required String guid,
+  required String url,
+  required String title,
+  Value<String?> content,
+  Value<String?> summary,
+  Value<String?> author,
+  Value<String?> imageUrl,
+  Value<bool> isRead,
+  Value<bool> isSaved,
+  required DateTime publishedAt,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+});
+typedef $$ArticlesTableUpdateCompanionBuilder = ArticlesCompanion Function({
+  Value<int> id,
+  Value<int> sourceId,
+  Value<String> sourceName,
+  Value<int> profileId,
+  Value<String> guid,
+  Value<String> url,
+  Value<String> title,
+  Value<String?> content,
+  Value<String?> summary,
+  Value<String?> author,
+  Value<String?> imageUrl,
+  Value<bool> isRead,
+  Value<bool> isSaved,
+  Value<DateTime> publishedAt,
+  Value<DateTime> createdAt,
+  Value<DateTime> updatedAt,
+});
 
 final class $$ArticlesTableReferences
     extends BaseReferences<_$AppDatabase, $ArticlesTable, Article> {
@@ -4029,30 +4021,26 @@ class $$ArticlesTableTableManager
                     >
                   >(state) {
                     if (sourceId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.sourceId,
-                                referencedTable: $$ArticlesTableReferences
-                                    ._sourceIdTable(db),
-                                referencedColumn: $$ArticlesTableReferences
-                                    ._sourceIdTable(db)
-                                    .id,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.sourceId,
+                        referencedTable: $$ArticlesTableReferences
+                            ._sourceIdTable(db),
+                        referencedColumn: $$ArticlesTableReferences
+                            ._sourceIdTable(db)
+                            .id,
+                      ) as T;
                     }
                     if (profileId) {
-                      state =
-                          state.withJoin(
-                                currentTable: table,
-                                currentColumn: table.profileId,
-                                referencedTable: $$ArticlesTableReferences
-                                    ._profileIdTable(db),
-                                referencedColumn: $$ArticlesTableReferences
-                                    ._profileIdTable(db)
-                                    .id,
-                              )
-                              as T;
+                      state = state.withJoin(
+                        currentTable: table,
+                        currentColumn: table.profileId,
+                        referencedTable: $$ArticlesTableReferences
+                            ._profileIdTable(db),
+                        referencedColumn: $$ArticlesTableReferences
+                            ._profileIdTable(db)
+                            .id,
+                      ) as T;
                     }
 
                     return state;
