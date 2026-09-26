@@ -29,7 +29,7 @@ class SourceRecommendationCard extends StatelessWidget {
       actions: [
         CustomIconButton.normal(
           onTap: onSubscribe,
-          icon: subscribed ? CustomIcons.checked : CustomIcons.check,
+          iconPath: subscribed ? CustomIcons.checked : CustomIcons.check,
           enabled: !subscribed,
           tooltip: subscribed
               ? localizations.sourceRecommendationCardLabelSubscribed

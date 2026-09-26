@@ -46,7 +46,7 @@ class SettingsProfilesGroup extends StatelessWidget {
                   child: Text(title, style: theme.textTheme.titleMedium),
                 ),
                 CustomIconButton.normal(
-                  icon: CustomIcons.add,
+                  iconPath: CustomIcons.add,
                   onTap: onNewProfile,
                   tooltip: localizations.settingsProfilesCardLabelAdd,
                 ),
@@ -66,12 +66,12 @@ class SettingsProfilesGroup extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     CustomIconButton.normal(
-                      icon: CustomIcons.modify,
+                      iconPath: CustomIcons.modify,
                       onTap: () => onModifyProfile(profile),
                       tooltip: localizations.settingsProfilesCardLabelModify,
                     ),
                     CustomIconButton.normal(
-                      icon: CustomIcons.remove,
+                      iconPath: CustomIcons.remove,
                       onTap: () => onRemoveProfile(profile),
                       tooltip: localizations.settingsProfilesCardLabelRemove,
                     ),

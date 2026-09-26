@@ -10,7 +10,7 @@ enum CustomIconButtonType { normal, redirectInApp, redirectExternal }
 class CustomIconButton extends StatelessWidget {
   const CustomIconButton.normal({
     super.key,
-    required this.icon,
+    required this.iconPath,
     required this.onTap,
     this.tooltip,
     this.enabled = true,
@@ -19,7 +19,7 @@ class CustomIconButton extends StatelessWidget {
 
   CustomIconButton.redirectInApp({
     super.key,
-    required this.icon,
+    required this.iconPath,
     required String route,
     required BuildContext context,
     this.tooltip,
@@ -30,7 +30,7 @@ class CustomIconButton extends StatelessWidget {
 
   CustomIconButton.redirectExternal({
     super.key,
-    required this.icon,
+    required this.iconPath,
     required String url,
     this.tooltip,
     this.enabled = true,
@@ -38,7 +38,7 @@ class CustomIconButton extends StatelessWidget {
   }) : type = CustomIconButtonType.redirectExternal,
        onTap = (() => safeLaunchUrl(url: Uri.parse(url)));
 
-  final String icon;
+  final String iconPath;
   final VoidCallback onTap;
   final double size;
   final String? tooltip;
@@ -49,7 +49,7 @@ class CustomIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: enabled ? onTap : null,
-      icon: CustomIcon(iconPath: icon, size: size),
+      icon: CustomIcon(iconPath: iconPath, size: size),
       tooltip: tooltip,
     );
   }

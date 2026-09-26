@@ -12,6 +12,7 @@ export 'custom_filter.dart';
 export 'custom_filter_dropdown.dart';
 export 'custom_icon.dart';
 export 'custom_icon_button.dart';
+export 'custom_link.dart';
 export 'custom_modal_sheet.dart';
 export 'custom_placeholder.dart';
 export 'custom_screen.dart';

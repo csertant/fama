@@ -24,7 +24,7 @@ class SourceSubscribeCard extends StatelessWidget {
         children: [
           Text(title, style: Theme.of(context).textTheme.titleMedium),
           CustomIconButton.normal(
-            icon: CustomIcons.add,
+            iconPath: CustomIcons.add,
             tooltip: localizations.exploreAddCustomSourceActionLabel,
             onTap: onSubscribe,
           ),

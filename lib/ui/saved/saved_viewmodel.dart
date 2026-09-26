@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 
-import 'package:material_ui/material_ui.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../data/database/database.dart';
 import '../../data/managers/session/session_manager.dart';

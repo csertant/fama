@@ -48,7 +48,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                 });
               }),
           child: Text(
-            AppDateFormat.dateOnly.format(value),
+            AppDateFormat.yMd.format(value),
             style: theme.textTheme.bodyMedium,
           ),
         ),

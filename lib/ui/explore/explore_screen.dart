@@ -53,12 +53,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
         title: localizations.exploreTitle,
         actions: [
           CustomIconButton.normal(
-            icon: CustomIcons.refresh,
+            iconPath: CustomIcons.refresh,
             onTap: widget.viewModel.load.execute,
             tooltip: localizations.navigationLabelRefresh,
           ),
           CustomIconButton.normal(
-            icon: CustomIcons.filter,
+            iconPath: CustomIcons.filter,
             onTap: () => _showFiltersModal(context),
             tooltip: localizations.navigationLabelFilter,
           ),
@@ -115,7 +115,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           child: CustomPlaceholder(
                             message: localizations.filtersNoMatchesLabel,
                             action: CustomIconButton.normal(
-                              icon: CustomIcons.remove,
+                              iconPath: CustomIcons.remove,
                               onTap: widget.viewModel.clearFilters,
                               tooltip: localizations.filtersActionLabel,
                             ),

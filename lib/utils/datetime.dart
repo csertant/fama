@@ -1,9 +1,9 @@
 import 'package:intl/intl.dart';
 
 abstract final class AppDateFormat {
-  static final DateFormat dateOnly = DateFormat('y. MM. dd.');
-  static final DateFormat dateTime = DateFormat('y. MM. dd. HH:mm');
-  static final DateFormat full = DateFormat('y. MM. dd. HH:mm:ss');
+  static final DateFormat yMd = DateFormat('y. MM. dd.');
+  static final DateFormat yMdHm = DateFormat('y. MM. dd. HH:mm');
+  static final DateFormat yMdHms = DateFormat('y. MM. dd. HH:mm:ss');
 }
 
 abstract final class AppDateUtils {

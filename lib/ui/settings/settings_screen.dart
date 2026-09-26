@@ -139,7 +139,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       formatBytesAsFileSize(widget.viewModel.databaseSize),
                     ),
                     action: CustomIconButton.normal(
-                      icon: CustomIcons.trash,
+                      iconPath: CustomIcons.trash,
                       tooltip: localizations.settingsTrashEmptyLabel,
                       onTap: _showRemoveArticlesModal,
                     ),
@@ -148,7 +148,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     title: localizations.settingsContactTitle,
                     subtitle: localizations.settingsContactSubtitle,
                     action: CustomIconButton.redirectExternal(
-                      icon: CustomIcons.sendMail,
+                      iconPath: CustomIcons.sendMail,
                       url: 'mailto:nosebitestudios@gmail.com',
                       tooltip: localizations.settingsContactEmailLabel,
                     ),

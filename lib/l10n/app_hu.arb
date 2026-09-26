@@ -113,6 +113,7 @@
     "settingsContactTitle": "kapcsolat",
     "settingsContactSubtitle": "ha hibát találsz vagy javaslatod van, írj nekünk",
     "settingsContactEmailLabel": "email küldése",
+    "settingsMetadataPrivacyPolicyLabel": "adatvédelmi irányelvek",
     "settingsMetadataVersionLabel": "verzió: {version}",
     "@settingsMetadataVersionLabel": {
         "placeholders": {

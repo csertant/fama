@@ -50,7 +50,7 @@ class _SourcesScreenState extends State<SourcesScreen> {
         actions: [
           CustomIconButton.redirectInApp(
             context: context,
-            icon: CustomIcons.add,
+            iconPath: CustomIcons.add,
             route: Routes.explore,
             tooltip: localizations.navigationLabelExplore,
           ),
@@ -96,7 +96,7 @@ class _SourcesScreenState extends State<SourcesScreen> {
                           message: localizations.sourcesEmptyLabel,
                           action: CustomIconButton.redirectInApp(
                             context: context,
-                            icon: CustomIcons.add,
+                            iconPath: CustomIcons.add,
                             route: Routes.explore,
                             tooltip: localizations.navigationLabelExplore,
                           ),

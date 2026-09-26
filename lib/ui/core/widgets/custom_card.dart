@@ -1,8 +1,7 @@
 import 'package:material_ui/material_ui.dart';
-import 'package:url_launcher/link.dart';
 
 import '../themes/dimensions.dart';
-import 'custom_icon_button.dart';
+import 'widgets.dart';
 
 class CustomCard extends StatelessWidget {
   const CustomCard({
@@ -10,7 +9,7 @@ class CustomCard extends StatelessWidget {
     required this.headline,
     required this.actions,
     required this.title,
-    this.titleUrl,
+    required this.titleUrl,
     required this.description,
     this.metadata = const [],
     this.padding = const EdgeInsets.all(AppDimensions.paddingMedium),
@@ -27,9 +26,6 @@ class CustomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final parsedTitleUrl = titleUrl == null || titleUrl!.isEmpty
-        ? null
-        : Uri.tryParse(titleUrl!);
     final metadataWidgets = [
       for (var index = 0; index < metadata.length; index++)
         if (index == 0)
@@ -60,27 +56,7 @@ class CustomCard extends StatelessWidget {
               ...actions,
             ],
           ),
-          if (parsedTitleUrl == null)
-            Text(title, style: theme.textTheme.titleMedium)
-          else
-            Link(
-              uri: parsedTitleUrl,
-              target: LinkTarget.blank,
-              builder: (context, followLink) {
-                return MouseRegion(
-                  cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    onTap: followLink,
-                    child: Text(
-                      title,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
+          CustomLink(url: titleUrl, title: title),
           Text(
             description,
             style: theme.textTheme.bodyMedium,

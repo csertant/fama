@@ -6,19 +6,20 @@ import 'custom_icon.dart';
 class CustomDismissibleAction extends StatelessWidget {
   const CustomDismissibleAction.left({
     super.key,
-    required this.icon,
+    required this.iconPath,
     this.iconColor,
     this.backgroundColor,
   }) : alignment = Alignment.centerLeft;
+
   const CustomDismissibleAction.right({
     super.key,
-    required this.icon,
+    required this.iconPath,
     this.iconColor,
     this.backgroundColor,
   }) : alignment = Alignment.centerRight;
 
   final Alignment alignment;
-  final String icon;
+  final String iconPath;
   final Color? iconColor;
   final Color? backgroundColor;
 
@@ -39,7 +40,7 @@ class CustomDismissibleAction extends StatelessWidget {
       ),
       alignment: alignment,
       child: CustomIcon(
-        iconPath: icon,
+        iconPath: iconPath,
         color: iconColor ?? theme.colorScheme.onPrimary,
       ),
     );

@@ -12,19 +12,17 @@ class ArticleCard extends StatelessWidget {
   const ArticleCard({
     super.key,
     required this.article,
-    required this.layout,
-    required this.onConfirmDismissArticle,
     required this.dismissibleActionLeft,
     required this.dismissibleActionRight,
+    required this.layout,
+    required this.onConfirmDismissArticle,
   });
 
   final Article article;
-  final ArticleCardLayout layout;
-
-  final ConfirmDismissCallback onConfirmDismissArticle;
-
   final CustomDismissibleAction dismissibleActionLeft;
   final CustomDismissibleAction dismissibleActionRight;
+  final ArticleCardLayout layout;
+  final ConfirmDismissCallback onConfirmDismissArticle;
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +106,7 @@ class ArticleCard extends StatelessWidget {
       actions: [
         CustomIconButton.normal(
           onTap: () => safeShareUrl(url: Uri.parse(article.url)),
-          icon: CustomIcons.share,
+          iconPath: CustomIcons.share,
           size: AppDimensions.iconSizeSmall,
           tooltip: localizations.articleCardLabelShare,
         ),
@@ -118,7 +116,7 @@ class ArticleCard extends StatelessWidget {
       description: summaryOrPlaceholder,
       metadata: [
         authorOrPlaceholder,
-        AppDateFormat.dateTime.format(article.publishedAt),
+        AppDateFormat.yMdHm.format(article.publishedAt),
       ],
     );
   }

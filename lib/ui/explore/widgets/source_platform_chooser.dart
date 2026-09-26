@@ -23,7 +23,7 @@ class _SourcePlatformChooserState extends State<SourcePlatformChooser> {
       children: UrlResolver.supportedStrategies.map((strategy) {
         return CustomIconButton.normal(
           onTap: () => widget.onTap(strategy.platform),
-          icon: strategy.iconPath,
+          iconPath: strategy.iconPath,
           tooltip: strategy.platformName,
         );
       }).toList(),

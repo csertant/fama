@@ -44,7 +44,7 @@ class SourceCard extends StatelessWidget {
               actions: [
                 CustomIconButton.normal(
                   onTap: onRemoveSource,
-                  icon: CustomIcons.remove,
+                  iconPath: CustomIcons.remove,
                   tooltip: localizations.sourceCardLabelRemove,
                 ),
               ],
@@ -54,7 +54,7 @@ class SourceCard extends StatelessWidget {
               metadata: [
                 localizations.sourceCardLastSyncTitle,
                 if (source.lastSyncedAt != null)
-                  AppDateFormat.dateTime.format(source.lastSyncedAt!)
+                  AppDateFormat.yMdHm.format(source.lastSyncedAt!)
                 else
                   localizations.sourceCardNotSyncedYetLabel,
               ],

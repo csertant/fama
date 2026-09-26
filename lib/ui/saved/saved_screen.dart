@@ -50,7 +50,7 @@ class _SavedScreenState extends State<SavedScreen> {
         title: localizations.savedTitle,
         actions: [
           CustomIconButton.normal(
-            icon: CustomIcons.filter,
+            iconPath: CustomIcons.filter,
             onTap: () => _showFiltersModal(context),
             tooltip: localizations.navigationLabelFilter,
           ),
@@ -97,7 +97,7 @@ class _SavedScreenState extends State<SavedScreen> {
                               : localizations.filtersNoMatchesLabel,
                           action: widget.viewModel.savedArticles.isNotEmpty
                               ? CustomIconButton.normal(
-                                  icon: CustomIcons.remove,
+                                  iconPath: CustomIcons.remove,
                                   onTap: widget.viewModel.clearFilters,
                                   tooltip: localizations.filtersActionLabel,
                                 )
@@ -143,11 +143,11 @@ class _SavedScreenState extends State<SavedScreen> {
         }
       },
       dismissibleActionLeft: CustomDismissibleAction.left(
-        icon: CustomIcons.remove,
+        iconPath: CustomIcons.remove,
         backgroundColor: Theme.of(context).colorScheme.error,
       ),
       dismissibleActionRight: const CustomDismissibleAction.right(
-        icon: CustomIcons.read,
+        iconPath: CustomIcons.read,
       ),
     );
   }

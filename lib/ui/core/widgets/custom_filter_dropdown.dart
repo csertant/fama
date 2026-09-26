@@ -25,7 +25,7 @@ class CustomFilterDropdown extends StatelessWidget {
         if (query.isEmpty) {
           return options;
         }
-        return options.where((opt) => opt.toLowerCase().contains(query));
+        return options.where((option) => option.toLowerCase().contains(query));
       },
       fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) {
         final theme = Theme.of(context);

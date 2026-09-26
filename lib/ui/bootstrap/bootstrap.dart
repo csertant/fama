@@ -44,6 +44,7 @@ class _BootstrapState extends State<Bootstrap> {
         if (_bootstrapViewModel.load.running) {
           return const SizedBox.shrink();
         } else if (_bootstrapViewModel.load.error) {
+          FlutterNativeSplash.remove();
           final localizations = AppLocalizations.of(context)!;
           return ErrorIndicator(
             title: localizations.bootstrapLoadErrorTitle,

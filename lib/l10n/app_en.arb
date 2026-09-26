@@ -113,6 +113,7 @@
     "errorWhileEmptyingTrash": "error occurred while emptying trash",
     "settingsContactSubtitle": "if you find any issues or have suggestions, please contact us",
     "settingsContactEmailLabel": "send email",
+    "settingsMetadataPrivacyPolicyLabel": "privacy policy",
     "settingsMetadataVersionLabel": "version: {version}",
     "@settingsMetadataVersionLabel": {
         "placeholders": {

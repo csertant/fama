@@ -52,12 +52,12 @@ class _FeedScreenState extends State<FeedScreen> {
         leading: const CustomIcon(iconPath: CustomIcons.appIcon),
         actions: [
           CustomIconButton.normal(
-            icon: CustomIcons.refresh,
+            iconPath: CustomIcons.refresh,
             onTap: widget.viewModel.load.execute,
             tooltip: localizations.navigationLabelRefresh,
           ),
           CustomIconButton.normal(
-            icon: CustomIcons.filter,
+            iconPath: CustomIcons.filter,
             onTap: () => _showFiltersModal(context),
             tooltip: localizations.navigationLabelFilter,
           ),
@@ -105,13 +105,13 @@ class _FeedScreenState extends State<FeedScreen> {
                           action: widget.viewModel.articles.isEmpty
                               ? CustomIconButton.redirectInApp(
                                   context: context,
-                                  icon: CustomIcons.add,
+                                  iconPath: CustomIcons.add,
                                   route: Routes.explore,
                                   tooltip:
                                       localizations.exploreAddCustomSourceTitle,
                                 )
                               : CustomIconButton.normal(
-                                  icon: CustomIcons.remove,
+                                  iconPath: CustomIcons.remove,
                                   onTap: widget.viewModel.clearFilters,
                                   tooltip: localizations.filtersActionLabel,
                                 ),
@@ -152,11 +152,11 @@ class _FeedScreenState extends State<FeedScreen> {
         }
       },
       dismissibleActionLeft: const CustomDismissibleAction.left(
-        icon: CustomIcons.saved,
+        iconPath: CustomIcons.saved,
         backgroundColor: AppColors.green,
       ),
       dismissibleActionRight: const CustomDismissibleAction.right(
-        icon: CustomIcons.read,
+        iconPath: CustomIcons.read,
       ),
     );
   }
