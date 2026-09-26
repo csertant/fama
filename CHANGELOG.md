@@ -2,11 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.4.0]
+## [1.4.0] - 2026-09-26
+
+### Added
+
+- Added a privacy policy link to the settings metadata section for transparency and compliance with privacy regulations.
 
 ### Fixed
 
 - Refactored the app bootstrap process to be more simple and robust.
+- Some housekeeping and refactoring of the codebase to improve maintainability and future-proofing.
 
 ## [1.3.3] - 2026-08-25
 
