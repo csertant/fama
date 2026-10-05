@@ -89,7 +89,7 @@ class SettingsRepositoryLocal extends SettingsRepository {
       case Ok<AppSettings>():
         return appSettingsResult;
       case Error<AppSettings>(error: final error):
-        if (error is DataNotFoundException || error is DataStorageException) {
+        if (error is DataNotFoundError || error is DataStorageError) {
           return Result.ok(_defaultSettings);
         }
         return Result.error(error);

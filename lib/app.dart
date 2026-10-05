@@ -7,14 +7,14 @@ import 'l10n/generated/app_localizations.dart';
 import 'routing/router.dart';
 import 'ui/core/themes/themes.dart';
 
-class FamaApp extends StatefulWidget {
-  const FamaApp({super.key});
+class App extends StatefulWidget {
+  const App({super.key});
 
   @override
-  State<FamaApp> createState() => _FamaAppState();
+  State<App> createState() => _AppState();
 }
 
-class _FamaAppState extends State<FamaApp> {
+class _AppState extends State<App> {
   late final GoRouter _router;
 
   @override

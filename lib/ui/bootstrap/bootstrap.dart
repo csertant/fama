@@ -2,10 +2,10 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
+import '../../app.dart';
 import '../../data/managers/session/session_manager.dart';
 import '../../data/repositories/profile/profile_repository.dart';
 import '../../data/repositories/settings/settings_repository.dart';
-import '../../famaapp.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../core/widgets/custom_error_indicator.dart';
 import 'bootstrap_viewmodel.dart';
@@ -53,7 +53,7 @@ class _BootstrapState extends State<Bootstrap> {
           );
         } else {
           FlutterNativeSplash.remove();
-          return const FamaApp();
+          return const App();
         }
       },
     );

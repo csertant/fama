@@ -46,7 +46,7 @@ class SavedViewModel extends ChangeNotifier with ArticleFilterMixin {
     try {
       final profileId = _sessionManager.profileId;
       if (profileId == null) {
-        return Result.error(DataNotFoundException('No active session found'));
+        return Result.error(DataNotFoundError('No active session found'));
       }
       final savedArticlesResult = await _articleRepository.getSavedArticles(
         profileId: profileId,

@@ -6,7 +6,7 @@ Future<Result<T>> guard<T>(Future<T> Function() action) async {
     final result = await action();
     return Result.ok(result);
   } on Exception catch (e) {
-    return Result.error(AppException.fromError(e));
+    return Result.error(AppError.fromError(e));
   }
 }
 
@@ -15,7 +15,7 @@ Future<Result<void>> guardVoid(Future<void> Function() action) async {
     await action();
     return const Result.ok(null);
   } on Exception catch (e) {
-    return Result.error(AppException.fromError(e));
+    return Result.error(AppError.fromError(e));
   }
 }
 
@@ -23,10 +23,10 @@ Future<Result<T>> guardNotNull<T>(Future<T?> Function() action) async {
   try {
     final result = await action();
     if (result == null) {
-      return Result.error(DataNotFoundException('Not found'));
+      return Result.error(DataNotFoundError('Not found'));
     }
     return Result.ok(result);
   } on Exception catch (e) {
-    return Result.error(AppException.fromError(e));
+    return Result.error(AppError.fromError(e));
   }
 }

@@ -4,26 +4,26 @@ import 'package:drift/drift.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 
-class AppException implements Exception {
-  AppException(this.message, {this.cause});
+class AppError implements Exception {
+  AppError(this.message, {this.cause});
 
-  factory AppException.fromError(Exception error) {
-    if (error is AppException) {
+  factory AppError.fromError(Exception error) {
+    if (error is AppError) {
       return error;
     } else if (error is StateError) {
-      return DataStorageException('Row cardinality violated', cause: error);
+      return DataStorageError('Row cardinality violated', cause: error);
     } else if (error is FormatException || error is InvalidDataException) {
-      return DataStorageException('Data format invalid', cause: error);
+      return DataStorageError('Data format invalid', cause: error);
     } else if (error is DriftWrappedException) {
-      return DataStorageException('Database operation failed', cause: error);
+      return DataStorageError('Database operation failed', cause: error);
     } else if (error is TimeoutException) {
-      return NetworkTimeoutException('Operation timed out', cause: error);
+      return NetworkTimeoutError('Operation timed out', cause: error);
     } else if (error is ClientException) {
-      return NetworkException('Network error occurred', cause: error);
+      return NetworkError('Network error occurred', cause: error);
     } else if (error is PlatformException) {
-      return AppException('Platform-specific error occurred', cause: error);
+      return AppError('Platform-specific error occurred', cause: error);
     } else {
-      return AppException('Unexpected error occurred', cause: error);
+      return AppError('Unexpected error occurred', cause: error);
     }
   }
 
@@ -31,42 +31,42 @@ class AppException implements Exception {
   final Object? cause;
 
   @override
-  String toString() => 'AppException: $message';
+  String toString() => 'AppError: $message';
 }
 
-class NetworkException extends AppException {
-  NetworkException(super.message, {super.cause});
+class NetworkError extends AppError {
+  NetworkError(super.message, {super.cause});
 
   @override
-  String toString() => 'NetworkException: $message';
+  String toString() => 'NetworkError: $message';
 }
 
-class NetworkNoInternetException extends NetworkException {
-  NetworkNoInternetException(super.message, {super.cause});
+class NetworkNoInternetError extends NetworkError {
+  NetworkNoInternetError(super.message, {super.cause});
 }
 
-class NetworkTimeoutException extends NetworkException {
-  NetworkTimeoutException(super.message, {super.cause});
+class NetworkTimeoutError extends NetworkError {
+  NetworkTimeoutError(super.message, {super.cause});
 }
 
-class DataException extends AppException {
-  DataException(super.message, {super.cause});
+class DataError extends AppError {
+  DataError(super.message, {super.cause});
 
   @override
-  String toString() => 'DataException: $message';
+  String toString() => 'DataError: $message';
 }
 
-class DataNotFoundException extends DataException {
-  DataNotFoundException(super.message, {super.cause});
+class DataNotFoundError extends DataError {
+  DataNotFoundError(super.message, {super.cause});
 }
 
-class DataStorageException extends DataException {
-  DataStorageException(super.message, {super.cause});
+class DataStorageError extends DataError {
+  DataStorageError(super.message, {super.cause});
 }
 
-class ValidationException extends AppException {
-  ValidationException(super.message, {super.cause});
+class ValidationError extends AppError {
+  ValidationError(super.message, {super.cause});
 
   @override
-  String toString() => 'ValidationException: $message';
+  String toString() => 'ValidationError: $message';
 }

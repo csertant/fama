@@ -25,7 +25,7 @@ class RssService {
       await _connectivityService.refreshConnectionStatus();
       if (_connectivityService.isOffline) {
         return Result.error(
-          NetworkNoInternetException('No internet connection available'),
+          NetworkNoInternetError('No internet connection available'),
         );
       }
 
@@ -35,16 +35,14 @@ class RssService {
 
       if (response.statusCode != 200) {
         return Result.error(
-          DataStorageException(
-            'Error fetching feed: HTTP ${response.statusCode}',
-          ),
+          DataStorageError('Error fetching feed: HTTP ${response.statusCode}'),
         );
       }
 
       final xmlString = utf8.decode(response.bodyBytes);
       return Result.ok(_parseFeedWithFallback(xmlString));
     } on Exception catch (e) {
-      return Result.error(AppException.fromError(e));
+      return Result.error(AppError.fromError(e));
     }
   }
 

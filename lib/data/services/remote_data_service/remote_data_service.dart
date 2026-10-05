@@ -25,7 +25,7 @@ class RemoteDataService {
       await _connectivityService.refreshConnectionStatus();
       if (_connectivityService.isOffline) {
         return Result.error(
-          NetworkNoInternetException('No internet connection available'),
+          NetworkNoInternetError('No internet connection available'),
         );
       }
 
@@ -35,7 +35,7 @@ class RemoteDataService {
 
       if (response.statusCode != 200) {
         return Result.error(
-          DataStorageException(
+          DataStorageError(
             'Error fetching recommendations: HTTP ${response.statusCode}',
           ),
         );
@@ -45,7 +45,7 @@ class RemoteDataService {
       final recommendations = _parseRecommendations(jsonString);
       return Result.ok(recommendations);
     } on Exception catch (e) {
-      return Result.error(AppException.fromError(e));
+      return Result.error(AppError.fromError(e));
     }
   }
 

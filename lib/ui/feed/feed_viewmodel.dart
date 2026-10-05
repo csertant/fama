@@ -54,7 +54,7 @@ class FeedViewModel extends ChangeNotifier with ArticleFilterMixin {
     try {
       final profileId = _sessionManager.profileId;
       if (profileId == null) {
-        return Result.error(DataNotFoundException('No active session found'));
+        return Result.error(DataNotFoundError('No active session found'));
       }
       await _articleRepository.syncArticlesForProfile(profileId: profileId);
       final articlesResult = await _articleRepository.getArticles(

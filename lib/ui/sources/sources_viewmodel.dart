@@ -40,7 +40,7 @@ class SourcesViewModel extends ChangeNotifier {
       final profileId = _sessionManager.profileId;
       if (profileId == null) {
         return Result.error(
-          DataNotFoundException('No active profile session found'),
+          DataNotFoundError('No active profile session found'),
         );
       }
       final sourcesResult = await _sourceRepository.getSourcesForProfile(

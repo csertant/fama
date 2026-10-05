@@ -27,7 +27,7 @@ class ProfileRepositoryLocal implements ProfileRepository {
       case Ok<Profile>():
         return result;
       case Error<Profile>(error: final error):
-        if (error is DataNotFoundException || error is DataStorageException) {
+        if (error is DataNotFoundError || error is DataStorageError) {
           final saveResult = await _localDataService.saveProfile(
             profile: defaultProfile,
           );
@@ -69,7 +69,7 @@ class ProfileRepositoryLocal implements ProfileRepository {
       case Ok<List<Profile>>(value: final profilesList):
         if (profilesList.length <= 1 && !profile.isDefault) {
           return Result.error(
-            ValidationException(
+            ValidationError(
               'Cannot remove default status from the only profile',
             ),
           );
@@ -82,7 +82,7 @@ class ProfileRepositoryLocal implements ProfileRepository {
       case Ok<Profile>(value: final defaultProfile):
         if (defaultProfile.id == profile.id && !profile.isDefault) {
           return Result.error(
-            ValidationException(
+            ValidationError(
               'Cannot remove default status from the default profile',
             ),
           );
@@ -117,12 +117,12 @@ class ProfileRepositoryLocal implements ProfileRepository {
       case Ok<List<Profile>>(value: final profilesList):
         if (profilesList.length <= 1) {
           return Result.error(
-            ValidationException('Cannot delete the only profile'),
+            ValidationError('Cannot delete the only profile'),
           );
         }
         if (profilesList.any((p) => p.id == profileId && p.isDefault)) {
           return Result.error(
-            ValidationException('Cannot delete the default profile'),
+            ValidationError('Cannot delete the default profile'),
           );
         }
       case Error<List<Profile>>(error: final error):

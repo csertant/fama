@@ -29,7 +29,7 @@ class UrlResolver {
     final trimmedUrl = url.trim().replaceAll(RegExp(r'\/+$'), '');
     final parsedUrl = Uri.tryParse(trimmedUrl);
     if (parsedUrl == null) {
-      throw ValidationException('Invalid URL format: $url');
+      throw ValidationError('Invalid URL format: $url');
     }
     return parsedUrl.toString();
   }
