@@ -15,7 +15,7 @@ class SettingsRepositoryLocal extends SettingsRepository {
 
   static final AppSettings _defaultSettings = AppSettings(
     languageCode: AppLanguage.hungarian,
-    theme: ThemeMode.system,
+    themeMode: ThemeMode.system,
   );
 
   final SharedPreferencesService _sharedPreferencesService;
@@ -65,11 +65,11 @@ class SettingsRepositoryLocal extends SettingsRepository {
   }
 
   @override
-  Future<Result<void>> updateTheme({required ThemeMode theme}) async {
+  Future<Result<void>> updateTheme({required ThemeMode themeMode}) async {
     final loadResult = await load();
     switch (loadResult) {
       case Ok<void>():
-        final updatedAppSettings = _appSettings.copyWith(theme: theme);
+        final updatedAppSettings = _appSettings.copyWith(themeMode: themeMode);
         final saveResult = await _sharedPreferencesService.saveAppSettings(
           appSettings: updatedAppSettings,
         );

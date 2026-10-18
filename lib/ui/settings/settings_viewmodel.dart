@@ -61,7 +61,7 @@ class SettingsViewModel extends ChangeNotifier {
   late Command3<void, bool, bool, DateTime?> removeArticles;
 
   AppSettings get appSettings => _settingsRepository.appSettings;
-  ThemeMode get theme => appSettings.theme;
+  ThemeMode get theme => appSettings.themeMode;
   String get language => appSettings.languageCode;
   Profile get activeProfile => _profiles.firstWhere(
     (profile) => profile.id == _sessionManager.profileId,
@@ -85,7 +85,7 @@ class SettingsViewModel extends ChangeNotifier {
   }
 
   Future<Result<void>> _updateTheme(ThemeMode theme) {
-    return _settingsRepository.updateTheme(theme: theme);
+    return _settingsRepository.updateTheme(themeMode: theme);
   }
 
   Future<Result<void>> _updateLanguage(String languageCode) {

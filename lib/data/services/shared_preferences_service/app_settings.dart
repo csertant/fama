@@ -16,7 +16,7 @@ class AppLanguage {
 
 @JsonSerializable()
 class AppSettings {
-  AppSettings({required this.languageCode, required this.theme});
+  AppSettings({required this.languageCode, required this.themeMode});
 
   factory AppSettings.fromJson(JsonMap json) => _$AppSettingsFromJson(json);
 
@@ -24,12 +24,12 @@ class AppSettings {
   final String languageCode;
 
   @JsonKey(defaultValue: ThemeMode.system)
-  final ThemeMode theme;
+  final ThemeMode themeMode;
 
-  AppSettings copyWith({String? languageCode, ThemeMode? theme}) {
+  AppSettings copyWith({String? languageCode, ThemeMode? themeMode}) {
     return AppSettings(
       languageCode: languageCode ?? this.languageCode,
-      theme: theme ?? this.theme,
+      themeMode: themeMode ?? this.themeMode,
     );
   }
 

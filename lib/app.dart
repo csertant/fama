@@ -37,7 +37,7 @@ class _AppState extends State<App> {
       locale: Locale(appSettings.languageCode),
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: appSettings.theme,
+      themeMode: appSettings.themeMode,
       routerConfig: _router,
     );
   }
