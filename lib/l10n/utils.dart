@@ -63,6 +63,8 @@ String mapCategoryToString(BuildContext context, String category) {
   switch (category) {
     case 'general':
       return localizations.filtersCategoryOptionGeneral;
+    case 'local':
+      return localizations.filtersCategoryOptionLocal;
     case 'economy':
       return localizations.filtersCategoryOptionEconomy;
     case 'media':

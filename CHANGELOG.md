@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2026-11-04
+
+### Added
+
+- Added a category option for local news.
+
+### Fixed
+
+- Some housekeeping and refactoring of the codebase to improve maintainability and future-proofing.
+
 ## [1.4.0] - 2026-09-26
 
 ### Added

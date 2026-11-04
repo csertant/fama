@@ -144,6 +144,7 @@
     "filtersGenreOptionVideo": "video",
     "filtersGenreOptionUnknown": "other",
     "filtersCategoryOptionGeneral": "general",
+    "filtersCategoryOptionLocal": "local",
     "filtersCategoryOptionEconomy": "economy",
     "filtersCategoryOptionMedia": "media",
     "filtersCategoryOptionScience": "science",
