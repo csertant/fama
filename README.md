@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="assets/images/logo.svg" alt="fáma logo" width="320" />
+	<img src="assets/icons/icon_2x.png" alt="fáma logo" width="180" />
 </p>
 
 fáma is a cross-platform news reader built with Flutter. It helps users discover RSS sources, build a personalized feed, save articles for later, and keep reading across devices and platforms.
