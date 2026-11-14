@@ -1,13 +1,13 @@
 import 'package:material_ui/material_ui.dart';
 
 abstract final class AppColors {
-  static const Color black = Color(0xFF0A0A0A);
-  static const Color darkGrey = Color(0xFF323232);
-  static const Color lightGrey = Color(0xFFC8C8C8);
-  static const Color white = Color(0xFFF5F5F5);
+  static const black = Color(0xFF0A0A0A);
+  static const darkGrey = Color(0xFF323232);
+  static const lightGrey = Color(0xFFC8C8C8);
+  static const white = Color(0xFFF5F5F5);
 
-  static const Color red = Color(0xFFFF0000);
-  static const Color green = Color(0xFF4CAF50);
+  static const red = Color(0xFFFF0000);
+  static const green = Color(0xFF4CAF50);
 
   static const lightColorScheme = ColorScheme(
     brightness: Brightness.light,

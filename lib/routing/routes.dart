@@ -1,9 +1,9 @@
 abstract final class Routes {
-  static const String home = '/';
-  static const String feed = '/feed';
-  static const String sources = '/sources';
-  static const String exploreSegment = 'explore';
-  static const String explore = '$sources/$exploreSegment';
-  static const String saved = '/saved';
-  static const String settings = '/settings';
+  static const home = '/';
+  static const feed = '/feed';
+  static const sources = '/sources';
+  static const exploreSegment = 'explore';
+  static const explore = '$sources/$exploreSegment';
+  static const saved = '/saved';
+  static const settings = '/settings';
 }
